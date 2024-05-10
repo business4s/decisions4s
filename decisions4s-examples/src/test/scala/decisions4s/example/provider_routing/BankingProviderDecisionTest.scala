@@ -6,9 +6,7 @@ import org.camunda.bpm.model.dmn.Dmn
 import org.scalatest.freespec.AnyFreeSpec
 
 import java.io.File
-import scala.annotation.experimental
 
-@experimental
 class BankingProviderDecisionTest extends AnyFreeSpec {
   import decisions4s.example.provider_routing.BankingProviderDecision.Input
 

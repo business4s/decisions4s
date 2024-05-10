@@ -2,11 +2,11 @@ package decisions4s.example.provider_routing
 
 import decisions4s.*
 import decisions4s.syntax.*
-import decisions4s.util.{FunctorK, SemigroupalK}
+import decisions4s.util.{FunctorK, PureK, SemigroupalK}
 
 object BankingProviderDecision {
 
-  case class Input[F[_]](userResidenceCountry: F[Country], currency: F[Currency]) derives FunctorK, SemigroupalK
+  case class Input[F[_]](userResidenceCountry: F[Country], currency: F[Currency]) derives FunctorK, SemigroupalK, PureK
 
   case class Output[F[_]](provider: F[Provider]) derives FunctorK, SemigroupalK
 
@@ -15,11 +15,11 @@ object BankingProviderDecision {
       rules,
       inputNames = Name.auto[Input],
       outputNames = Name.auto[Output],
+      name = "BankingProviderSelection"
     )
 
-  type Rule = decisions4s.Rule[Input, Output]
-
-  lazy val rules: List[Rule] = List(
+  private type Rule = decisions4s.Rule[Input, Output]
+  private lazy val rules: List[Rule] = List(
     Rule(
       matching = Input(
         userResidenceCountry = IsEEA,
@@ -47,15 +47,11 @@ object BankingProviderDecision {
         provider = Provider.BarLtd.asLiteral,
       ),
     ),
-    Rule(
-      matching = Input(
-        userResidenceCountry = catchAll,
-        currency = catchAll,
-      ),
-      output = Output(
+    Rule.default(
+      Output(
         provider = Provider.BazCo.asLiteral,
       ),
-    )
+    ),
   )
 
 }

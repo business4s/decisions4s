@@ -37,7 +37,7 @@ object DmnConverter {
 
     private def buildDecision = {
       val decision = definitions.addChild[Decision]
-      decision.setName(table.name.getOrElse("Decision"))
+      decision.setName(table.name)
       decision
     }
 

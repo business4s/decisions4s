@@ -5,7 +5,7 @@ package object decisions4s {
   type Value[T]       = T
   type Description[T] = String
 
-  type ValueExpr[T]    = Expr[Unit, T]
+  type ValueExpr[T]    = Expr[Any, T]
   type MatchingExpr[T] = Expr[T, Boolean]
 
   type Name[T] = String

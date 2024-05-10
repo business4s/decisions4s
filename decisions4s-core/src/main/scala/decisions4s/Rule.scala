@@ -1,11 +1,11 @@
 package decisions4s
 
-import cats.arrow.FunctionK
 import cats.data.Tuple2K
 import decisions4s.internal.HKDUtils
+import decisions4s.syntax.catchAll
 import decisions4s.util.FunctorK.syntax.mapK
 import decisions4s.util.SemigroupalK.syntax.productK
-import decisions4s.util.{FunctorK, SemigroupalK}
+import decisions4s.util.{FunctorK, PureK, SemigroupalK}
 import shapeless3.deriving.~>
 
 case class Rule[Input[_[_]]: FunctorK: SemigroupalK, Output[_[_]]: FunctorK](
@@ -29,4 +29,13 @@ case class Rule[Input[_[_]]: FunctorK: SemigroupalK, Output[_[_]]: FunctorK](
     (matching.mapK(renderInput), output.mapK(renderOutput))
   }
 
+}
+
+object Rule {
+  def default[Input[_[_]]: FunctorK: SemigroupalK: PureK, Output[_[_]]: FunctorK](value: Output[ValueExpr]): Rule[Input, Output] = {
+    Rule(
+      matching = PureK[Input].pure[MatchingExpr]([t] => () => catchAll[t]),
+      output = value,
+    )
+  }
 }
