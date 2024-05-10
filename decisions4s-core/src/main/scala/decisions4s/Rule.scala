@@ -2,10 +2,11 @@ package decisions4s
 
 import cats.arrow.FunctionK
 import cats.data.Tuple2K
-import cats.tagless.{FunctorK, SemigroupalK}
 import cats.tagless.syntax.all.*
-import cats.{SemigroupK, ~>}
-import decisions4s.exprs.Literal
+import cats.tagless.{FunctorK, SemigroupalK}
+import cats.~>
+import decisions4s.exprs.{Literal, Variable}
+import decisions4s.internal.HKDUtils
 
 case class Rule[Input[_[_]]: FunctorK: SemigroupalK, Output[_[_]]: FunctorK](
     matching: Input[MatchingExpr],
@@ -13,22 +14,22 @@ case class Rule[Input[_[_]]: FunctorK: SemigroupalK, Output[_[_]]: FunctorK](
 ) {
 
   def evaluate(in: Input[Value]): Option[Output[Value]] = {
-    var matches = true
-    type Void[T] = Any
+    type Bool[T] = Boolean
     type Tup[T]  = Tuple2K[MatchingExpr, Value, T]
-    val checkMatching: Tup ~> Void   = new FunctionK[Tup, Void] {
-      override def apply[A](fa: Tup[A]): Void[A] = {
-        val fieldMatches = fa.first(Literal(fa.second)).evaluate
-        matches = matches && fieldMatches
-      }
-    }
-    val _                            = matching.productK(in).mapK(checkMatching)
+    val evaluateMatch: Tup ~> Bool   = FunctionK.lift[Tup, Bool]([t] => (tuple: Tup[t]) => tuple.first(Literal(tuple.second)).evaluate)
+    val evaluated                    = matching.productK(in).mapK(evaluateMatch)
+    val matches                      = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
     val evaluate: ValueExpr ~> Value = new FunctionK[ValueExpr, Value] {
       override def apply[A](fa: ValueExpr[A]): Value[A] = fa.evaluate
     }
     Option.when(matches)(output.mapK(evaluate))
   }
 
-  def render(): (Input[Description], Output[Description]) = ???
+  def render(): (Input[Description], Output[Description]) = {
+    val renderInput: MatchingExpr ~> Description =
+      FunctionK.lift[MatchingExpr, Description]([t] => (expr: MatchingExpr[t]) => expr.apply(Variable("x")).describe)
+    val renderOutput: ValueExpr ~> Description   = FunctionK.lift[ValueExpr, Description]([t] => (expr: ValueExpr[t]) => expr.describe)
+    (matching.mapK(renderInput), output.mapK(renderOutput))
+  }
 
 }

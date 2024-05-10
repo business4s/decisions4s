@@ -17,7 +17,11 @@ object BankingProviderDecision {
   case class Output[F[_]](provider: F[Provider]) // derives FunctorK, SemigroupalK
 
   val decisionTable: DecisionTable[Input, Output] =
-    DecisionTable(List(rule1, rule2, rule3))
+    DecisionTable(
+      List(rule1, rule2, rule3),
+      inputNames = Name.auto[Input],
+      outputNames = Name.auto[Output]
+    )
 
   type Rule = decisions4s.Rule[Input, Output]
   lazy val rule1: Rule = Rule[Input, Output](
@@ -36,7 +40,7 @@ object BankingProviderDecision {
     ),
     output = Output[ValueExpr](
       provider = Provider.AcmeCorp.toValueExpr,
-    )
+    ),
   )
   lazy val rule3: Rule = Rule(
     matching = Input(
@@ -48,12 +52,12 @@ object BankingProviderDecision {
     ),
   )
 
-  implicit lazy val inputI:  FunctorK[Input] with SemigroupalK[Input] = new FunctorK[Input] with SemigroupalK[Input] {
+  implicit lazy val inputI: FunctorK[Input] with SemigroupalK[Input] = new FunctorK[Input] with SemigroupalK[Input] {
     override def mapK[F[_], G[_]](af: Input[F])(fk: F ~> G): Input[G] = Input(fk(af.userResidenceCountry), fk(af.currency))
 
     override def productK[F[_], G[_]](af: Input[F], ag: Input[G]): Input[[_$5] =>> Tuple2K[F, G, _$5]] = Input(
       Tuple2K(af.userResidenceCountry, ag.userResidenceCountry),
-      Tuple2K(af.currency, ag.currency)
+      Tuple2K(af.currency, ag.currency),
     )
   }
 

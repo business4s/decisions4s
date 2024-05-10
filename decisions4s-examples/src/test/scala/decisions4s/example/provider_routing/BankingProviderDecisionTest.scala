@@ -1,8 +1,11 @@
 package decisions4s.example.provider_routing
 
 import decisions4s.*
+import decisions4s.dmn.DmnConverter
+import org.camunda.bpm.model.dmn.Dmn
 import org.scalatest.freespec.AnyFreeSpec
 
+import java.io.File
 import scala.annotation.experimental
 
 @experimental
@@ -22,6 +25,11 @@ class BankingProviderDecisionTest extends AnyFreeSpec {
       assert(result.get.provider == Provider.FooInc)
     }
 
+  }
+
+  "render dmn" in {
+    val dmnInstance = DmnConverter.convert(BankingProviderDecision.decisionTable)
+    Dmn.writeModelToFile(new File("./banking-provider-decision.dmn"), dmnInstance)
   }
 
 }
