@@ -20,7 +20,7 @@ object BankingProviderDecision {
     DecisionTable(
       List(rule1, rule2, rule3),
       inputNames = Name.auto[Input],
-      outputNames = Name.auto[Output]
+      outputNames = Name.auto[Output],
     )
 
   type Rule = decisions4s.Rule[Input, Output]
@@ -29,17 +29,17 @@ object BankingProviderDecision {
       userResidenceCountry = _.isEEA,
       currency = catchAll,
     ),
-    output = Output[ValueExpr](
-      provider = Provider.FooInc.toValueExpr,
+    output = Output(
+      provider = Provider.FooInc.asLiteral,
     ),
   )
   lazy val rule2: Rule = Rule(
     matching = Input(
       userResidenceCountry = catchAll,
-      currency = Currency.EUR.toMatchingExpr, // _ === Currency.EUR might be more direct and intuitive
+      currency = Currency.EUR.matchEqual, // _ === Currency.EUR might be more direct and intuitive
     ),
-    output = Output[ValueExpr](
-      provider = Provider.AcmeCorp.toValueExpr,
+    output = Output(
+      provider = Provider.AcmeCorp.asLiteral,
     ),
   )
   lazy val rule3: Rule = Rule(
@@ -47,8 +47,8 @@ object BankingProviderDecision {
       userResidenceCountry = catchAll,
       currency = catchAll,
     ),
-    output = Output[ValueExpr](
-      provider = Provider.BazCo.toValueExpr,
+    output = Output(
+      provider = Provider.BazCo.asLiteral,
     ),
   )
 

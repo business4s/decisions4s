@@ -6,7 +6,7 @@ object syntax {
   def catchAll[T]: MatchingExpr[T] = _ => True
 
   extension [T](v: T) {
-    def toValueExpr: ValueExpr[T]       = Literal(v)
-    def toMatchingExpr: MatchingExpr[T] = Equal(_, Literal(v))
+    def asLiteral(using show: LiteralShow[T]): ValueExpr[T]       = Literal(v)
+    def matchEqual(using show: LiteralShow[T]): MatchingExpr[T] = Equal(_, Literal(v))
   }
 }

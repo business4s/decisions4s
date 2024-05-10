@@ -15,7 +15,7 @@ import org.camunda.bpm.model.dmn.instance.{
   Rule as DmnRule,
   Text,
 }
-import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance}
+import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance, HitPolicy}
 import org.camunda.bpm.model.xml.instance.ModelElementInstance
 
 import scala.reflect.ClassTag
@@ -52,7 +52,11 @@ object DmnConverter {
       decision
     }
 
-    private def buildDecisionTable = decision.addChild[DmnDecisionTable]
+    private def buildDecisionTable = {
+      val table = decision.addChild[DmnDecisionTable]
+      table.setHitPolicy(HitPolicy.FIRST)
+      table
+    }
 
     private def buildInputs(): Unit = {
       val names = HKDUtils.collectFields(table.inputNames)
