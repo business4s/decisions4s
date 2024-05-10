@@ -8,5 +8,5 @@ input & output types and set of rules that match on the input and produce the ou
 
 TODO:
 * [x] Basic decision evaluation
-* [ ] Rendering DMN
-* [ ] Deriving functorK for case classes (https://github.com/typelevel/cats-tagless/issues/29)
+* [x] Rendering DMN
+* [x] Deriving functorK for case classes (https://github.com/typelevel/cats-tagless/issues/29)

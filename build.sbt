@@ -7,7 +7,6 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel"                %% "cats-core"           % "2.10.0",
-      "org.typelevel"                %% "cats-tagless-core"   % "0.16.0",
       "org.typelevel"                %% "shapeless3-deriving" % "3.4.0",
     ),
   )

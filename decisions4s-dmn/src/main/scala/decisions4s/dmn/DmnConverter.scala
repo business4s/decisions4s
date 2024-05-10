@@ -1,20 +1,9 @@
 package decisions4s.dmn
 
-import cats.tagless.FunctorK
 import decisions4s.DecisionTable
 import decisions4s.internal.HKDUtils
-import org.camunda.bpm.model.dmn.instance.{
-  Decision,
-  DecisionTable as DmnDecisionTable,
-  Definitions,
-  Input as DmnInput,
-  InputEntry,
-  InputExpression,
-  Output as DmnOutput,
-  OutputEntry,
-  Rule as DmnRule,
-  Text,
-}
+import decisions4s.util.FunctorK
+import org.camunda.bpm.model.dmn.instance.{Decision, Definitions, InputEntry, InputExpression, OutputEntry, Text, DecisionTable as DmnDecisionTable, Input as DmnInput, Output as DmnOutput, Rule as DmnRule}
 import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance, HitPolicy}
 import org.camunda.bpm.model.xml.instance.ModelElementInstance
 

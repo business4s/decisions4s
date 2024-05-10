@@ -1,9 +1,8 @@
 package decisions4s.internal
 
-import cats.arrow.FunctionK
-import cats.tagless.FunctorK
-import cats.tagless.FunctorK.ops.toAllFunctorKOps
-import cats.~>
+import decisions4s.util.FunctorK
+import decisions4s.util.FunctorK.syntax.mapK
+import shapeless3.deriving.~>
 
 import scala.collection.mutable.ListBuffer
 
@@ -14,9 +13,7 @@ object HKDUtils {
   def collectFields[F[_[_]]: FunctorK, T](instance: F[Const[T]]): Seq[T] = {
     val result = ListBuffer[T]()
     type Void[T] = Any
-    val gatherName: Const[T] ~> Void = new FunctionK[Const[T], Void] {
-      override def apply[A](fa: T): Void[A] = result.append(fa)
-    }
+    val gatherName: Const[T] ~> Void = [t] => (fa: T) => result.append(fa)
     val _                     = instance.mapK(gatherName)
     result.toList
   }
