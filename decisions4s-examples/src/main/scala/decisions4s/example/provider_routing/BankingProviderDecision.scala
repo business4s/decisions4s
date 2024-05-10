@@ -2,7 +2,6 @@ package decisions4s.example.provider_routing
 
 import decisions4s.*
 import decisions4s.syntax.*
-import IsEEA.isEEA
 import cats.data.Tuple2K
 import cats.tagless.{FunctorK, SemigroupalK}
 import cats.~>
@@ -18,38 +17,50 @@ object BankingProviderDecision {
 
   val decisionTable: DecisionTable[Input, Output] =
     DecisionTable(
-      List(rule1, rule2, rule3),
+      rules,
       inputNames = Name.auto[Input],
       outputNames = Name.auto[Output],
     )
 
   type Rule = decisions4s.Rule[Input, Output]
-  lazy val rule1: Rule = Rule[Input, Output](
-    matching = Input(
-      userResidenceCountry = _.isEEA,
-      currency = catchAll,
+
+  lazy val rules: List[Rule] = List(
+    Rule(
+      matching = Input(
+        userResidenceCountry = IsEEA,
+        currency = catchAll,
+      ),
+      output = Output(
+        provider = Provider.FooInc.asLiteral,
+      ),
     ),
-    output = Output(
-      provider = Provider.FooInc.asLiteral,
+    Rule(
+      matching = Input(
+        userResidenceCountry = catchAll,
+        currency = Currency.EUR.matchEqual,
+      ),
+      output = Output(
+        provider = Provider.AcmeCorp.asLiteral,
+      ),
     ),
-  )
-  lazy val rule2: Rule = Rule(
-    matching = Input(
-      userResidenceCountry = catchAll,
-      currency = Currency.EUR.matchEqual, // _ === Currency.EUR might be more direct and intuitive
+    Rule(
+      matching = Input(
+        userResidenceCountry = catchAll,
+        currency = List(Currency.CHF, Currency.PLN).matchAny,
+      ),
+      output = Output(
+        provider = Provider.BarLtd.asLiteral,
+      ),
     ),
-    output = Output(
-      provider = Provider.AcmeCorp.asLiteral,
-    ),
-  )
-  lazy val rule3: Rule = Rule(
-    matching = Input(
-      userResidenceCountry = catchAll,
-      currency = catchAll,
-    ),
-    output = Output(
-      provider = Provider.BazCo.asLiteral,
-    ),
+    Rule(
+      matching = Input(
+        userResidenceCountry = catchAll,
+        currency = catchAll,
+      ),
+      output = Output(
+        provider = Provider.BazCo.asLiteral,
+      ),
+    )
   )
 
   implicit lazy val inputI: FunctorK[Input] with SemigroupalK[Input] = new FunctorK[Input] with SemigroupalK[Input] {
