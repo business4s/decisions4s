@@ -23,7 +23,7 @@ object BankingProviderDecision {
     Rule(
       matching = Input(
         userResidenceCountry = IsEEA,
-        currency = catchAll,
+        currency = it.catchAll,
       ),
       output = Output(
         provider = Provider.FooInc.asLiteral,
@@ -31,7 +31,7 @@ object BankingProviderDecision {
     ),
     Rule(
       matching = Input(
-        userResidenceCountry = catchAll,
+        userResidenceCountry = it.catchAll,
         currency = Currency.EUR.matchEqual,
       ),
       output = Output(
@@ -40,8 +40,8 @@ object BankingProviderDecision {
     ),
     Rule(
       matching = Input(
-        userResidenceCountry = catchAll,
-        currency = List(Currency.CHF, Currency.PLN).matchAny,
+        userResidenceCountry = it.catchAll,
+        currency = it.equalsAnyOf(Currency.CHF, Currency.PLN),
       ),
       output = Output(
         provider = Provider.BarLtd.asLiteral,

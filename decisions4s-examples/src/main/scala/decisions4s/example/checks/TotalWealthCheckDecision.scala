@@ -3,7 +3,7 @@ package decisions4s.example.checks
 import decisions4s.exprs.GreaterThan
 import decisions4s.syntax.*
 import decisions4s.util.{FunctorK, PureK, SemigroupalK}
-import decisions4s.{DecisionTable, LiteralShow, Name, Rule}
+import decisions4s.{DecisionTable, it, LiteralShow, Name, Rule}
 
 object TotalWealthCheckDecision {
   sealed trait TotalWealth
@@ -51,9 +51,9 @@ object TotalWealthCheckDecision {
                     riskLevel <- RiskLevel.values
                   } yield Rule(
                     matching = Input(
-                      totalWealthDeclaration = answer.matchEqual,
-                      userRiskLevel = riskLevel.matchEqual,
-                      sumOfDepositsEur = GreaterThan(getThreshold(riskLevel).asLiteral),
+                      totalWealthDeclaration = it === answer,
+                      userRiskLevel = it === riskLevel,
+                      sumOfDepositsEur = it > getThreshold(riskLevel),
                     ),
                     output = Output(stop = true.asLiteral),
                   )
@@ -61,9 +61,9 @@ object TotalWealthCheckDecision {
                   List(
                     Rule(
                       matching = Input(
-                        totalWealthDeclaration = answer.matchEqual,
-                        userRiskLevel = catchAll,
-                        sumOfDepositsEur = catchAll,
+                        totalWealthDeclaration = it === answer,
+                        userRiskLevel = it.catchAll,
+                        sumOfDepositsEur = it.catchAll,
                       ),
                       output = Output(stop = false.asLiteral),
                     ),

@@ -1,9 +1,8 @@
 package decisions4s.example.checks
 
-import decisions4s.exprs.{GreaterThan, LessThan}
 import decisions4s.syntax.*
 import decisions4s.util.{FunctorK, PureK, SemigroupalK}
-import decisions4s.{DecisionTable, Name, Rule}
+import decisions4s.{DecisionTable, it, Name, Rule}
 
 object ElderlyScamCheckDecision {
 
@@ -26,10 +25,10 @@ object ElderlyScamCheckDecision {
   private lazy val rules: List[Rule] = List(
     Rule(
       matching = Input(
-        accountAgeDays = LessThan(30.asLiteral),
-        userAgeYears = GreaterThan(55.asLiteral),
-        cryptoWithdrawalsCount = LessThan(3.asLiteral),
-        txAmountEur = GreaterThan(2000.asLiteral),
+        accountAgeDays = it < 30,
+        userAgeYears = it > 55,
+        cryptoWithdrawalsCount = it < 3,
+        txAmountEur = it > 2000,
       ),
       output = Output(
         stop = true.asLiteral,
