@@ -8,7 +8,7 @@ case class Equal[T](b: Expr[T, T]) extends Expr[T, Boolean] {
 }
 
 
-case class Or[T](parts: List[Expr[T, Boolean]]) extends Expr[T, Boolean] {
+case class Or[T](parts: Seq[Expr[T, Boolean]]) extends Expr[T, Boolean] {
   override def evaluate(in: T): Boolean     = parts.exists(_.evaluate(in))
   override def renderFeelExpression: String = parts.map(_.renderFeelExpression).mkString(", ")
 }

@@ -16,5 +16,6 @@ object LiteralShow {
   given LiteralShow[Int]      = _.toString
   given LiteralShow[Long]     = _.toString
   given LiteralShow[Double]   = _.toString
+  given [T](using ls: LiteralShow[T]): LiteralShow[Iterable[T]] = _.map(ls.show).mkString(", ")
 
 }
