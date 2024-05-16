@@ -19,4 +19,7 @@ object it {
   def <[T](value: T)(using LiteralShow[T], Ordering[T]): MatchingExpr[T] = LessThan(Literal(value))
 
   def catchAll[T]: MatchingExpr[T] = True
+
+  def isTrue: MatchingExpr[Boolean] = Equal(Literal(true))
+  def isFalse: MatchingExpr[Boolean] = Equal(Literal(false))
 }
