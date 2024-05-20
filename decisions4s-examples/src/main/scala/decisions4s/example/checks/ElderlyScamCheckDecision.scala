@@ -1,24 +1,20 @@
 package decisions4s.example.checks
 
 import decisions4s.syntax.*
-import decisions4s.util.{FunctorK, PureK, SemigroupalK}
-import decisions4s.{DecisionTable, it, Name, Rule}
+import decisions4s.*
 
 object ElderlyScamCheckDecision {
 
-  case class Input[F[_]](accountAgeDays: F[Int], userAgeYears: F[Int], cryptoWithdrawalsCount: F[Int], txAmountEur: F[Int])
-      derives FunctorK,
-        SemigroupalK,
-        PureK
+  case class Input[F[_]](accountAgeDays: F[Int], userAgeYears: F[Int], cryptoWithdrawalsCount: F[Int], txAmountEur: F[Int]) derives HKD
 
-  case class Output[F[_]](stop: F[Boolean]) derives FunctorK, SemigroupalK
+  case class Output[F[_]](stop: F[Boolean]) derives HKD
 
   val decisionTable: DecisionTable[Input, Output] =
     DecisionTable(
       rules,
       inputNames = Name.auto[Input],
       outputNames = Name.auto[Output],
-      name = "ElderlyScamCheck"
+      name = "ElderlyScamCheck",
     )
 
   private type Rule = decisions4s.Rule[Input, Output]

@@ -1,22 +1,19 @@
 package decisions4s
 
-import cats.data.Tuple2K
+import decisions4s.HKD.syntax.*
 import decisions4s.internal.HKDUtils
 import decisions4s.syntax.catchAll
-import decisions4s.util.FunctorK.syntax.mapK
-import decisions4s.util.SemigroupalK.syntax.productK
-import decisions4s.util.{FunctorK, PureK, SemigroupalK}
 import shapeless3.deriving.~>
 
-case class Rule[Input[_[_]]: FunctorK: SemigroupalK, Output[_[_]]: FunctorK](
+case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
     matching: Input[MatchingExpr],
     output: Output[ValueExpr],
 ) {
 
   def evaluate(in: Input[Value]): Option[Output[Value]] = {
     type Bool[T] = Boolean
-    type Tup[T]  = Tuple2K[MatchingExpr, Value, T]
-    val evaluateMatch: Tup ~> Bool   = [t] => (tuple: Tup[t]) => tuple.first.evaluate(tuple.second)
+    type Tup[T] = Tuple2K[MatchingExpr, Value][T]
+    val evaluateMatch: Tup ~> Bool   = [t] => (tuple: Tup[t]) => tuple._1.evaluate(tuple._2)
     val evaluated                    = matching.productK(in).mapK(evaluateMatch)
     val matches                      = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
     val evaluate: ValueExpr ~> Value = [t] => (fa: ValueExpr[t]) => fa.evaluate(())
@@ -32,9 +29,9 @@ case class Rule[Input[_[_]]: FunctorK: SemigroupalK, Output[_[_]]: FunctorK](
 }
 
 object Rule {
-  def default[Input[_[_]]: FunctorK: SemigroupalK: PureK, Output[_[_]]: FunctorK](value: Output[ValueExpr]): Rule[Input, Output] = {
+  def default[Input[_[_]]: HKD, Output[_[_]]: HKD](value: Output[ValueExpr]): Rule[Input, Output] = {
     Rule(
-      matching = PureK[Input].pure[MatchingExpr]([t] => () => catchAll[t]),
+      matching = HKD[Input].pure[MatchingExpr]([t] => () => catchAll[t]),
       output = value,
     )
   }

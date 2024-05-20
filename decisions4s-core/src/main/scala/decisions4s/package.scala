@@ -2,6 +2,9 @@ import shapeless3.deriving.{K0, Labelling}
 
 package object decisions4s {
 
+  type ~>[A[_], B[_]] = [t] => A[t] => B[t]
+  type Tuple2K[A[_], B[_]] = [t] =>> (A[t], B[t])
+
   type Value[T]       = T
   type Description[T] = String
 

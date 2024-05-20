@@ -2,13 +2,12 @@ package decisions4s.example.provider_routing
 
 import decisions4s.*
 import decisions4s.syntax.*
-import decisions4s.util.{FunctorK, PureK, SemigroupalK}
 
 object BankingProviderDecision {
 
-  case class Input[F[_]](userResidenceCountry: F[Country], currency: F[Currency]) derives FunctorK, SemigroupalK, PureK
+  case class Input[F[_]](userResidenceCountry: F[Country], currency: F[Currency]) derives HKD
 
-  case class Output[F[_]](provider: F[Provider]) derives FunctorK, SemigroupalK
+  case class Output[F[_]](provider: F[Provider]) derives HKD
 
   val decisionTable: DecisionTable[Input, Output] =
     DecisionTable(

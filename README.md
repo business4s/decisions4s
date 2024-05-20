@@ -19,13 +19,12 @@ We will model rules governing a pull request process. We start by defining the i
 ```scala 3
 import decisions4s.*
 import decisions4s.syntax.*
-import decisions4s.util.*
 
 case class Input[F[_]](numOfApprovals: F[Int], isTargetBranchProtected: F[Boolean], authorIsAdmin: F[Boolean])
-  derives FunctorK, SemigroupalK, PureK
+  derives HKD
 
 case class Output[F[_]](allowMerging: F[Boolean], notifyUnusualAction: F[Boolean])
-  derives FunctorK, SemigroupalK
+  derives HKD
 ```
 
 We take 3 values as input and provide 2 values as the output. Now let's define the rules

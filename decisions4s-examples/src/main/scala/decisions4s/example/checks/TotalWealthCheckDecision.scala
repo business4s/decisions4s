@@ -1,9 +1,7 @@
 package decisions4s.example.checks
 
-import decisions4s.exprs.GreaterThan
 import decisions4s.syntax.*
-import decisions4s.util.{FunctorK, PureK, SemigroupalK}
-import decisions4s.{DecisionTable, it, LiteralShow, Name, Rule}
+import decisions4s.*
 
 object TotalWealthCheckDecision {
   sealed trait TotalWealth
@@ -28,11 +26,9 @@ object TotalWealthCheckDecision {
   }
 
   case class Input[F[_]](totalWealthDeclaration: F[TotalWealth], userRiskLevel: F[RiskLevel], sumOfDepositsEur: F[Int])
-      derives FunctorK,
-        SemigroupalK,
-        PureK
+      derives HKD
 
-  case class Output[F[_]](stop: F[Boolean]) derives FunctorK, SemigroupalK
+  case class Output[F[_]](stop: F[Boolean]) derives HKD
 
   val decisionTable: DecisionTable[Input, Output] =
     DecisionTable(

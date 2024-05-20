@@ -1,8 +1,7 @@
 package decisions4s.dmn
 
-import decisions4s.DecisionTable
+import decisions4s.{DecisionTable, HKD}
 import decisions4s.internal.HKDUtils
-import decisions4s.util.FunctorK
 import org.camunda.bpm.model.dmn.instance.{Decision, Definitions, InputEntry, InputExpression, OutputEntry, Text, DecisionTable as DmnDecisionTable, Input as DmnInput, Output as DmnOutput, Rule as DmnRule}
 import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance, HitPolicy}
 import org.camunda.bpm.model.xml.instance.ModelElementInstance
@@ -11,13 +10,13 @@ import scala.reflect.ClassTag
 
 object DmnConverter {
 
-  def convert[Input[_[_]]: FunctorK, Output[_[_]]: FunctorK](table: DecisionTable[Input, Output]): DmnModelInstance = {
+  def convert[Input[_[_]]: HKD, Output[_[_]]: HKD](table: DecisionTable[Input, Output]): DmnModelInstance = {
     val modelInstance = DmnBuilder(table).modelInstance
     Dmn.validateModel(modelInstance)
     modelInstance
   }
 
-  private class DmnBuilder[Input[_[_]]: FunctorK, Output[_[_]]: FunctorK](table: DecisionTable[Input, Output]) {
+  private class DmnBuilder[Input[_[_]]: HKD, Output[_[_]]: HKD](table: DecisionTable[Input, Output]) {
     val modelInstance: DmnModelInstance  = Dmn.createEmptyModel()
     private val definitions: Definitions = buildDefinitions
     private val decision                 = buildDecision

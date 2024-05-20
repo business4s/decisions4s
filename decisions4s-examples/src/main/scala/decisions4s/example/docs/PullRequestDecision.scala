@@ -2,13 +2,12 @@ package decisions4s.example.docs
 
 import decisions4s.*
 import decisions4s.syntax.*
-import decisions4s.util.*
 
 object PullRequestDecision {
 
-  case class Input[F[_]](numOfApprovals: F[Int], isTargetBranchProtected: F[Boolean], authorIsAdmin: F[Boolean]) derives FunctorK, SemigroupalK, PureK
+  case class Input[F[_]](numOfApprovals: F[Int], isTargetBranchProtected: F[Boolean], authorIsAdmin: F[Boolean]) derives HKD
 
-  case class Output[F[_]](allowMerging: F[Boolean], notifyUnusualAction: F[Boolean]) derives FunctorK, SemigroupalK
+  case class Output[F[_]](allowMerging: F[Boolean], notifyUnusualAction: F[Boolean]) derives HKD
 
   val decisionTable: DecisionTable[Input, Output] =
     DecisionTable(
