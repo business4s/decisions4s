@@ -1,8 +1,9 @@
+import decisions4s.syntax.asLiteral
 import shapeless3.deriving.{K0, Labelling}
 
 package object decisions4s {
 
-  type ~>[A[_], B[_]] = [t] => A[t] => B[t]
+  type ~>[A[_], B[_]]      = [t] => A[t] => B[t]
   type Tuple2K[A[_], B[_]] = [t] =>> (A[t], B[t])
 
   type Value[T]       = T
@@ -10,6 +11,11 @@ package object decisions4s {
 
   type ValueExpr[T]    = Expr[Any, T]
   type MatchingExpr[T] = Expr[T, Boolean]
+
+  opaque type OutputValue[T] <: Expr[Any, T] = Expr[Any, T]
+  object OutputValue {
+    implicit def toExpr[T](t: T)(using LiteralShow[T]): OutputValue[T] = t.asLiteral
+  }
 
   type Name[T] = String
   object Name {

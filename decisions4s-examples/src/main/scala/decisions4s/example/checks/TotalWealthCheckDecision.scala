@@ -51,7 +51,7 @@ object TotalWealthCheckDecision {
                       userRiskLevel = it === riskLevel,
                       sumOfDepositsEur = it > getThreshold(riskLevel),
                     ),
-                    output = Output(stop = true.asLiteral),
+                    output = Output(stop = true),
                   )
                 case None               =>
                   List(
@@ -61,7 +61,7 @@ object TotalWealthCheckDecision {
                         userRiskLevel = it.catchAll,
                         sumOfDepositsEur = it.catchAll,
                       ),
-                      output = Output(stop = false.asLiteral),
+                      output = Output(stop = false),
                     ),
                   )
               }

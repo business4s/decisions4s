@@ -121,9 +121,6 @@ To see the full example check [PullRequestDecision.scala](decisions4s-examples/s
 
 ## TODO:
 
-* [ ] Specialised derivation - Currently Input and Output shapes require to derive generic algebraic
-  typeclasses (`FunctorK`, `SemigroupK`, `PureK`). This provides little value and should be merged into
-  specialised `InputShape` and `OutputShape` typeclasses
 * [ ] Defining hit policy - Currently decision table returns the first result, this can be customised to allow for at
   least collecting all the hits
 * [ ] Release/CI/CD

@@ -1,7 +1,6 @@
 package decisions4s.internal
 
 import decisions4s.HKD
-import decisions4s.HKD.syntax.*
 import shapeless3.deriving.~>
 
 import scala.collection.mutable.ListBuffer

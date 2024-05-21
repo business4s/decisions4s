@@ -27,12 +27,12 @@ object ElderlyScamCheckDecision {
         txAmountEur = it > 2000,
       ),
       output = Output(
-        stop = true.asLiteral,
+        stop = true,
       ),
     ),
     Rule.default(
       Output(
-        stop = false.asLiteral,
+        stop = false,
       ),
     ),
   )

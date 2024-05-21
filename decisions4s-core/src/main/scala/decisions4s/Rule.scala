@@ -1,13 +1,12 @@
 package decisions4s
 
-import decisions4s.HKD.syntax.*
 import decisions4s.internal.HKDUtils
 import decisions4s.syntax.catchAll
 import shapeless3.deriving.~>
 
 case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
     matching: Input[MatchingExpr],
-    output: Output[ValueExpr],
+    output: Output[OutputValue],
 ) {
 
   def evaluate(in: Input[Value]): Option[Output[Value]] = {
@@ -29,7 +28,7 @@ case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
 }
 
 object Rule {
-  def default[Input[_[_]]: HKD, Output[_[_]]: HKD](value: Output[ValueExpr]): Rule[Input, Output] = {
+  def default[Input[_[_]]: HKD, Output[_[_]]: HKD](value: Output[OutputValue]): Rule[Input, Output] = {
     Rule(
       matching = HKD[Input].pure[MatchingExpr]([t] => () => catchAll[t]),
       output = value,

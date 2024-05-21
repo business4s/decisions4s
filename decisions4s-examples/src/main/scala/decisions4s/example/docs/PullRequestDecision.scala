@@ -25,8 +25,8 @@ object PullRequestDecision {
         authorIsAdmin = it.catchAll,
       ),
       output = Output(
-        allowMerging = true.asLiteral,
-        notifyUnusualAction = false.asLiteral,
+        allowMerging = true,
+        notifyUnusualAction = false,
       ),
     ),
     Rule(
@@ -36,8 +36,8 @@ object PullRequestDecision {
         authorIsAdmin = it.catchAll,
       ),
       output = Output(
-        allowMerging = true.asLiteral,
-        notifyUnusualAction = false.asLiteral,
+        allowMerging = true,
+        notifyUnusualAction = false,
       ),
     ),
     Rule(
@@ -47,14 +47,14 @@ object PullRequestDecision {
         authorIsAdmin = it.isTrue,
       ),
       output = Output(
-        allowMerging = true.asLiteral,
-        notifyUnusualAction = true.asLiteral,
+        allowMerging = true,
+        notifyUnusualAction = true,
       ),
     ),
     Rule.default(
       Output(
-        allowMerging = false.asLiteral,
-        notifyUnusualAction = false.asLiteral,
+        allowMerging = false,
+        notifyUnusualAction = false,
       ),
     ),
   )

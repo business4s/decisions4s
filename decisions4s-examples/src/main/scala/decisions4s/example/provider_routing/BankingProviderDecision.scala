@@ -25,7 +25,7 @@ object BankingProviderDecision {
         currency = it.catchAll,
       ),
       output = Output(
-        provider = Provider.FooInc.asLiteral,
+        provider = Provider.FooInc,
       ),
     ),
     Rule(
@@ -34,7 +34,7 @@ object BankingProviderDecision {
         currency = Currency.EUR.matchEqual,
       ),
       output = Output(
-        provider = Provider.AcmeCorp.asLiteral,
+        provider = Provider.AcmeCorp,
       ),
     ),
     Rule(
@@ -43,12 +43,12 @@ object BankingProviderDecision {
         currency = it.equalsAnyOf(Currency.CHF, Currency.PLN),
       ),
       output = Output(
-        provider = Provider.BarLtd.asLiteral,
+        provider = Provider.BarLtd,
       ),
     ),
     Rule.default(
       Output(
-        provider = Provider.BazCo.asLiteral,
+        provider = Provider.BazCo,
       ),
     ),
   )
