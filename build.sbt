@@ -6,8 +6,10 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel"                %% "cats-core"           % "2.10.0",
-      "org.typelevel"                %% "shapeless3-deriving" % "3.4.0",
+      "org.typelevel"   %% "shapeless3-deriving" % "3.4.0",
+      "org.scalameta"   %% "munit"               % "1.0.0"  % Test,
+      "org.camunda.feel" % "feel-engine"         % "1.17.7" % Test,
+      "ch.qos.logback"   % "logback-classic"     % "1.5.6"  % Test,
     ),
   )
 
@@ -26,7 +28,7 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
 
 lazy val commonSettings = Seq(
   scalaVersion := "3.3.3",
-  scalacOptions ++= Seq("-no-indent"),
+  scalacOptions ++= Seq("-no-indent", "-Yrangepos"),
   libraryDependencies ++= testDeps,
 )
 
