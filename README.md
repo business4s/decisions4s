@@ -18,7 +18,6 @@ We will model rules governing a pull request process. We start by defining the i
 
 ```scala 3
 import decisions4s.*
-import decisions4s.syntax.*
 
 case class Input[F[_]](numOfApprovals: F[Int], isTargetBranchProtected: F[Boolean], authorIsAdmin: F[Boolean])
   derives HKD
@@ -38,8 +37,8 @@ def rules: List[Rule[Input, Output]] = List(
       authorIsAdmin = it.catchAll,
     ),
     output = Output(
-      allowMerging = true.asLiteral,
-      notifyUnusualAction = false.asLiteral,
+      allowMerging = true,
+      notifyUnusualAction = false,
     ),
   ),
   Rule(
@@ -49,8 +48,8 @@ def rules: List[Rule[Input, Output]] = List(
       authorIsAdmin = it.catchAll,
     ),
     output = Output(
-      allowMerging = true.asLiteral,
-      notifyUnusualAction = false.asLiteral,
+      allowMerging = true,
+      notifyUnusualAction = false,
     ),
   ),
   Rule(
@@ -60,14 +59,14 @@ def rules: List[Rule[Input, Output]] = List(
       authorIsAdmin = it.isTrue,
     ),
     output = Output(
-      allowMerging = true.asLiteral,
-      notifyUnusualAction = true.asLiteral,
+      allowMerging = true,
+      notifyUnusualAction = true,
     ),
   ),
   Rule.default(
     Output(
-      allowMerging = false.asLiteral,
-      notifyUnusualAction = false.asLiteral,
+      allowMerging = false,
+      notifyUnusualAction = false,
     ),
   ),
 )

@@ -1,5 +1,7 @@
-import decisions4s.syntax.asLiteral
+import decisions4s.exprs.Literal
 import shapeless3.deriving.{K0, Labelling}
+
+import scala.annotation.implicitNotFound
 
 package object decisions4s {
 
@@ -14,7 +16,7 @@ package object decisions4s {
 
   opaque type OutputValue[T] <: Expr[Any, T] = Expr[Any, T]
   object OutputValue {
-    implicit def toExpr[T](t: T)(using LiteralShow[T]): OutputValue[T] = t.asLiteral
+    implicit def toLiteral[T](t: T)(using LiteralShow[T]): OutputValue[T] = Literal(t)
   }
 
   type Name[T] = String

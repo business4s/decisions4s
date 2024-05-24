@@ -1,6 +1,5 @@
 package decisions4s.example.checks
 
-import decisions4s.syntax.*
 import decisions4s.*
 
 object TotalWealthCheckDecision {

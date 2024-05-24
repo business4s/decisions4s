@@ -1,7 +1,6 @@
 package decisions4s.example.docs
 
 import decisions4s.*
-import decisions4s.syntax.*
 
 object PullRequestDecision {
 
