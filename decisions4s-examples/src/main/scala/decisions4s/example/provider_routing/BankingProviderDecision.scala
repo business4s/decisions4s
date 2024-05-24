@@ -1,7 +1,6 @@
 package decisions4s.example.provider_routing
 
 import decisions4s.*
-import decisions4s.syntax.*
 
 object BankingProviderDecision {
 
@@ -14,7 +13,7 @@ object BankingProviderDecision {
       rules,
       inputNames = Name.auto[Input],
       outputNames = Name.auto[Output],
-      name = "BankingProviderSelection"
+      name = "BankingProviderSelection",
     )
 
   private type Rule = decisions4s.Rule[Input, Output]
@@ -31,7 +30,7 @@ object BankingProviderDecision {
     Rule(
       matching = Input(
         userResidenceCountry = it.catchAll,
-        currency = Currency.EUR.matchEqual,
+        currency = it === Currency.EUR,
       ),
       output = Output(
         provider = Provider.AcmeCorp,

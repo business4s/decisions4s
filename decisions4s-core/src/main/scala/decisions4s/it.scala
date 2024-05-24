@@ -7,8 +7,9 @@ import scala.annotation.targetName
 // Syntax for defining predicates
 object it {
 
-  @targetName("equalsTo")
+  @targetName("equalsToOp")
   def ===[T](value: T)(using LiteralShow[T]): MatchingExpr[T] = Equal(Literal(value))
+  def equalsTo[T](value: T)(using LiteralShow[T]): MatchingExpr[T] = Equal(Literal(value))
 
   def equalsAnyOf[T](values: T*)(using LiteralShow[T]): MatchingExpr[T] = Or(values.map(v => Equal(Literal(v))))
 
