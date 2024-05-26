@@ -28,7 +28,7 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
 
 lazy val commonSettings = Seq(
   scalaVersion := "3.3.3",
-  scalacOptions ++= Seq("-no-indent", "-Yrangepos"),
+  scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
 )
 
