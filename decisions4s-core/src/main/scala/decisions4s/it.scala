@@ -8,6 +8,8 @@ import scala.annotation.targetName
 // Syntax for defining predicates
 object it {
 
+  def value[T]: Expr[T, T] = Input()
+
   @targetName("equalsToOp")
   def ===[T](value: T)(using LiteralShow[T]): UnaryTest[T]      = UnaryTest.EqualTo(Literal(value))
   def equalsTo[T](value: T)(using LiteralShow[T]): UnaryTest[T] = UnaryTest.EqualTo(Literal(value))

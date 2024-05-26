@@ -8,29 +8,35 @@ import munit.FunSuite
 class UnaryTestTest extends FunSuite {
 
   test("bool conversion") {
-    val bool1: Expr[Any, Int] = Literal(1)
-    val unary1: UnaryTest[Int]    = bool1
+    val bool1: Expr[Any, Int]  = Literal(1)
+    val unary1: UnaryTest[Int] = bool1
     checkUnaryExpression(unary1, 1, true)
     checkUnaryExpression(unary1, 2, false)
   }
 
   test("comparison with boolean takes precedence over boolean conversion") {
     checkUnaryExpression(UnaryTest.EqualTo(True), false, false)
-    checkUnaryExpression(True, false, false)
+    checkUnaryExpression((True: UnaryTest[Boolean]), false, false)
   }
 
   test("list conversion") {
     val list: Expr[Int, List[Int]] = Literal(List(1, 2, 3))
     val unary: UnaryTest[Int]      = list
     checkUnaryExpression(unary, 1, true)
+    checkUnaryExpression(it.equalsAnyOf(1, 2, 3), 1, true)
     checkUnaryExpression(unary, 2, true)
+    checkUnaryExpression(it.equalsAnyOf(1, 2, 3), 2, true)
     checkUnaryExpression(unary, 4, false)
+    checkUnaryExpression(it.equalsAnyOf(1, 2, 3), 4, false)
   }
   test("value conversion") {
     val value: Expr[Int, Int] = Literal(1)
     val unary: UnaryTest[Int] = value
     checkUnaryExpression(unary, 1, true)
+    checkUnaryExpression(it === 1, 1, true)
+
     checkUnaryExpression(unary, 2, false)
+    checkUnaryExpression(it === 1, 2, false)
   }
   test("catchAll") {
     checkUnaryExpression(CatchAll, 1, true)
