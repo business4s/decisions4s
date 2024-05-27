@@ -125,10 +125,11 @@ check [PullRequestDecision.scala](decisions4s-examples/src/main/scala/decisions4
 
 ## Expressions coverage and FEEL compatibility
 
-As of now, Decisions4s supports a limited set of expressions, mostly focusing on boolean logic and basic tests.
+As of now, Decisions4s supports a limited set of expressions, mostly focusing on boolean logic and basic tests. Missing
+expressions need to be provided at the use-site.
 
-The expressions provided guarantee compatibility
-with [FEEL](https://docs.camunda.io/docs/components/modeler/feel/what-is-feel/), meaning their rendered form, when
+The expressions provide guarantee compatibility
+with [FEEL](https://docs.camunda.io/docs/components/modeler/feel/what-is-feel/). This means their rendered form, when
 evaluated, yields the same result as direct evaluation. This guarantee is provided to lower the mental load, so that we
 can rely on a properly specified format instead of defining our own. Having said that, it's important to remember that
 **rendered form is not intended to be evaluated**, Decisions4s will use direct evaluation when evaluating decision

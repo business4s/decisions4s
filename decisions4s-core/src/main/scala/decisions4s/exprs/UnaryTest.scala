@@ -7,12 +7,12 @@ import decisions4s.exprs.UnaryTest.Compare.Sign
 import scala.language.implicitConversions
 import scala.math.Ordered.orderingToOrdered
 
+// https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/
 sealed trait UnaryTest[-T] extends Expr[T, Boolean] {
   def evaluate(in: T): Boolean
   def renderFeelExpression: String
 }
 
-// matches https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/
 object UnaryTest extends LowPriorityUnaryTestConversion {
 
   case class EqualTo[T](expr: Expr[T, T]) extends UnaryTest[T] {
