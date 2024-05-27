@@ -103,20 +103,39 @@ decisionTable.evaluate(Input[Value](
 ))
 // Output(allowMerging = true, notifyUnusualAction = false)
 ```
+
 It works! Lets generate the DMN for the business.
 
 ```scala 3
 import decisions4s.dmn.DmnConverter
+
 val dmnInstance = DmnConverter.convert(decisionTable)
 import org.camunda.bpm.model.dmn.Dmn
+
 Dmn.writeModelToFile(new java.io.File(s"./${decisionTable.name}.dmn"), dmnInstance)
 ```
 
-Now if we open this file in [bpmn.io](https://bpmn.io/toolkit/dmn-js/) or Camunda Modeler we will see the following table.
+Now if we open this file in [bpmn.io](https://bpmn.io/toolkit/dmn-js/) or Camunda Modeler we will see the following
+table.
 
 ![PullRequestDecision.png](docs/PullRequestDecision.png)
 
-To see the full example check [PullRequestDecision.scala](decisions4s-examples/src/main/scala/decisions4s/example/docs/PullRequestDecision.scala)
+To see the full example,
+check [PullRequestDecision.scala](decisions4s-examples/src/main/scala/decisions4s/example/docs/PullRequestDecision.scala)
+
+## Expressions coverage and FEEL compatibility
+
+As of now, Decisions4s supports a limited set of expressions, mostly focusing on boolean logic and basic tests. Missing
+expressions need to be provided at the use-site.
+
+The expressions provide guarantee compatibility
+with [FEEL](https://docs.camunda.io/docs/components/modeler/feel/what-is-feel/). This means their rendered form, when
+evaluated, yields the same result as direct evaluation. This guarantee is provided to lower the mental load, so that we
+can rely on a properly specified format instead of defining our own. Having said that, it's important to remember that
+**rendered form is not intended to be evaluated**, Decisions4s will use direct evaluation when evaluating decision
+tables.
+
+User-defined expressions dont have to keep FEEL compatibility.
 
 ## TODO:
 

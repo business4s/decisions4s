@@ -1,26 +1,33 @@
 package decisions4s
 
 import decisions4s.exprs.*
+import decisions4s.exprs.UnaryTest.{Compare, Or}
 
 import scala.annotation.targetName
 
 // Syntax for defining predicates
 object it {
 
+  def value[T]: Expr[T, T] = Input()
+
   @targetName("equalsToOp")
-  def ===[T](value: T)(using LiteralShow[T]): MatchingExpr[T] = Equal(Literal(value))
-  def equalsTo[T](value: T)(using LiteralShow[T]): MatchingExpr[T] = Equal(Literal(value))
+  def ===[T](value: T)(using LiteralShow[T]): UnaryTest[T]      = UnaryTest.EqualTo(Literal(value))
+  def equalsTo[T](value: T)(using LiteralShow[T]): UnaryTest[T] = UnaryTest.EqualTo(Literal(value))
 
-  def equalsAnyOf[T](values: T*)(using LiteralShow[T]): MatchingExpr[T] = Or(values.map(v => Equal(Literal(v))))
+  def equalsAnyOf[T](values: T*)(using LiteralShow[T]): UnaryTest[T] = Or(values.map(v => Literal(v)))
 
-  @targetName("greaterThan")
-  def >[T](value: T)(using LiteralShow[T], Ordering[T]): MatchingExpr[T] = GreaterThan(Literal(value))
+  def >[T](value: T)(using LiteralShow[T], Ordering[T]): UnaryTest[T]  = Compare(Compare.Sign.`>`, Literal(value))
+  def >[T](value: Expr[T, T])(using Ordering[T]): UnaryTest[T]         = Compare(Compare.Sign.`>`, value)
+  def >=[T](value: T)(using LiteralShow[T], Ordering[T]): UnaryTest[T] = Compare(Compare.Sign.`>=`, Literal(value))
+  def >=[T](value: Expr[T, T])(using Ordering[T]): UnaryTest[T]        = Compare(Compare.Sign.`>=`, value)
 
-  @targetName("lessThan")
-  def <[T](value: T)(using LiteralShow[T], Ordering[T]): MatchingExpr[T] = LessThan(Literal(value))
+  def <[T](value: T)(using LiteralShow[T], Ordering[T]): UnaryTest[T]  = Compare(Compare.Sign.`<`, Literal(value))
+  def <[T](value: Expr[T, T])(using Ordering[T]): UnaryTest[T]         = Compare(Compare.Sign.`<`, value)
+  def <=[T](value: T)(using LiteralShow[T], Ordering[T]): UnaryTest[T] = Compare(Compare.Sign.`<=`, Literal(value))
+  def <=[T](value: Expr[T, T])(using Ordering[T]): UnaryTest[T]        = Compare(Compare.Sign.`<=`, value)
 
-  def catchAll[T]: MatchingExpr[T] = True
+  def catchAll[T]: UnaryTest[T] = UnaryTest.CatchAll
 
-  def isTrue: MatchingExpr[Boolean] = Equal(Literal(true))
-  def isFalse: MatchingExpr[Boolean] = Equal(Literal(false))
+  def isTrue: Expr[Any, Boolean]  = True
+  def isFalse: UnaryTest[Boolean] = UnaryTest.EqualTo(Literal(false))
 }

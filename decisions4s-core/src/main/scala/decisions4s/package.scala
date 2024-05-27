@@ -1,7 +1,5 @@
-import decisions4s.exprs.Literal
+import decisions4s.exprs.{Literal, UnaryTest}
 import shapeless3.deriving.{K0, Labelling}
-
-import scala.annotation.implicitNotFound
 
 package object decisions4s {
 
@@ -12,7 +10,7 @@ package object decisions4s {
   type Description[T] = String
 
   type ValueExpr[T]    = Expr[Any, T]
-  type MatchingExpr[T] = Expr[T, Boolean]
+  type MatchingExpr[T] = UnaryTest[T]
 
   opaque type OutputValue[T] <: Expr[Any, T] = Expr[Any, T]
   object OutputValue {
