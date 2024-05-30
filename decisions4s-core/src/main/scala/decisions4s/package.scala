@@ -12,6 +12,8 @@ package object decisions4s {
   type ValueExpr[T]    = Expr[Any, T]
   type MatchingExpr[T] = UnaryTest[T]
 
+
+
   opaque type OutputValue[T] <: Expr[Any, T] = Expr[Any, T]
   object OutputValue {
     implicit def toLiteral[T](t: T)(using LiteralShow[T]): OutputValue[T] = Literal(t)

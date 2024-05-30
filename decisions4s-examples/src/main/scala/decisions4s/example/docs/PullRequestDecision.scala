@@ -1,6 +1,7 @@
 package decisions4s.example.docs
 
 import decisions4s.*
+import decisions4s.DecisionTable.HitPolicy
 
 object PullRequestDecision {
 
@@ -8,12 +9,13 @@ object PullRequestDecision {
 
   case class Output[F[_]](allowMerging: F[Boolean], notifyUnusualAction: F[Boolean]) derives HKD
 
-  val decisionTable: DecisionTable[Input, Output] =
+  val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
     DecisionTable(
       rules,
       inputNames = Name.auto,
       outputNames = Name.auto,
       name = "PullRequestDecision",
+      HitPolicy.Unique,
     )
 
   private def rules: List[Rule[Input, Output]] = List(
@@ -60,7 +62,7 @@ object PullRequestDecision {
 
   def main(args: Array[String]): Unit = {
 
-    val result = decisionTable.evaluate(
+    val result = decisionTable.evaluateUnique(
       Input[Value](
         numOfApprovals = 1,
         isTargetBranchProtected = false,

@@ -1,6 +1,7 @@
 package decisions4s.example.checks
 
 import decisions4s.*
+import decisions4s.DecisionTable.HitPolicy
 
 object TotalWealthCheckDecision {
   sealed trait TotalWealth
@@ -24,17 +25,17 @@ object TotalWealthCheckDecision {
     given LiteralShow[RiskLevel] = _.toString
   }
 
-  case class Input[F[_]](totalWealthDeclaration: F[TotalWealth], userRiskLevel: F[RiskLevel], sumOfDepositsEur: F[Int])
-      derives HKD
+  case class Input[F[_]](totalWealthDeclaration: F[TotalWealth], userRiskLevel: F[RiskLevel], sumOfDepositsEur: F[Int]) derives HKD
 
   case class Output[F[_]](stop: F[Boolean]) derives HKD
 
-  val decisionTable: DecisionTable[Input, Output] =
+  val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
     DecisionTable(
       rules,
       inputNames = Name.auto[Input],
       outputNames = Name.auto[Output],
       name = "TotalWealthCheck",
+      HitPolicy.Unique,
     )
 
   private type Rule = decisions4s.Rule[Input, Output]

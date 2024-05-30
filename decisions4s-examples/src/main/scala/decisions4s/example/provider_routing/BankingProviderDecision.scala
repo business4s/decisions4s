@@ -1,6 +1,7 @@
 package decisions4s.example.provider_routing
 
 import decisions4s.*
+import decisions4s.DecisionTable.HitPolicy
 
 object BankingProviderDecision {
 
@@ -8,12 +9,13 @@ object BankingProviderDecision {
 
   case class Output[F[_]](provider: F[Provider]) derives HKD
 
-  val decisionTable: DecisionTable[Input, Output] =
+  val decisionTable: DecisionTable[Input, Output, HitPolicy.First] =
     DecisionTable(
       rules,
       inputNames = Name.auto[Input],
       outputNames = Name.auto[Output],
       name = "BankingProviderSelection",
+      HitPolicy.First,
     )
 
   private type Rule = decisions4s.Rule[Input, Output]

@@ -82,12 +82,13 @@ We have defined 4 rules:
 Now let's create a decision table
 
 ```scala 3
-val decisionTable: DecisionTable[Input, Output] =
+val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
   DecisionTable(
     rules,
     inputNames = Name.auto[Input],
     outputNames = Name.auto[Output],
     name = "PullRequestDecision",
+    hitPolicy = HitPolicy.Unique
   )
 ```
 
@@ -96,7 +97,7 @@ Defining the decision means specifying the rules and names for fields and decisi
 Now we can evaluate our decision:
 
 ```scala 3
-decisionTable.evaluate(Input[Value](
+decisionTable.evaluateUnqiue(Input[Value](
   numOfApprovals = 1,
   isTargetBranchProtected = false,
   authorIsAdmin = true
@@ -132,7 +133,7 @@ The expressions provide guarantee compatibility
 with [FEEL](https://docs.camunda.io/docs/components/modeler/feel/what-is-feel/). This means their rendered form, when
 evaluated, yields the same result as direct evaluation. This guarantee is provided to lower the mental load, so that we
 can rely on a properly specified format instead of defining our own. Having said that, it's important to remember that
-**rendered form is not intended to be evaluated**, Decisions4s will use direct evaluation when evaluating decision
+**rendered form is not intended to be evaluated**; Decisions4s will use direct evaluation when evaluating decision
 tables.
 
 User-defined expressions dont have to keep FEEL compatibility.
