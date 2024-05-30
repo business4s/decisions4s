@@ -9,13 +9,13 @@ object BankingProviderDecision {
 
   case class Output[F[_]](provider: F[Provider]) derives HKD
 
-  val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
+  val decisionTable: DecisionTable[Input, Output, HitPolicy.First] =
     DecisionTable(
       rules,
       inputNames = Name.auto[Input],
       outputNames = Name.auto[Output],
       name = "BankingProviderSelection",
-      HitPolicy.Unique,
+      HitPolicy.First,
     )
 
   private type Rule = decisions4s.Rule[Input, Output]
