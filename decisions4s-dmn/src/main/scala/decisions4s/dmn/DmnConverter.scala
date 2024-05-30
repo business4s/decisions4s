@@ -2,21 +2,33 @@ package decisions4s.dmn
 
 import decisions4s.{DecisionTable, HKD}
 import decisions4s.internal.HKDUtils
-import org.camunda.bpm.model.dmn.instance.{Decision, Definitions, InputEntry, InputExpression, OutputEntry, Text, DecisionTable as DmnDecisionTable, Input as DmnInput, Output as DmnOutput, Rule as DmnRule}
-import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance, HitPolicy}
+import org.camunda.bpm.model.dmn.instance.{
+  Decision,
+  DecisionTable as DmnDecisionTable,
+  Definitions,
+  Description,
+  Input as DmnInput,
+  InputEntry,
+  InputExpression,
+  Output as DmnOutput,
+  OutputEntry,
+  Rule as DmnRule,
+  Text,
+}
+import org.camunda.bpm.model.dmn.{BuiltinAggregator, Dmn, DmnModelInstance, HitPolicy}
 import org.camunda.bpm.model.xml.instance.ModelElementInstance
 
 import scala.reflect.ClassTag
 
 object DmnConverter {
 
-  def convert[Input[_[_]]: HKD, Output[_[_]]: HKD](table: DecisionTable[Input, Output]): DmnModelInstance = {
+  def convert[Input[_[_]]: HKD, Output[_[_]]: HKD, HP <: DecisionTable.HitPolicy](table: DecisionTable[Input, Output, HP]): DmnModelInstance = {
     val modelInstance = DmnBuilder(table).modelInstance
     Dmn.validateModel(modelInstance)
     modelInstance
   }
 
-  private class DmnBuilder[Input[_[_]]: HKD, Output[_[_]]: HKD](table: DecisionTable[Input, Output]) {
+  private class DmnBuilder[Input[_[_]]: HKD, Output[_[_]]: HKD, HP <: DecisionTable.HitPolicy](table: DecisionTable[Input, Output, HP]) {
     val modelInstance: DmnModelInstance  = Dmn.createEmptyModel()
     private val definitions: Definitions = buildDefinitions
     private val decision                 = buildDecision
@@ -41,9 +53,26 @@ object DmnConverter {
     }
 
     private def buildDecisionTable = {
-      val table = decision.addChild[DmnDecisionTable]
-      table.setHitPolicy(HitPolicy.FIRST)
-      table
+      val tableElem = decision.addChild[DmnDecisionTable]
+      tableElem.setHitPolicy((table.hitPolicy: DecisionTable.HitPolicy) match {
+        case DecisionTable.HitPolicy.Unique       => HitPolicy.UNIQUE
+        case DecisionTable.HitPolicy.Any          => HitPolicy.ANY
+        case DecisionTable.HitPolicy.First        => HitPolicy.FIRST
+        case DecisionTable.HitPolicy.Collect      => HitPolicy.COLLECT
+        case DecisionTable.HitPolicy.CollectSum   => HitPolicy.COLLECT
+        case DecisionTable.HitPolicy.CollectMin   => HitPolicy.COLLECT
+        case DecisionTable.HitPolicy.CollectMax   => HitPolicy.COLLECT
+        case DecisionTable.HitPolicy.CollectCount => HitPolicy.COLLECT
+      })
+      val aggr      = (table.hitPolicy: DecisionTable.HitPolicy) match {
+        case DecisionTable.HitPolicy.CollectSum   => Some(BuiltinAggregator.SUM)
+        case DecisionTable.HitPolicy.CollectMin   => Some(BuiltinAggregator.MIN)
+        case DecisionTable.HitPolicy.CollectMax   => Some(BuiltinAggregator.MAX)
+        case DecisionTable.HitPolicy.CollectCount => Some(BuiltinAggregator.COUNT)
+        case _                                    => None
+      }
+      aggr.foreach(tableElem.setAggregation)
+      tableElem
     }
 
     private def buildInputs(): Unit = {
@@ -67,6 +96,7 @@ object DmnConverter {
       table.rules.foreach(rule => {
         val ruleInstance      = decisionTable.addChild[DmnRule]
         val (inDesc, outDesc) = rule.render()
+        rule.annotation.foreach(ruleInstance.setDescription(_))
         HKDUtils
           .collectFields(inDesc)
           .foreach(desc => {
@@ -92,6 +122,10 @@ object DmnConverter {
     }
     def setText(value: String): Unit                                  = {
       val text = addChild[Text]
+      text.setTextContent(value)
+    }
+    def setDescription(value: String): Unit                           = {
+      val text = addChild[Description]
       text.setTextContent(value)
     }
   }

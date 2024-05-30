@@ -1,6 +1,7 @@
 package decisions4s.example.checks
 
 import decisions4s.*
+import decisions4s.DecisionTable.HitPolicy
 
 object ElderlyScamCheckDecision {
 
@@ -8,12 +9,13 @@ object ElderlyScamCheckDecision {
 
   case class Output[F[_]](stop: F[Boolean]) derives HKD
 
-  val decisionTable: DecisionTable[Input, Output] =
+  val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
     DecisionTable(
       rules,
       inputNames = Name.auto[Input],
       outputNames = Name.auto[Output],
       name = "ElderlyScamCheck",
+      HitPolicy.Unique
     )
 
   private type Rule = decisions4s.Rule[Input, Output]

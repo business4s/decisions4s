@@ -132,7 +132,7 @@ The expressions provide guarantee compatibility
 with [FEEL](https://docs.camunda.io/docs/components/modeler/feel/what-is-feel/). This means their rendered form, when
 evaluated, yields the same result as direct evaluation. This guarantee is provided to lower the mental load, so that we
 can rely on a properly specified format instead of defining our own. Having said that, it's important to remember that
-**rendered form is not intended to be evaluated**, Decisions4s will use direct evaluation when evaluating decision
+**rendered form is not intended to be evaluated**; Decisions4s will use direct evaluation when evaluating decision
 tables.
 
 User-defined expressions dont have to keep FEEL compatibility.
