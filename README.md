@@ -82,12 +82,13 @@ We have defined 4 rules:
 Now let's create a decision table
 
 ```scala 3
-val decisionTable: DecisionTable[Input, Output] =
+val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
   DecisionTable(
     rules,
     inputNames = Name.auto[Input],
     outputNames = Name.auto[Output],
     name = "PullRequestDecision",
+    hitPolicy = HitPolicy.Unique
   )
 ```
 
@@ -96,7 +97,7 @@ Defining the decision means specifying the rules and names for fields and decisi
 Now we can evaluate our decision:
 
 ```scala 3
-decisionTable.evaluate(Input[Value](
+decisionTable.evaluateUnqiue(Input[Value](
   numOfApprovals = 1,
   isTargetBranchProtected = false,
   authorIsAdmin = true
