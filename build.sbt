@@ -13,12 +13,22 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
     ),
   )
 
-lazy val `decisions4s-dmn` = (project in file("decisions4s-dmn"))
+lazy val `decisions4s-dmn`         = (project in file("decisions4s-dmn"))
   .settings(commonSettings)
   .dependsOn(`decisions4s-core`)
   .settings(
     libraryDependencies ++= Seq(
       "org.camunda.bpm.model" % "camunda-dmn-model" % "7.21.0",
+    ),
+  )
+
+lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect"))
+  .settings(commonSettings)
+  .dependsOn(`decisions4s-core`)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-effect" % "3.5.4",
+      "org.scalameta" %% "munit"       % "1.0.0" % Test,
     ),
   )
 

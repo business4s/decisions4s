@@ -138,11 +138,25 @@ tables.
 
 User-defined expressions dont have to keep FEEL compatibility.
 
-## TODO:
+## Effectful evaluation
 
-* [ ] Defining hit policy - Currently decision table returns the first result, this can be customised to allow for at
-  least collecting all the hits
-* [ ] Release/CI/CD
+Decisions4s allow to evaluate a decision table based on effectful inputs
+(e.g. when network call is required for particular piece of data).
+
+* All inputs will be memoized and executed only if required by the rule.
+* Input is considered not required only if `catchAll` expression is used for matching.
+* table need to use HitPolicy.First (because it's the only one for which lazy evaluation is expected)
+
+```
+import cats.effect.IO
+import decisions4s.*
+import decisions4s.cats.effect.given
+
+val decisionTable: DecisionTable[Input, Output, HitPolicy.First] = ???
+val input: Input[IO] = ???
+
+decisionTable.evaluateFirstF(input)
+```
 
 ## Non-features
 
@@ -150,7 +164,3 @@ The following items are currently not available, although they could be implemen
 
 * **Serialization** - currently the decisions are not meant to be serialized and transferred over the wire, but it
   should be possible.
-* **Effectful evaluation** - as of now, all the inputs are expected to be present at the time of evaluation. This could
-  be extended for them to be lazily evaluated, so that rule can skip some expensive operations (e.g. network calls) if
-  the decision is taken without them. This item has a high chance of being implemented through accepting IO as input and
-  memoizing it. 
