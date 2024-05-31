@@ -1,1 +1,5 @@
 **/target/
+metals.lock.db
+metals.log
+metals.*
+.vscode/*
