@@ -1,26 +1,22 @@
 package decisions4s.exprs
 
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import decisions4s.exprs.TestUtils.checkExpression
-import munit.FunSuite
 
-class AndTest extends FunSuite {
-  class AndTest extends FunSuite {
-    test("basic") {
-      checkExpression(And(True, True), true)
-      checkExpression(True and True, true)
-      checkExpression(True && True, true)
-
-      checkExpression(And(True, False), false)
-      checkExpression(True and False, false)
-      checkExpression(True && False, false)
-
-      checkExpression(And(False, True), false)
-      checkExpression(False and True, false)
-      checkExpression(False && True, false)
-
-      checkExpression(And(False, False), false)
-      checkExpression(False and False, false)
-      checkExpression(False && False, false)
-    }
+class ExampleSpec extends AnyFlatSpec with Matchers {
+  "AndTest" should "basic" in {
+    assert(And(True, True).evaluate(()) == true)
+    assert((True and True).evaluate(()) == true)
+    assert((True && True).evaluate(()) == true)
+    assert(And(True, False).evaluate(()) == false)
+    assert((True and False).evaluate(()) == false)
+    assert((True && False).evaluate(()) == false)
+    assert(And(False, True).evaluate(()) == false)
+    assert((False and True).evaluate(()) == false)
+    assert((False && True).evaluate(()) == false)
+    assert(And(False, False).evaluate(()) == false)
+    assert((False and False).evaluate(()) == false)
+    assert((False && False).evaluate(()) == false)
   }
 }
