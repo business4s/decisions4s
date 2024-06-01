@@ -2,7 +2,6 @@ package decisions4s.exprs
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import decisions4s.exprs.TestUtils.checkExpression
 
 class ExampleSpec extends AnyFlatSpec with Matchers {
   "AndTest" should "basic" in {
