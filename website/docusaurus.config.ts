@@ -2,9 +2,10 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
+
 const config: Config = {
     title: 'Decisions4s',
-    tagline: 'Conditional logic made manageable',
+    tagline: 'Complicated conditionals made manageable',
     favicon: 'img/favicon.ico',
 
     // GitHub pages deployment config.
@@ -125,6 +126,9 @@ const config: Config = {
             additionalLanguages: ['java', 'scala', "json"]
         },
     } satisfies Preset.ThemeConfig,
+    customFields: {
+        decisions4sVersion: process.env.DECISIONS4s_VERSION,
+    },
 };
 
 export default config;

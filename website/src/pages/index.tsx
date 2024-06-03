@@ -4,11 +4,14 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
+import CodeBlock from '@theme/CodeBlock';
 
 import styles from './index.module.css';
 
+
 function HomepageHeader() {
     const {siteConfig} = useDocusaurusContext();
+    const decisions4sVersion = siteConfig.customFields?.decisions4sVersion;
     return (
         <header className={clsx('hero hero--primary', styles.heroBanner)}>
             <div className="container">
@@ -19,9 +22,19 @@ function HomepageHeader() {
                     {siteConfig.title}
                 </Heading>
                 <p className="hero__subtitle">{siteConfig.tagline}</p>
+                <div className={styles.dependency}>
+                    <CodeBlock className="language-scala">
+                        {`"org.business4s" %% "decisions4s-core" % "${decisions4sVersion}"`}
+                    </CodeBlock>
+                </div>
                 <div className={styles.buttons}>
                     <Link
-                        className="button button--secondary button--lg"
+                        className={`button button--secondary button--lg ${styles.myButton}`}
+                        to="">
+                        Try in Scastie
+                    </Link>
+                    <Link
+                        className={`button button--secondary button--lg ${styles.myButton}`}
                         to="/docs">
                         Read the Docs
                     </Link>

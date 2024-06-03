@@ -22,6 +22,16 @@
   justify-content: center;
 }
 
+.myButton {
+  margin: 10px
+}
+
+.dependency {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .roundedImage {
   width: 200px;
   height: 200px;
