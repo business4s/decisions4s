@@ -40,6 +40,8 @@ jobs:
         run: yarn build
       - name: Setup Pages
         uses: actions/configure-pages@v3
+        with:
+          enablement: true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
