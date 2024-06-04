@@ -33,21 +33,21 @@ class DecisionTableTest extends FunSuite {
 
   test("unique - single matching rule") {
     val result: UniqueEvalResult[Input, Output]   = uniqueTestTable.evaluateUnique(Input(2))
-    val expected: UniqueEvalResult[Input, Output] = UniqueEvalResult.Success(rawResults(false, false, true), Output(1))
+    val expected: UniqueEvalResult[Input, Output] = UniqueEvalResult.Success(diagnostics(false, false, true), Output(1))
     assertEquals(result, expected)
   }
 
   test("unique - no matching rules") {
     val input                                     = Input[Value](0)
     val result                                    = uniqueTestTable.evaluateUnique(input)
-    val expected: UniqueEvalResult[Input, Output] = UniqueEvalResult.NoHit(rawResults(false, false, false))
+    val expected: UniqueEvalResult[Input, Output] = UniqueEvalResult.NoHit(diagnostics(false, false, false))
     assertEquals(result, expected)
   }
 
   test("unique - multiple matching rules") {
     val input                                     = Input[Value](3)
     val result                                    = uniqueTestTable.evaluateUnique(input)
-    val expected: UniqueEvalResult[Input, Output] = UniqueEvalResult.NotUnique(rawResults(false, true, true))
+    val expected: UniqueEvalResult[Input, Output] = UniqueEvalResult.NotUnique(diagnostics(false, true, true))
     assertEquals(result, expected)
   }
 
@@ -163,7 +163,6 @@ class DecisionTableTest extends FunSuite {
     assertEquals(result, expected)
   }
 
-
   def rawResults(hits: Boolean*): List[Rule.Result[Input, Output]] = {
     hits.zipWithIndex
       .map((wasHit, idx) =>
@@ -174,6 +173,18 @@ class DecisionTableTest extends FunSuite {
         ),
       )
       .toList
+  }
+  def diagnostics(hits: Boolean*): EvalDiagnostics[Input, Output]  = {
+    val rawResults = hits.zipWithIndex
+      .map((wasHit, idx) =>
+        Rule.Result(
+          Input(wasHit),
+          if (wasHit) EvaluationResult.Satisfied(uniqueTestTable.rules(idx).evaluateOutput())
+          else EvaluationResult.NotSatisfied(),
+        ),
+      )
+      .toList
+    EvalDiagnostics(rawResults, ???, ???)
   }
 
 }

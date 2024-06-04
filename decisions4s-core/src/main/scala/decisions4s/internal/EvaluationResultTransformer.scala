@@ -1,9 +1,9 @@
 package decisions4s.internal
 
-import decisions4s.{Rule, Value}
+import decisions4s.{DecisionTable, EvalDiagnostics, HKD, Rule, Value}
 
 sealed trait UniqueEvalResult[Input[_[_]], Output[_[_]]] {
-  def rawResults: List[Rule.Result[Input, Output]]
+  def diagnostics: EvalDiagnostics[Input, Output]
   def toOption: Option[Output[Value]] = this match {
     case UniqueEvalResult.NotUnique(rawResults)       => None
     case UniqueEvalResult.NoHit(rawResults)           => None
@@ -11,9 +11,9 @@ sealed trait UniqueEvalResult[Input[_[_]], Output[_[_]]] {
   }
 }
 object UniqueEvalResult                                  {
-  case class NotUnique[Input[_[_]], Output[_[_]]](rawResults: List[Rule.Result[Input, Output]]) extends UniqueEvalResult[Input, Output]
-  case class NoHit[Input[_[_]], Output[_[_]]](rawResults: List[Rule.Result[Input, Output]])     extends UniqueEvalResult[Input, Output]
-  case class Success[Input[_[_]], Output[_[_]]](rawResults: List[Rule.Result[Input, Output]], output: Output[Value])
+  case class NotUnique[Input[_[_]], Output[_[_]]](diagnostics: EvalDiagnostics[Input, Output]) extends UniqueEvalResult[Input, Output]
+  case class NoHit[Input[_[_]], Output[_[_]]](diagnostics: EvalDiagnostics[Input, Output])     extends UniqueEvalResult[Input, Output]
+  case class Success[Input[_[_]], Output[_[_]]](diagnostics: EvalDiagnostics[Input, Output], output: Output[Value])
       extends UniqueEvalResult[Input, Output]
 }
 
@@ -37,18 +37,23 @@ case class CollectBoundEvalResult[Input[_[_]], Output[_[_]]](rawResults: List[Ru
 
 case class CollectCountEvalResult[Input[_[_]], Output[_[_]]](rawResults: List[Rule.Result[Input, Output]], output: Int)
 
-class EvaluationResultTransformer[Input[_[_]], Output[_[_]]](val rawResults: Seq[() => Rule.Result[Input, Output]]) extends AnyVal {
+class EvaluationResultTransformer[Input[_[_]]: HKD, Output[_[_]]](
+    rawResults: Seq[() => Rule.Result[Input, Output]],
+    table: DecisionTable[Input, Output, _],
+    input: Input[Value],
+) {
 
   /** Return result if exactly one rule was satisfied Could be made lazy (stop evaluation on second unique result) if needed
     * @return
     */
   def single(): UniqueEvalResult[Input, Output] = {
     val raw              = rawResults.map(_.apply()).toList
+    val diagnostics      = EvalDiagnostics(raw, table, input)
     val satisfiedResults = raw.flatMap(_.evaluationResult.toOption)
     satisfiedResults match {
-      case Nil                 => UniqueEvalResult.NoHit(raw)     // No satisfied results found
-      case singleResult :: Nil => UniqueEvalResult.Success(raw, singleResult)
-      case _                   => UniqueEvalResult.NotUnique(raw) // More than one unique result
+      case Nil                 => UniqueEvalResult.NoHit(diagnostics)     // No satisfied results found
+      case singleResult :: Nil => UniqueEvalResult.Success(diagnostics, singleResult)
+      case _                   => UniqueEvalResult.NotUnique(diagnostics) // More than one unique result
     }
   }
 

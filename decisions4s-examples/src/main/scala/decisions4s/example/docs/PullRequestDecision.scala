@@ -70,6 +70,7 @@ object PullRequestDecision {
       ),
     )
     println(result)
+    println(result.diagnostics.mkString)
 
     import decisions4s.dmn.DmnConverter
     val dmnInstance = DmnConverter.convert(decisionTable)
