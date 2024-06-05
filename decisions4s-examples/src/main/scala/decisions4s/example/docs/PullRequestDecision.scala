@@ -1,34 +1,38 @@
 package decisions4s.example.docs
 
+//start_imports
 import decisions4s.*
-import decisions4s.DecisionTable.HitPolicy
+//end_imports
 
 object PullRequestDecision {
 
-  case class Input[F[_]](numOfApprovals: F[Int], isTargetBranchProtected: F[Boolean], authorIsAdmin: F[Boolean]) derives HKD
+  // start_shapes
+  case class Input[F[_]](
+      numOfApprovals: F[Int],
+      isTargetBranchProtected: F[Boolean],
+      authorIsAdmin: F[Boolean],
+  ) derives HKD
 
-  case class Output[F[_]](allowMerging: F[Boolean], notifyUnusualAction: F[Boolean]) derives HKD
+  case class Output[F[_]](
+      allowMerging: F[Boolean],
+      notifyUnusualAction: F[Boolean],
+  ) derives HKD
+  // end_shapes
 
-  val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
-    DecisionTable(
-      rules,
-      inputNames = Name.auto,
-      outputNames = Name.auto,
-      name = "PullRequestDecision",
-      HitPolicy.Unique,
-    )
+  // start_table
+  val decisionTable: DecisionTable[Input, Output, HitPolicy.First] =
+    DecisionTable(rules, name = "PullRequestDecision", HitPolicy.First)
+  // end_table
 
-  private def rules: List[Rule[Input, Output]] = List(
+  // start_rules
+  def rules: List[Rule[Input, Output]] = List(
     Rule(
       matching = Input(
         numOfApprovals = it > 0,
         isTargetBranchProtected = it.isFalse,
         authorIsAdmin = it.catchAll,
       ),
-      output = Output(
-        allowMerging = true,
-        notifyUnusualAction = false,
-      ),
+      output = Output(allowMerging = true, notifyUnusualAction = false),
     ),
     Rule(
       matching = Input(
@@ -36,10 +40,7 @@ object PullRequestDecision {
         isTargetBranchProtected = it.isTrue,
         authorIsAdmin = it.catchAll,
       ),
-      output = Output(
-        allowMerging = true,
-        notifyUnusualAction = false,
-      ),
+      output = Output(allowMerging = true, notifyUnusualAction = false),
     ),
     Rule(
       matching = Input(
@@ -47,34 +48,33 @@ object PullRequestDecision {
         isTargetBranchProtected = it.catchAll,
         authorIsAdmin = it.isTrue,
       ),
-      output = Output(
-        allowMerging = true,
-        notifyUnusualAction = true,
-      ),
+      output = Output(allowMerging = true, notifyUnusualAction = true),
     ),
     Rule.default(
-      Output(
-        allowMerging = false,
-        notifyUnusualAction = false,
-      ),
+      Output(allowMerging = false, notifyUnusualAction = false),
     ),
   )
+  // end_rules
 
   def main(args: Array[String]): Unit = {
 
-    val result = decisionTable.evaluateUnique(
+    // start_evaluate
+    val result = decisionTable.evaluateFirst(
       Input[Value](
         numOfApprovals = 1,
         isTargetBranchProtected = false,
         authorIsAdmin = true,
       ),
     )
-    println(result)
+    assert(result.output == Some(Output[Value](allowMerging = true, notifyUnusualAction = false)))
+    // end_evaluate
 
+    // start_dmn
     import decisions4s.dmn.DmnConverter
     val dmnInstance = DmnConverter.convert(decisionTable)
     import org.camunda.bpm.model.dmn.Dmn
     Dmn.writeModelToFile(new java.io.File(s"./${decisionTable.name}.dmn"), dmnInstance)
+    // end_dmn
 
   }
 

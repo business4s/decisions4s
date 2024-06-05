@@ -7,6 +7,7 @@ import Heading from '@theme/Heading';
 import CodeBlock from '@theme/CodeBlock';
 
 import styles from './index.module.css';
+import SbtDependency from "@site/src/components/SbtDependency";
 
 
 function HomepageHeader() {
@@ -23,9 +24,7 @@ function HomepageHeader() {
                 </Heading>
                 <p className="hero__subtitle">{siteConfig.tagline}</p>
                 <div className={styles.dependency}>
-                    <CodeBlock className="language-scala">
-                        {`"org.business4s" %% "decisions4s-core" % "${decisions4sVersion}"`}
-                    </CodeBlock>
+                    <SbtDependency moduleName={"decisions4s-core"}/>
                 </div>
                 <div className={styles.buttons}>
                     <Link

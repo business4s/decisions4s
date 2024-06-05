@@ -26,8 +26,6 @@ class MemoizedEvalTest extends FunSuite {
         output = Output(3),
       ),
     ),
-    inputNames = Name.auto[Input],
-    outputNames = Name.auto[Output],
     "test",
     HitPolicy.First,
   )

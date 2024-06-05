@@ -22,13 +22,15 @@ import scala.reflect.ClassTag
 
 object DmnConverter {
 
-  def convert[Input[_[_]]: HKD, Output[_[_]]: HKD, HP <: DecisionTable.HitPolicy](table: DecisionTable[Input, Output, HP]): DmnModelInstance = {
+  def convert[Input[_[_]], Output[_[_]], HP <: DecisionTable.HitPolicy](table: DecisionTable[Input, Output, HP]): DmnModelInstance = {
     val modelInstance = DmnBuilder(table).modelInstance
     Dmn.validateModel(modelInstance)
     modelInstance
   }
 
-  private class DmnBuilder[Input[_[_]]: HKD, Output[_[_]]: HKD, HP <: DecisionTable.HitPolicy](table: DecisionTable[Input, Output, HP]) {
+  private class DmnBuilder[Input[_[_]], Output[_[_]], HP <: DecisionTable.HitPolicy](table: DecisionTable[Input, Output, HP]) {
+    import table.given
+
     val modelInstance: DmnModelInstance  = Dmn.createEmptyModel()
     private val definitions: Definitions = buildDefinitions
     private val decision                 = buildDecision
@@ -76,7 +78,7 @@ object DmnConverter {
     }
 
     private def buildInputs(): Unit = {
-      val names = HKDUtils.collectFields(table.inputNames)
+      val names = table.inputHKD.fieldNames
       names.foreach(name => {
         val input = decisionTable.addChild[DmnInput]
         input.setLabel(name)
@@ -85,7 +87,7 @@ object DmnConverter {
     }
 
     private def buildOutputs(): Unit = {
-      val names = HKDUtils.collectFields(table.outputNames)
+      val names = table.outputHKD.fieldNames
       names.foreach(name => {
         val output = decisionTable.addChild[DmnOutput]
         output.setLabel(name)

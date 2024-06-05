@@ -12,8 +12,6 @@ object ElderlyScamCheckDecision {
   val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
     DecisionTable(
       rules,
-      inputNames = Name.auto[Input],
-      outputNames = Name.auto[Output],
       name = "ElderlyScamCheck",
       HitPolicy.Unique
     )

@@ -36,7 +36,7 @@ const config: Config = {
                     remarkPlugins: [
                         [
                             require('remark-code-snippets'),
-                            {baseDir: "../decisions-example/src/"}
+                            {baseDir: "../decisions4s-examples/src/"}
                         ]
                     ],
                 },
