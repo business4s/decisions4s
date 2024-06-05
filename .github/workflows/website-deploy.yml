@@ -43,6 +43,7 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
       - name: Build
         run: |
+          sbt 'print stableVersion'
           DECISIONS4S_VERSION=$(sbt -batch -error 'print stableVersion')
           yarn build
       - name: Setup Pages
