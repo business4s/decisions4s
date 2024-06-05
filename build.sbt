@@ -50,5 +50,5 @@ lazy val stableVersion = taskKey[String]("stableVersion")
 
 stableVersion := {
   if(isVersionStable.value && !isSnapshot.value) version.value
-  else previousStableVersion.value.get
+  else previousStableVersion.value.getOrElse("unreleased")
 }
