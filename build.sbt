@@ -45,3 +45,10 @@ lazy val commonSettings = Seq(
 lazy val testDeps = List(
   "org.scalatest" %% "scalatest" % "3.2.17" % Test,
 )
+
+lazy val stableVersion = taskKey[String]("stableVersion")
+
+stableVersion := {
+  if(isVersionStable.value) version.value
+  else previousStableVersion.value.get
+}
