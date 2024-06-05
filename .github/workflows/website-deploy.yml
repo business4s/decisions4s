@@ -29,13 +29,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20.x
           cache: yarn
           cache-dependency-path: 'website/yarn.lock'
       - name: Set up Java/Sbt
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
@@ -44,13 +44,13 @@ jobs:
       - name: Build
         run: |
           cd ../
-          DECISIONS4S_VERSION=$(sbt -batch -error 'print stableVersion')
+          export Update CIDECISIONS4S_VERSION=$(sbt -batch -error 'print stableVersion')
           cd website
           yarn build
       - name: Setup Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: website/build
