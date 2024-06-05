@@ -12,7 +12,6 @@ import SbtDependency from "@site/src/components/SbtDependency";
 
 function HomepageHeader() {
     const {siteConfig} = useDocusaurusContext();
-    const decisions4sVersion = siteConfig.customFields?.decisions4sVersion;
     return (
         <header className={clsx('hero hero--primary', styles.heroBanner)}>
             <div className="container">

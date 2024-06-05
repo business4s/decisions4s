@@ -127,7 +127,7 @@ const config: Config = {
         },
     } satisfies Preset.ThemeConfig,
     customFields: {
-        decisions4sVersion: process.env.DECISIONS4s_VERSION,
+        decisions4sVersion: process.env.DECISIONS4S_VERSION,
     },
 };
 
