@@ -49,6 +49,6 @@ lazy val testDeps = List(
 lazy val stableVersion = taskKey[String]("stableVersion")
 
 stableVersion := {
-  if(isVersionStable.value) version.value
+  if(isVersionStable.value && !isSnapshot.value) version.value
   else previousStableVersion.value.get
 }
