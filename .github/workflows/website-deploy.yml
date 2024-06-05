@@ -44,7 +44,7 @@ jobs:
       - name: Build
         run: |
           cd ../
-          export Update CIDECISIONS4S_VERSION=$(sbt -batch -error 'print stableVersion')
+          export DECISIONS4S_VERSION=$(sbt -batch -error 'print stableVersion')
           cd website
           yarn build
       - name: Setup Pages
