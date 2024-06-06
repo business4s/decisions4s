@@ -12,7 +12,7 @@ object TestUtils {
     import munit.Assertions.*
     assert(clue(expr.evaluate(input)) == clue(expectedEvalResult))
 
-    val feelExpression  = clue(expr.renderFeelExpression)
+    val feelExpression  = clue(expr.renderExpression)
     val feelResult: Any = engine.evaluateUnaryTests(feelExpression, input) match {
       case SuccessfulEvaluationResult(result, suppressedFailures) => result
       case FailedEvaluationResult(failure, suppressedFailures)    =>
@@ -33,7 +33,7 @@ object TestUtils {
     import munit.Assertions.*
     assert(clue(expr.evaluate(())) == clue(expectedEvalResult))
 
-    val feelExpression = clue(expr.renderFeelExpression)
+    val feelExpression = clue(expr.renderExpression)
 
     Option(expectedFeelExpr).foreach(expectedFeelExpr => {
       assertEquals(feelExpression, expectedFeelExpr)
