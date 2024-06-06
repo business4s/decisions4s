@@ -26,6 +26,7 @@ object PullRequestDecision {
 
   // start_rules
   def rules: List[Rule[Input, Output]] = List(
+    // Unprotected branch requires 1 approval
     Rule(
       matching = Input(
         numOfApprovals = it > 0,
@@ -34,6 +35,7 @@ object PullRequestDecision {
       ),
       output = Output(allowMerging = true, notifyUnusualAction = false),
     ),
+    // Protected branch requires 2 approvals
     Rule(
       matching = Input(
         numOfApprovals = it > 1,
@@ -42,6 +44,7 @@ object PullRequestDecision {
       ),
       output = Output(allowMerging = true, notifyUnusualAction = false),
     ),
+    // Admin can merge anything without approvals but this sends a notification
     Rule(
       matching = Input(
         numOfApprovals = it.catchAll,
@@ -50,6 +53,7 @@ object PullRequestDecision {
       ),
       output = Output(allowMerging = true, notifyUnusualAction = true),
     ),
+    // Nothing can be merged otherwise
     Rule.default(
       Output(allowMerging = false, notifyUnusualAction = false),
     ),
