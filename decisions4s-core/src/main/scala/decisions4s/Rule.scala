@@ -28,8 +28,8 @@ case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
   }
 
   def render(): (Input[Description], Output[Description]) = {
-    val renderInput: MatchingExpr ~> Description = [t] => (expr: MatchingExpr[t]) => expr.renderFeelExpression
-    val renderOutput: ValueExpr ~> Description   = [t] => (expr: ValueExpr[t]) => expr.renderFeelExpression
+    val renderInput: MatchingExpr ~> Description = [t] => (expr: MatchingExpr[t]) => expr.renderExpression
+    val renderOutput: ValueExpr ~> Description   = [t] => (expr: ValueExpr[t]) => expr.renderExpression
     (matching.mapK(renderInput), output.mapK(renderOutput))
   }
 

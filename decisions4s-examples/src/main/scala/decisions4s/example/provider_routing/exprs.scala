@@ -7,5 +7,5 @@ object IsEEA extends Expr[Country, Boolean] {
 
   override def evaluate(in: Country): Boolean = IsEEA.eeaCountries.contains(in)
 
-  override def renderFeelExpression: String = s"isEEA(?)"
+  override def renderExpression: String = s"isEEA(?)"
 }
