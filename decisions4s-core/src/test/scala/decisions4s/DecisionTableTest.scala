@@ -25,8 +25,6 @@ class DecisionTableTest extends FunSuite {
         output = Output(1),
       ),
     ),
-    inputNames = Name.auto[Input],
-    outputNames = Name.auto[Output],
     "test",
     HitPolicy.Unique,
   )

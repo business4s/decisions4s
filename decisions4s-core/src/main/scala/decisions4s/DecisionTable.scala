@@ -1,17 +1,24 @@
 package decisions4s
 
-import decisions4s.internal.{AnyEvalResult, CollectBoundEvalResult, CollectCountEvalResult, CollectEvalResult, CollectSumEvalResult, EvaluationResultTransformer, FirstEvalResult, UniqueEvalResult}
+import decisions4s.internal.{
+  AnyEvalResult,
+  CollectBoundEvalResult,
+  CollectCountEvalResult,
+  CollectEvalResult,
+  CollectSumEvalResult,
+  EvaluationResultTransformer,
+  FirstEvalResult,
+  UniqueEvalResult,
+}
 import shapeless3.deriving.Const
 
 import scala.util.chaining.scalaUtilChainingOps
 
-case class DecisionTable[Input[_[_]], Output[_[_]], HitPolicy <: DecisionTable.HitPolicy](
+case class DecisionTable[Input[_[_]]: HKD, Output[_[_]]: HKD, HitPolicy <: DecisionTable.HitPolicy](
     rules: List[Rule[Input, Output]],
-    inputNames: Input[Name],
-    outputNames: Output[Name],
     name: String,
-    hitPolicy: HitPolicy
-) {
+    hitPolicy: HitPolicy,
+)(using val inputHKD: HKD[Input], val outputHKD: HKD[Output]) {
 
   private def evaluateRaw(in: Input[Value]): Seq[() => Rule.Result[Input, Output]] =
     rules.map(r => () => r.evaluate(in))

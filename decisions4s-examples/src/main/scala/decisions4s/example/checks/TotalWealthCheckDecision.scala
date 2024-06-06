@@ -32,8 +32,6 @@ object TotalWealthCheckDecision {
   val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
     DecisionTable(
       rules,
-      inputNames = Name.auto[Input],
-      outputNames = Name.auto[Output],
       name = "TotalWealthCheck",
       HitPolicy.Unique,
     )
