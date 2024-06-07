@@ -1,6 +1,6 @@
 package decisions4s.cats
 
-import cats.effect.{Concurrent}
+import cats.effect.Concurrent
 import decisions4s.{DecisionTable, HKD}
 import decisions4s.DecisionTable.HitPolicy
 import decisions4s.internal.FirstEvalResult

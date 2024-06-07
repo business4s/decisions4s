@@ -57,8 +57,8 @@ object DmnConverter {
     private def buildDecisionTable = {
       val tableElem = decision.addChild[DmnDecisionTable]
       tableElem.setHitPolicy((table.hitPolicy: DecisionTable.HitPolicy) match {
-        case DecisionTable.HitPolicy.Unique       => HitPolicy.UNIQUE
-        case DecisionTable.HitPolicy.Any          => HitPolicy.ANY
+        case DecisionTable.HitPolicy.Single       => HitPolicy.UNIQUE
+        case DecisionTable.HitPolicy.Distinct     => HitPolicy.ANY
         case DecisionTable.HitPolicy.First        => HitPolicy.FIRST
         case DecisionTable.HitPolicy.Collect      => HitPolicy.COLLECT
         case DecisionTable.HitPolicy.CollectSum   => HitPolicy.COLLECT
@@ -71,7 +71,7 @@ object DmnConverter {
         case DecisionTable.HitPolicy.CollectMin   => Some(BuiltinAggregator.MIN)
         case DecisionTable.HitPolicy.CollectMax   => Some(BuiltinAggregator.MAX)
         case DecisionTable.HitPolicy.CollectCount => Some(BuiltinAggregator.COUNT)
-        case _                                    => None
+        case _                               => None
       }
       aggr.foreach(tableElem.setAggregation)
       tableElem

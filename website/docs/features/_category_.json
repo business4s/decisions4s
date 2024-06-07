@@ -1,0 +1,9 @@
+{
+  "label": "Features",
+  "position": 2,
+  "collapsible": false,
+  "link": {
+    "type": "generated-index",
+    "description": "What Decisions4s can do."
+  }
+}
