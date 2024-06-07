@@ -12,8 +12,6 @@ object BankingProviderDecision {
   val decisionTable: DecisionTable[Input, Output, HitPolicy.First] =
     DecisionTable(
       rules,
-      inputNames = Name.auto[Input],
-      outputNames = Name.auto[Output],
       name = "BankingProviderSelection",
       HitPolicy.First,
     )

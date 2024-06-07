@@ -9,13 +9,11 @@ object ElderlyScamCheckDecision {
 
   case class Output[F[_]](stop: F[Boolean]) derives HKD
 
-  val decisionTable: DecisionTable[Input, Output, HitPolicy.Unique] =
+  val decisionTable: DecisionTable[Input, Output, HitPolicy.Single] =
     DecisionTable(
       rules,
-      inputNames = Name.auto[Input],
-      outputNames = Name.auto[Output],
       name = "ElderlyScamCheck",
-      HitPolicy.Unique
+      HitPolicy.Single
     )
 
   private type Rule = decisions4s.Rule[Input, Output]

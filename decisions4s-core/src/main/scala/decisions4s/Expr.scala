@@ -4,7 +4,7 @@ import decisions4s.exprs.{And, Between, Equal, GreaterThan, GreaterThanEqual, In
 
 trait Expr[-In, +Out] {
   def evaluate(in: In): Out
-  def renderFeelExpression: String
+  def renderExpression: String
 }
 
 object Expr {

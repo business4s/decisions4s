@@ -34,7 +34,7 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
 
 lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(commonSettings)
-  .dependsOn(`decisions4s-core`, `decisions4s-dmn`)
+  .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`)
 
 lazy val commonSettings = Seq(
   scalaVersion := "3.3.3",
@@ -45,3 +45,10 @@ lazy val commonSettings = Seq(
 lazy val testDeps = List(
   "org.scalatest" %% "scalatest" % "3.2.17" % Test,
 )
+
+lazy val stableVersion = taskKey[String]("stableVersion")
+
+stableVersion := {
+  if(isVersionStable.value && !isSnapshot.value) version.value
+  else previousStableVersion.value.getOrElse("unreleased")
+}
