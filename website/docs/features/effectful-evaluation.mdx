@@ -1,0 +1,27 @@
+---
+sidebar_position: 6
+---
+
+# Effectful Evaluation
+
+`Decisions4s` allows evaluating a decision table based on effectful inputs, e.g., when network call is required for a
+particular piece of data.
+
+* Inputs will be executed at most once (memoized).
+* Inputs will be executed _only_ if required by the rule.
+* Input is considered not required if `catchAll` expression is used for matching.
+* Table needs to use `HitPolicy.First` because it's the only one for which lazy evaluation can be expected.
+
+To use that feature, add an additional dependency.
+
+import SbtDependency from '@site/src/components/SbtDependency';
+
+<SbtDependency moduleName={"decisions4s-cats-effect"}/>
+
+```scala file=./main/scala/decisions4s/example/docs/EffectfulEvalExample.scala start=start_effect end=end_effect
+```
+
+## Other effect systems
+
+As of now only `cats-effect` is supported, but the same can be achieved for any other effect system or even `() => T`.
+If you want to give it a try and need assistance, please reach out on Discord.
