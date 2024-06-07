@@ -34,23 +34,23 @@ object HitPoliciesExample {
 
   // start_sum
   val collectSum: DecisionTable[In, Out, HitPolicy.CollectSum] = DecisionTable(rules, name, HitPolicy.CollectSum)
-  val merge: (Out[Value], Out[Value]) => Out[Value]       = ???
+  val merge: (Out[Value], Out[Value]) => Out[Value]            = ???
   collectSum.evaluateSum(in)(merge)
   // end_sum
 
   {
     // start_min
     val collectMin: DecisionTable[In, Out, HitPolicy.CollectMin] = DecisionTable(rules, name, HitPolicy.CollectMin)
-    val ordering: Ordering[Out[Value]]                      = ???
-    collectMin.evaluateMin(in)(ordering)
+    given Ordering[Out[Value]]                                   = ???
+    collectMin.evaluateMin(in)
     // end_min
   }
 
   {
     // start_max
     val collectMax: DecisionTable[In, Out, HitPolicy.CollectMax] = DecisionTable(rules, name, HitPolicy.CollectMax)
-    val ordering: Ordering[Out[Value]]                      = ???
-    collectMax.evaluateMax(in)(ordering)
+    given Ordering[Out[Value]]                                   = ???
+    collectMax.evaluateMax(in)
     // end_max
   }
 
