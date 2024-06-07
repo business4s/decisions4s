@@ -34,7 +34,7 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
 
 lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(commonSettings)
-  .dependsOn(`decisions4s-core`, `decisions4s-dmn`)
+  .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`)
 
 lazy val commonSettings = Seq(
   scalaVersion := "3.3.3",
