@@ -1,9 +1,8 @@
 package decisions4s.cats.effect
 
-import decisions4s.*
 import _root_.cats.effect.IO
+import decisions4s.*
 import decisions4s.DecisionTable.HitPolicy
-import decisions4s.internal.FirstEvalResult
 import munit.FunSuite
 
 class MemoizedEvalTest extends FunSuite {
@@ -48,7 +47,7 @@ class MemoizedEvalTest extends FunSuite {
     assertEquals(counters, Input[Counter](1, 1, 1))
   }
 
-  def evaluate(input: Input[Value]): (FirstEvalResult[Input, Output], Input[Counter]) = {
+  def evaluate(input: Input[Value]): (EvalResult.First[Input, Output], Input[Counter]) = {
     import _root_.cats.effect.unsafe.implicits.given
     val (effectfulInput, getCounters) = createCountingInput(input)
     val result                        = testTable.evaluateFirstF(effectfulInput).unsafeRunSync()

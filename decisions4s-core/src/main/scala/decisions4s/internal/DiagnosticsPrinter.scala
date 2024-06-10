@@ -1,23 +1,21 @@
-package decisions4s
+package decisions4s.internal
 
-import decisions4s.internal.HKDUtils
+import decisions4s.{EvalResult, HKD, MatchingExpr, Rule}
 import shapeless3.deriving.Const
 
-case class EvalDiagnostics[Input[_[_]]: HKD, Output[_[_]]](
-    results: List[Rule.Result[Input, Output]],
-    table: DecisionTable[Input, Output, _],
-    input: Input[Value],
-) {
+class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Output, Out]) {
+  import r.{input, results, table}
+  import r.table.given
 
-  private val inputNames: Vector[String]                  = HKDUtils.collectFields(table.inputNames).toVector
+  private val inputNames: IndexedSeq[String]              = summon[HKD[Input]].fieldNames
   private val matchingExpressions: Vector[Vector[String]] = table.rules.toVector.map(rule =>
-    HKDUtils.collectFields(rule.matching.mapK[Const[String]]([t] => (expr: MatchingExpr[t]) => expr.renderFeelExpression)).toVector,
+    HKDUtils.collectFields(rule.matching.mapK[Const[String]]([t] => (expr: MatchingExpr[t]) => expr.renderExpression)).toVector,
   )
-  private val inputValues: Vector[Any]                    = HKDUtils.collectFields(input.mapK[Const[Any]]([t] => (value: t) => (value: Any))).toVector
-  private val maxInputNameLen = inputNames.map(_.length).max
+  private val inputValues: Vector[Option[Any]]            =
+    HKDUtils.collectFields(input.mapK[Const[Option[Any]]]([t] => (value: Option[t]) => (value: Option[Any]))).toVector
+  private val maxInputNameLen                             = inputNames.map(_.length).max
 
-
-  def mkString: String = {
+  def print: String = {
     s"""Evaluation diagnostics for "${table.name}"
        |Hit policy: ${table.hitPolicy}
        |Input:
@@ -27,16 +25,17 @@ case class EvalDiagnostics[Input[_[_]]: HKD, Output[_[_]]](
 
   private def renderInput() = {
     inputValues.zipWithIndex
-      .map((value, idx) => s"${inputNames(idx)}: $value")
+      .map((value, idx) => s"${inputNames(idx)}: ${value.getOrElse("<not evaluated>")}")
       .mkString("\n")
   }
 
   private def renderRule(rr: Rule.Result[Input, Output], idx: Int): String = {
     val fieldSatisfaction: Vector[Boolean] = HKDUtils.collectFields(rr.details).toVector
-    val sign = if (rr.evaluationResult.toOption.isDefined) then "✓" else "✗"
+    val sign                               = if (rr.evaluationResult.isDefined) then "✓" else "✗"
+    val output                             = rr.evaluationResult.map(x => s"== ${x.toString}").getOrElse("== ✗")
     s"""Rule $idx [$sign]:
        |${fieldSatisfaction.zipWithIndex.map((satisfied, fIdx) => renderRuleField(idx, fIdx, satisfied)).mkString("\n").indent_(2)}
-       |  Output: ${rr.evaluationResult.toOption.map(_.toString).getOrElse("")}""".stripMargin
+       |  $output""".stripMargin
   }
 
   private def renderRuleField(ruleIdx: Int, idx: Int, satisfied: Boolean): String = {

@@ -3,35 +3,35 @@ package decisions4s.cats.effect
 import cats.Applicative
 import cats.effect.Concurrent
 import cats.implicits.{catsSyntaxApplicativeId, toFunctorOps}
-import cats.syntax.all.toTraverseOps
-import decisions4s.{DecisionTable, HKD, MatchingExpr, Rule, Tuple2K, Value, ~>}
+import cats.syntax.all.{toTraverseOps, given}
 import decisions4s.DecisionTable.HitPolicy
-import decisions4s.Rule.EvaluationResult
 import decisions4s.exprs.UnaryTest
-import decisions4s.internal.{FirstEvalResult, HKDUtils}
+import decisions4s.internal.HKDUtils
+import decisions4s.*
 import shapeless3.deriving.Const
-import cats.syntax.all.given
 
+import scala.collection.mutable
 import scala.util.chaining.scalaUtilChainingOps
 
 private class MemoizingEvaluator[Input[_[_]]: HKD, Output[_[_]]: HKD, F[_]: Concurrent](val dt: DecisionTable[Input, Output, HitPolicy.First]) {
 
-  def evaluateFirst(in: Input[F]): F[FirstEvalResult[Input, Output]] = {
+  def evaluateFirst(in: Input[F]): F[EvalResult.First[Input, Output]] = {
     for {
-      memoized <- memoizeInput(in)
-      result   <- evaluateRules(memoized)
-    } yield FirstEvalResult[Input, Output](result._1, result._2)
+      memoized                              <- memoizeInput(in)
+      result                                <- evaluateRules(memoized)
+      (ruleResults, output, evaluatedFields) = result
+      evaluatedInputs                       <- collectEvaluatedFields(evaluatedFields, memoized)
+    } yield EvalResult(dt, evaluatedInputs, ruleResults, output)
   }
 
-  private type RulesResult = (List[Rule.Result[Input, Output]], Option[Output[Value]])
+  type EvaluatedFields     = Set[FieldIdx]
+  private type RulesResult = (List[Rule.Result[Input, Output]], Option[Output[Value]], EvaluatedFields)
   private def evaluateRules(in: Input[F]): F[RulesResult] = {
-    dt.rules.foldLeftM[F, RulesResult]((List(), None)) {
-      case ((acc, None), rule)              =>
-        evaluateRule(rule, in).map {
-          case result @ Rule.Result(_, Rule.EvaluationResult.Satisfied(output)) => (acc :+ result, Some(output))
-          case result                                                           => (acc :+ result, None)
-        }
-      case ((acc, found @ Some(_)), result) => (acc, found).pure[F]
+    dt.rules.foldLeftM[F, RulesResult]((List(), None, Set())) {
+      case ((acc, None, evaluatedFieldsAcc), rule) =>
+        val (resultF, evaluatedFields) = evaluateRule(rule, in)
+        resultF.map(result => (acc :+ result, result.evaluationResult, evaluatedFieldsAcc ++ evaluatedFields))
+      case (acc, _)                                => acc.pure[F]
     }
   }
 
@@ -43,30 +43,37 @@ private class MemoizingEvaluator[Input[_[_]]: HKD, Output[_[_]]: HKD, F[_]: Conc
     memoized
   }
 
-  private def evaluateRule(rule: Rule[Input, Output], input: Input[F]): F[Rule.Result[Input, Output]] = {
+  type FieldIdx = Int
+  private def evaluateRule(rule: Rule[Input, Output], input: Input[F]): (F[Rule.Result[Input, Output]], Set[FieldIdx]) = {
     type FBool[T] = F[Boolean]
     type Tup[T]   = Tuple2K[MatchingExpr, F][T]
-    val evaluateMatch: Tup ~> FBool = [t] =>
+    val evaluatedFields: mutable.Set[FieldIdx] = mutable.Set()
+    var idx: FieldIdx                          = 0;
+    val evaluateMatch: Tup ~> FBool            = [t] =>
       (tuple: Tup[t]) => {
         val expr: MatchingExpr[t] = tuple._1
         val fValue: F[t]          = tuple._2
         val result: F[Boolean]    = expr match {
           case UnaryTest.CatchAll => true.pure[F]
-          case _                  => fValue.map(expr.evaluate)
+          case _                  => {
+            evaluatedFields.add(idx)
+            fValue.map(expr.evaluate)
+          }
         }
+        idx += 1;
         result
     }
-    val evaluatedF: Input[FBool]    = rule.matching.productK(input).mapK(evaluateMatch)
-    val sequenced                   = sequence[Input, F, Const[Boolean]](evaluatedF)
-    for {
+    val evaluatedF: Input[FBool]               = rule.matching.productK(input).mapK(evaluateMatch)
+    val sequenced                              = sequence[Input, F, Const[Boolean]](evaluatedF)
+    val result                                 = for {
       evaluated <- sequenced
       matches    = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
-      evalResult = if (matches) EvaluationResult.Satisfied(rule.evaluateOutput())
-                   else EvaluationResult.NotSatisfied()
+      evalResult = Option.when(matches)(rule.evaluateOutput())
     } yield Rule.Result(evaluated, evalResult)
+    result -> evaluatedFields.toSet
   }
 
-  // weird implementation of usual sequence/traverse. Collects all the fields, sequences them and reconstruct the case class
+  // Weird implementation of usual sequence/traverse. Collects all the fields, sequences them and reconstruct the case class
   private def sequence[CaseClass[_[_]]: HKD, G[_]: Applicative, H[_]](instance: CaseClass[[t] =>> G[H[t]]]): G[CaseClass[H]] = {
     val collected: List[G[H[Any]]] = HKDUtils.collectFields[CaseClass, G[H[Any]]](instance.asInstanceOf[CaseClass[Const[G[H[Any]]]]])
     collected.sequence
@@ -83,6 +90,19 @@ private class MemoizingEvaluator[Input[_[_]]: HKD, Output[_[_]]: HKD, F[_]: Conc
         )
         result
       })
+  }
+
+  private def collectEvaluatedFields(idxs: EvaluatedFields, in: Input[F]): F[Input[Option]] = {
+    var idx: FieldIdx = -1
+    type FOption[T] = F[Option[T]]
+    val keepEvaluated: F ~> FOption = [t] =>
+      (fValue: F[t]) => {
+        idx += 1
+        if (idxs.contains(idx)) fValue.map(_.some)
+        else None.pure[F]
+    }
+    val onlyEvaluated               = in.mapK(keepEvaluated)
+    sequence(onlyEvaluated)
   }
 
 }

@@ -1,6 +1,5 @@
 package decisions4s
 
-import decisions4s.Rule.EvaluationResult
 import decisions4s.internal.HKDUtils
 import shapeless3.deriving.{Const, ~>}
 
@@ -11,19 +10,17 @@ case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
 ) {
 
   def evaluateOutput(): Output[Value] = {
-    val evaluate: ValueExpr ~> Value         = [t] => (fa: ValueExpr[t]) => fa.evaluate(())
+    val evaluate: ValueExpr ~> Value = [t] => (fa: ValueExpr[t]) => fa.evaluate(())
     output.mapK(evaluate)
   }
 
   def evaluate(in: Input[Value]): Rule.Result[Input, Output] = {
     type Bool[T] = Boolean
     type Tup[T]  = Tuple2K[MatchingExpr, Value][T]
-    val evaluateMatch: Tup ~> Bool           = [t] => (tuple: Tup[t]) => tuple._1.evaluate(tuple._2)
-    val evaluated: Input[Bool]               = matching.productK(in).mapK(evaluateMatch)
-    val matches                              = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
-    val evalResult: EvaluationResult[Output] =
-      if (matches) EvaluationResult.Satisfied(evaluateOutput())
-      else EvaluationResult.NotSatisfied()
+    val evaluateMatch: Tup ~> Bool        = [t] => (tuple: Tup[t]) => tuple._1.evaluate(tuple._2)
+    val evaluated: Input[Bool]            = matching.productK(in).mapK(evaluateMatch)
+    val matches                           = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
+    val evalResult: Option[Output[Value]] = Option.when(matches)(evaluateOutput())
     Rule.Result(evaluated, evalResult)
   }
 
@@ -43,16 +40,5 @@ object Rule {
     )
   }
 
-  case class Result[Input[_[_]], Output[_[_]]](details: Input[Const[Boolean]], evaluationResult: EvaluationResult[Output])
-
-  sealed trait EvaluationResult[Output[_[_]]] {
-    def toOption: Option[Output[Value]] = this match {
-      case EvaluationResult.NotSatisfied()    => None
-      case EvaluationResult.Satisfied(values) => Some(values)
-    }
-  }
-  object EvaluationResult                     {
-    case class NotSatisfied[Output[_[_]]]()                   extends EvaluationResult[Output]
-    case class Satisfied[Output[_[_]]](values: Output[Value]) extends EvaluationResult[Output]
-  }
+  case class Result[Input[_[_]], Output[_[_]]](details: Input[Const[Boolean]], evaluationResult: Option[Output[Value]])
 }
