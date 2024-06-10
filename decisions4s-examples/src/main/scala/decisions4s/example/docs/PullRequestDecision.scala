@@ -73,6 +73,9 @@ object PullRequestDecision {
     assert(result.output == Some(Output[Value](allowMerging = true, notifyUnusualAction = false)))
     // end_evaluate
 
+    println(result.makeDiagnosticsString)
+
+
     // start_dmn
     import decisions4s.dmn.DmnConverter
     val dmnInstance = DmnConverter.convert(decisionTable)

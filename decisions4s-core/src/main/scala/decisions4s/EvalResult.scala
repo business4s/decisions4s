@@ -1,5 +1,7 @@
 package decisions4s
 
+import decisions4s.internal.DiagnosticsPrinter
+
 /** Results of evaluating a decision. Contains all the data required to analyze why the decision was taken.
   *
   * @param table
@@ -16,7 +18,11 @@ case class EvalResult[In[_[_]], Out[_[_]], +Output](
     input: In[Option],
     results: List[Rule.Result[In, Out]],
     output: Output,
-)
+) {
+
+  def makeDiagnosticsString: String = DiagnosticsPrinter(this).print
+
+}
 
 object EvalResult {
   type Single[I[_[_]], O[_[_]]]   = EvalResult[I, O, Either["not-single", Option[O[Value]]]]

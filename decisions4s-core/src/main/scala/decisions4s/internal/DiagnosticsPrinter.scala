@@ -16,8 +16,9 @@ class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Ou
   private val maxInputNameLen                             = inputNames.map(_.length).max
 
   def print: String = {
-    s"""Evaluation diagnostics for "${table.name}"
+    s"""${table.name} Diagnostics
        |Hit policy: ${table.hitPolicy}
+       |Result: ${r.output}
        |Input:
        |${renderInput().indent_(2)}
        |${results.zipWithIndex.map(renderRule).mkString("\n")}""".stripMargin
@@ -44,7 +45,7 @@ class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Ou
   }
 
   extension (string: String) {
-    def indent_(spaces: Int): String = {
+    private def indent_(spaces: Int): String = {
       val indent = " " * spaces
       string.linesIterator.map(line => indent + line).mkString("\n")
     }
