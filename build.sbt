@@ -13,7 +13,7 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
     ),
   )
 
-lazy val `decisions4s-dmn`         = (project in file("decisions4s-dmn"))
+lazy val `decisions4s-dmn` = (project in file("decisions4s-dmn"))
   .settings(commonSettings)
   .dependsOn(`decisions4s-core`)
   .settings(
@@ -37,22 +37,24 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`)
 
 lazy val commonSettings = Seq(
-  scalaVersion := "3.3.3",
+  scalaVersion            := "3.3.3",
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
   dynverSonatypeSnapshots := true,
-  organization := "org.business4s",
-  homepage := Some(url("https://business4s.github.io/decisions4s/")),
+  sonatypeCredentialHost  := "s01.oss.sonatype.org",
+  sonatypeRepository      := "https://s01.oss.sonatype.org/service/local",
+  organization            := "org.business4s",
+  homepage                := Some(url("https://business4s.github.io/decisions4s/")),
   // Alternatively License.Apache2 see https://github.com/sbt/librarymanagement/blob/develop/core/src/main/scala/sbt/librarymanagement/License.scala
-  licenses := List(License.MIT),
-  developers := List(
+  licenses                := List(License.MIT),
+  developers              := List(
     Developer(
       "Krever",
       "Voytek Pituła",
       "w.pitula@gmail.com",
-      url("https://v.pitula.me")
-    )
-  )
+      url("https://v.pitula.me"),
+    ),
+  ),
 )
 
 lazy val testDeps = List(
@@ -62,6 +64,6 @@ lazy val testDeps = List(
 lazy val stableVersion = taskKey[String]("stableVersion")
 
 stableVersion := {
-  if(isVersionStable.value && !isSnapshot.value) version.value
+  if (isVersionStable.value && !isSnapshot.value) version.value
   else previousStableVersion.value.getOrElse("unreleased")
 }
