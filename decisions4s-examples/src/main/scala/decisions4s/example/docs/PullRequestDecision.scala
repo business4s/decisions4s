@@ -60,21 +60,22 @@ object PullRequestDecision {
   )
   // end_rules
 
+  // start_evaluate
+  val result: EvalResult.First[Input, Output] = decisionTable.evaluateFirst(
+    Input[Value](
+      numOfApprovals = 2,
+      isTargetBranchProtected = true,
+      authorIsAdmin = false,
+    ),
+  )
+  assert(result.output == Some(Output[Value](allowMerging = true, notifyUnusualAction = false)))
+  // end_evaluate
+
   def main(args: Array[String]): Unit = {
 
-    // start_evaluate
-    val result = decisionTable.evaluateFirst(
-      Input[Value](
-        numOfApprovals = 1,
-        isTargetBranchProtected = false,
-        authorIsAdmin = true,
-      ),
-    )
-    assert(result.output == Some(Output[Value](allowMerging = true, notifyUnusualAction = false)))
-    // end_evaluate
-
+    // start_diagnose
     println(result.makeDiagnosticsString)
-
+    // end_diagnose
 
     // start_dmn
     import decisions4s.dmn.DmnConverter

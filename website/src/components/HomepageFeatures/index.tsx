@@ -13,21 +13,21 @@ const FeatureList: FeatureItem[] = [
         title: 'Model',
         description: (
             <>
-                Logic is expressed as rules, where each rule have inputs and outputs. This constrained model makes it easy
-                to understand and reason about the system behaviour.
+                Decision logic is expressed as rules, where each rule have inputs and outputs. This constrained model
+                let us define the decision in organised way with no arbitrary if expressions.
             </>
         ),
     },
     {
-        title: 'Diagrams',
+        title: 'Visualize',
         description: (
             <>
-                Rules can be rendered into a DMN diagram that can be shared with and understood by non-technical people.
+                Rules can be rendered into a DMN diagram that can be understood by non-technical people.
             </>
         ),
     },
     {
-        title: 'Diagnostics',
+        title: 'Understand',
         description: (
             <>
                 Each evaluation of the logic provides comprehensive diagnostic data that makes it easy to understand why
@@ -56,9 +56,9 @@ export default function HomepageFeatures(): JSX.Element {
         <section className={styles.features}>
             <div className="container">
                 <div className="row">
-                  {FeatureList.map((props, idx) => (
-                    <Feature key={idx} {...props} />
-                  ))}
+                    {FeatureList.map((props, idx) => (
+                        <Feature key={idx} {...props} />
+                    ))}
                 </div>
             </div>
         </section>

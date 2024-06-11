@@ -16,7 +16,7 @@ class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Ou
   private val maxInputNameLen                             = inputNames.map(_.length).max
 
   def print: String = {
-    s"""${table.name} Diagnostics
+    s"""Evaluation diagnostics for "${table.name}"
        |Hit policy: ${table.hitPolicy}
        |Result: ${r.output}
        |Input:
