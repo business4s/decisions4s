@@ -40,6 +40,19 @@ lazy val commonSettings = Seq(
   scalaVersion := "3.3.3",
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
+  dynverSonatypeSnapshots := true,
+  organization := "org.business4s",
+  homepage := Some(url("https://business4s.github.io/decisions4s/")),
+  // Alternatively License.Apache2 see https://github.com/sbt/librarymanagement/blob/develop/core/src/main/scala/sbt/librarymanagement/License.scala
+  licenses := List(License.MIT),
+  developers := List(
+    Developer(
+      "Krever",
+      "Voytek Pituła",
+      "w.pitula@gmail.com",
+      url("https://v.pitula.me")
+    )
+  )
 )
 
 lazy val testDeps = List(
