@@ -56,6 +56,20 @@ Now we can evaluate our decision:
 
 It works!
 
+## Understanding the decision
+
+But you might wonder why the given decision was taken. Wonder no more!
+
+```scala file=./main/scala/decisions4s/example/docs/PullRequestDecision.scala start=start_diagnose end=end_diagnose
+```
+
+Which gives us the following:
+```text file=./test/resources/docs/pull-request-diagnostics.txt
+```
+
+This tells us not only which rules were satisfied but also shows the results of particular predicates.
+This way we can easily say what happened!
+
 ## Generating the diagram
 
 Let's generate the DMN diagram that can be read by the business. To do this, we need to add another dependency.

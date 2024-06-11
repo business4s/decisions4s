@@ -16,7 +16,6 @@ trait HKD[F[_[_]]] {
 
     // allows to merge case classes together
     def productK[B[_]](fb: F[B]): F[Tuple2K[A, B]]
-
   }
 
   def fieldNames: IndexedSeq[String]

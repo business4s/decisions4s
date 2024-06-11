@@ -1,0 +1,17 @@
+Evaluation diagnostics for "PullRequestDecision"
+Hit policy: First
+Result: Some(Output(true,false))
+Input:
+  numOfApprovals: 2
+  isTargetBranchProtected: true
+  authorIsAdmin: false
+Rule 0 [✗]:
+  numOfApprovals          [✓]: > 0
+  isTargetBranchProtected [✗]: false
+  authorIsAdmin           [✓]: -
+  == ✗
+Rule 1 [✓]:
+  numOfApprovals          [✓]: > 1
+  isTargetBranchProtected [✓]: true
+  authorIsAdmin           [✓]: -
+  == Output(true,false)
