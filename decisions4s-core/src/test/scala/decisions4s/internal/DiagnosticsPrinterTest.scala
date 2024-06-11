@@ -27,7 +27,7 @@ class DiagnosticsPrinterTest extends AnyFreeSpec {
     val result = table.evaluateSingle(Input("foo", 1))
     assert(
       result.makeDiagnosticsString ==
-        """test Diagnostics
+        """Evaluation diagnostics for "test"
           |Hit policy: Single
           |Result: Right(Some(Output(1.0,true)))
           |Input:
