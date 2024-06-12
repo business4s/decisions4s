@@ -43,7 +43,6 @@ lazy val commonSettings = Seq(
   scalaVersion := "3.3.3",
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
-  dynverSonatypeSnapshots := true,
   organization := "org.business4s",
   homepage := Some(url("https://business4s.github.io/decisions4s/")),
   licenses := List(License.MIT),
@@ -54,7 +53,8 @@ lazy val commonSettings = Seq(
       "w.pitula@gmail.com",
       url("https://v.pitula.me")
     )
-  )
+  ),
+  versionScheme := Some("semver-spec")
 )
 
 lazy val testDeps = List(
