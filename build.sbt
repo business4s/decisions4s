@@ -1,6 +1,6 @@
 lazy val `decisions4s` = (project in file("."))
   .settings(commonSettings)
-  .aggregate(`decisions4s-core`, `decisions4s-examples`)
+  .aggregate(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`, `decisions4s-examples`)
 
 lazy val `decisions4s-core` = (project in file("decisions4s-core"))
   .settings(commonSettings)
@@ -34,6 +34,9 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
 
 lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(commonSettings)
+  .settings(
+    publish / skip := true
+  )
   .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`)
 
 lazy val commonSettings = Seq(
@@ -41,7 +44,7 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
   dynverSonatypeSnapshots := true,
-  organization := "com.github.krever", // temporary, until new ns is claimed
+  organization := "org.business4s",
   homepage := Some(url("https://business4s.github.io/decisions4s/")),
   licenses := List(License.MIT),
   developers := List(
