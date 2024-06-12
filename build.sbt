@@ -1,6 +1,6 @@
 lazy val `decisions4s` = (project in file("."))
   .settings(commonSettings)
-  .aggregate(`decisions4s-core`, `decisions4s-examples`)
+  .aggregate(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`, `decisions4s-examples`)
 
 lazy val `decisions4s-core` = (project in file("decisions4s-core"))
   .settings(commonSettings)
@@ -34,12 +34,27 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
 
 lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(commonSettings)
+  .settings(
+    publish / skip := true
+  )
   .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`)
 
 lazy val commonSettings = Seq(
   scalaVersion := "3.3.3",
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
+  organization := "org.business4s",
+  homepage := Some(url("https://business4s.github.io/decisions4s/")),
+  licenses := List(License.MIT),
+  developers := List(
+    Developer(
+      "Krever",
+      "Voytek Pituła",
+      "w.pitula@gmail.com",
+      url("https://v.pitula.me")
+    )
+  ),
+  versionScheme := Some("semver-spec")
 )
 
 lazy val testDeps = List(
