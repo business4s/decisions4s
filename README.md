@@ -7,4 +7,4 @@
 **Decisions4s** is a library that helps in taming the complexity of complicated conditional logic through modeling,
 visualising and diagnosing the decisions.
 
-See the [**website**](https://business4s.github.io/decisions4s/) for details.
+See the [**Website**](https://business4s.github.io/decisions4s/) for details and join our [**Discord**](https://bit.ly/business4s-discord) for discussions.
