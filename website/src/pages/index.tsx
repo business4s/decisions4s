@@ -28,7 +28,7 @@ function HomepageHeader() {
                 <div className={styles.buttons}>
                     <Link
                         className={`button button--secondary button--lg ${styles.myButton}`}
-                        to="">
+                        to="https://scastie.scala-lang.org/e5HXBvHESTe8k1S6vBtlhw">
                         Try in Scastie
                     </Link>
                     <Link
