@@ -1,1 +1,11 @@
 **/target/
+metals.lock.db
+metals.log
+metals.*
+.vscode/*
+.bloop/*
+ElderlyScamCheckDecision.dmn
+banking-provider-decision.dmn
+TotalWealthCheckDecision.dmn
+.bsp/*
+project/*
