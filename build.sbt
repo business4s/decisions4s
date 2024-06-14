@@ -13,7 +13,7 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
     ),
   )
 
-lazy val `decisions4s-dmn`         = (project in file("decisions4s-dmn"))
+lazy val `decisions4s-dmn` = (project in file("decisions4s-dmn"))
   .settings(commonSettings)
   .dependsOn(`decisions4s-core`)
   .settings(
@@ -32,38 +32,47 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
     ),
   )
 
+lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image/scala-wrapper"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.graalvm.polyglot" % "polyglot"  % "24.0.1",
+      "org.graalvm.polyglot" % "js"        % "24.0.1",
+    )
+  )
+
 lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(commonSettings)
   .settings(
-    publish / skip := true
+    publish / skip := true,
   )
   .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`)
 
 lazy val commonSettings = Seq(
-  scalaVersion := "3.3.3",
+  scalaVersion  := "3.3.3",
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
-  organization := "org.business4s",
-  homepage := Some(url("https://business4s.github.io/decisions4s/")),
-  licenses := List(License.MIT),
-  developers := List(
+  organization  := "org.business4s",
+  homepage      := Some(url("https://business4s.github.io/decisions4s/")),
+  licenses      := List(License.MIT),
+  developers    := List(
     Developer(
       "Krever",
       "Voytek Pituła",
       "w.pitula@gmail.com",
-      url("https://v.pitula.me")
-    )
+      url("https://v.pitula.me"),
+    ),
   ),
-  versionScheme := Some("semver-spec")
+  versionScheme := Some("semver-spec"),
 )
 
 lazy val testDeps = List(
-  "org.scalatest" %% "scalatest" % "3.2.17" % Test,
+  "org.scalatest"       %% "scalatest" % "3.2.17" % Test,
 )
 
 lazy val stableVersion = taskKey[String]("stableVersion")
 
 stableVersion := {
-  if(isVersionStable.value && !isSnapshot.value) version.value
+  if (isVersionStable.value && !isSnapshot.value) version.value
   else previousStableVersion.value.getOrElse("unreleased")
 }
