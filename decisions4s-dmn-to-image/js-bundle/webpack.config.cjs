@@ -2,10 +2,13 @@ const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const outputDir = path.resolve(__dirname, '../src/main/resources/generated-web-bundle')
+
 const webConfig = {
     name: 'web',
     target: 'web',
     entry: './src/web.ts',
+    mode: 'production',
     module: {
         rules: [
             {
@@ -19,7 +22,7 @@ const webConfig = {
         extensions: ['.ts', '.js'],
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: outputDir,
         filename: 'web_bundle.js',
         library: {
             type: 'module'
@@ -40,8 +43,9 @@ const webConfig = {
 const cssConfig = {
     name: 'css',
     entry: './src/css-entry.js',
+    mode: 'production',
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: outputDir,
         filename: 'css-bundle.js', // This will not actually generate a JS file, but we need to specify it
     },
     module: {

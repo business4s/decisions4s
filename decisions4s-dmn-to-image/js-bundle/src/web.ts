@@ -11,7 +11,6 @@ class DmnViewerImpl implements DmnViewerInterface {
 
         this.dmnViewer = new DmnJS({
             container: '#canvas',
-            width: '100%',
         });
 
         this.dmnViewer.on('import.done', function (event: ImportDoneEvent) {

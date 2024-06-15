@@ -10,24 +10,22 @@ import java.time.Duration
 import javax.imageio.ImageIO
 import scala.util.Try
 
-class DmnToImageConverter(customDriver: Option[WebDriver with JavascriptExecutor with TakesScreenshot] = None) {
+/** Helper allowing to convert dmn XML into image through rendering in a browser (using dmn-js) and taking a screenshot.
+  */
+class DmnToImageConverter(customDriver: Option[WebDriver with JavascriptExecutor with TakesScreenshot] = None) extends AutoCloseable {
 
-  private val driver: WebDriver with JavascriptExecutor with TakesScreenshot = customDriver.getOrElse(createDefaultDriver())
+  private val (driver, shouldClose): (WebDriver with JavascriptExecutor with TakesScreenshot, Boolean) =
+    customDriver.map(_ -> false).getOrElse(createDefaultDriver() -> true)
 
   def convertDiagram(dmnXml: String): Try[IArray[Byte]] = Try {
-    try {
-      openSkeleton()
-      loadDmn(dmnXml)
-      takesScreenshot()
-    } finally {
-      // Close the browser
-      driver.quit() // TODO
-    }
+    openSkeleton()
+    loadDmn(dmnXml)
+    takesScreenshot()
   }
 
-  def openSkeleton(): Unit = {
+  private def openSkeleton(): Unit = {
     // Load the bundled HTML
-    val url  = getClass.getResource("/dist/skeleton.html").toString
+    val url  = getClass.getResource("/generated-web-bundle/index.html").toString
     driver.get(url)
     // Wait until the page is loaded
     val wait = new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -57,10 +55,14 @@ class DmnToImageConverter(customDriver: Option[WebDriver with JavascriptExecutor
   private def createDefaultDriver(): WebDriver with JavascriptExecutor with TakesScreenshot = {
     WebDriverManager.chromedriver().setup()
     val options = new ChromeOptions()
+    // "--headless" seems to ignore "--windows-size"
     options.addArguments("--headless=new")
+    // allows fully rendering big tables. Could potentially be bumped even higher
     options.addArguments("--window-size=3840,2160")
+    // without this accessing css and js results in CORS error
     options.addArguments("--allow-file-access-from-files")
     new ChromeDriver(options)
   }
 
+  override def close(): Unit = if (shouldClose) driver.quit()
 }
