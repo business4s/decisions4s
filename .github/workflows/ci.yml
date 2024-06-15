@@ -22,8 +22,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: npm
-          cache-dependency-path: 'decisions4s-dmn-to-image/package-lock.json'
+          cache: yarn
+          cache-dependency-path: 'decisions4s-dmn-to-image/yarn.lock'
       # js bundle is kept commited in repository, but we verify if it is up to date if re-generated from scratch
       - name: Build dmn-to-image js bundle
         run: |
