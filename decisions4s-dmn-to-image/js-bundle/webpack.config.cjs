@@ -1,42 +1,6 @@
 const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
-
-
-const serverConfig = {
-    name: 'server',
-    target: 'node',
-    mode: 'development',
-    entry: './src/server.ts',
-    module: {
-        rules: [
-            {
-                test: /\.ts$/,
-                use: {
-                    loader: 'ts-loader',
-                    options: {
-                        configFile: 'tsconfig.server.json'
-                    }
-                },
-                exclude: /node_modules/,
-            },
-        ],
-    },
-    resolve: {
-        extensions: ['.ts', '.js'],
-    },
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'server_bundle.js',
-        libraryTarget: 'commonjs2' // Output as CommonJS2
-    },
-    plugins: [
-        new CopyPlugin({
-            patterns: [
-                {from: "src/skeleton.html", to: "skeleton.html"},
-            ],
-        }),
-    ]
-};
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const webConfig = {
     name: 'web',
@@ -46,12 +10,7 @@ const webConfig = {
         rules: [
             {
                 test: /\.ts$/,
-                use: {
-                    loader: 'ts-loader',
-                    options: {
-                        configFile: 'tsconfig.web.json'
-                    }
-                },
+                use: 'ts-loader',
                 exclude: /node_modules/,
             },
         ],
@@ -68,7 +27,37 @@ const webConfig = {
     },
     experiments: {
         outputModule: true
-    }
+    },
+    plugins: [
+        new CopyPlugin({
+            patterns: [
+                {from: "src/skeleton.html", to: "index.html"},
+            ],
+        }),
+    ]
 };
 
-module.exports = [serverConfig, webConfig];
+const cssConfig = {
+    name: 'css',
+    entry: './src/css-entry.js',
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'css-bundle.js', // This will not actually generate a JS file, but we need to specify it
+    },
+    module: {
+        rules: [
+            {
+                test: /\.css$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader'],
+            },
+        ],
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'bundle.css', // Output CSS file
+        }),
+    ],
+};
+
+
+module.exports = [webConfig, cssConfig];

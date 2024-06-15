@@ -3,7 +3,6 @@
 export interface DmnViewerInterface {
     getViewer(): any;
     openDiagram(dmnXML: string, options?: OpenOptions): Promise<Bounds>;
-    resize(): Promise<void>;
     toSVG(): Promise<string>;
 }
 

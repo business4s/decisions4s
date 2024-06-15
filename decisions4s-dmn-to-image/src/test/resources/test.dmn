@@ -1,6 +1,4 @@
-const dmnToImage = require('./dist/server_bundle.js');
-
-const xml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <definitions id="definitions" name="definitions" namespace="http://camunda.org/schema/1.0/dmn" xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/">
   <decision id="decision_7404e5e8-5516-49d5-8e95-5da8eea3c057" name="BankingProviderSelection">
     <decisionTable hitPolicy="FIRST" id="decisionTable_9c67715f-6a42-45bc-b5bd-a7fa18be4d29">
@@ -58,11 +56,3 @@ const xml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
     </decisionTable>
   </decision>
 </definitions>
-`
-
-async function main() {
-    const result = await dmnToImage.convert(xml);
-    console.log(result);
-}
-
-main().catch(console.error);

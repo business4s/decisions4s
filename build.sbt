@@ -32,14 +32,6 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
     ),
   )
 
-lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image/scala-wrapper"))
-  .settings(commonSettings)
-  .settings(
-    libraryDependencies ++= Seq(
-      "org.graalvm.polyglot" % "polyglot"  % "24.0.1",
-      "org.graalvm.polyglot" % "js"        % "24.0.1",
-    )
-  )
 
 lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(commonSettings)
@@ -67,7 +59,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val testDeps = List(
-  "org.scalatest"       %% "scalatest" % "3.2.17" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.18" % Test,
 )
 
 lazy val stableVersion = taskKey[String]("stableVersion")
