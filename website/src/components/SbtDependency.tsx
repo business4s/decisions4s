@@ -3,7 +3,7 @@ import React from 'react';
 import CodeBlock from '@theme/CodeBlock';
 
 interface SbtDependencyProps {
-    moduleName: "decisions4s-core" | "decisions4s-dmn";
+    moduleName: "decisions4s-core" | "decisions4s-dmn" | "decisions4s-dmn-to-image" | "decisions4s-cats-effect";
 }
 
 const SbtDependency: React.FC<SbtDependencyProps> = ({moduleName}) => {

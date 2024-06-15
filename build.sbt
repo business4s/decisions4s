@@ -48,7 +48,6 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % "1.5.6" % Test,
     ),
-//    unmanagedResources += baseDirectory.value.getParentFile / "js-bundle/dist"
   )
 
 lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
@@ -56,7 +55,7 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(
     publish / skip := true,
   )
-  .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`)
+  .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`, `decisions4s-dmn-to-image`)
 
 lazy val commonSettings = Seq(
   scalaVersion  := "3.3.3",
