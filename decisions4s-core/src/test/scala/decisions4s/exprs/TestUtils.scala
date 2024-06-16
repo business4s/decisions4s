@@ -2,7 +2,7 @@ package decisions4s.exprs
 
 import decisions4s.Expr
 import org.camunda.feel.FeelEngine
-import org.camunda.feel.api.{FailedEvaluationResult, FeelEngineApi, FeelEngineBuilder, SuccessfulEvaluationResult}
+import org.camunda.feel.api.{FailedEvaluationResult, FeelEngineApi, SuccessfulEvaluationResult}
 
 object TestUtils {
 

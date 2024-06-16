@@ -1,5 +1,4 @@
 import decisions4s.exprs.{Literal, UnaryTest}
-import shapeless3.deriving.{K0, Labelling}
 
 package object decisions4s {
 

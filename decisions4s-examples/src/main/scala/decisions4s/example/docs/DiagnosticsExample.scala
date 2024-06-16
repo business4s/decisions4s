@@ -1,9 +1,9 @@
 package decisions4s.example.docs
 
-import decisions4s.HKD
 
 object DiagnosticsExample {
 
+  import decisions4s.HKD
   case class Input[F[_]]() derives HKD
 
   case class Output[F[_]]() derives HKD

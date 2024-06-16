@@ -1,7 +1,7 @@
 package decisions4s.example.docs
 
+import decisions4s.Expr
 import decisions4s.exprs.UnaryTest
-import decisions4s.{Expr, it}
 
 object ExpressionsExample {
 

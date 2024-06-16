@@ -32,11 +32,13 @@ class DmnToImageConverter(customDriver: Option[WebDriver with JavascriptExecutor
     wait.until((d: WebDriver) => {
       d.asInstanceOf[JavascriptExecutor].executeScript("return document.readyState").toString == "complete"
     })
+    ()
   }
 
   private def loadDmn(dmnXml: String): Unit = {
     val loadXMLScript = """window.dmnViewerInterface.openDiagram(arguments[0]);"""
     driver.executeScript(loadXMLScript, dmnXml)
+    ()
   }
 
   private def takesScreenshot(): IArray[Byte] = {

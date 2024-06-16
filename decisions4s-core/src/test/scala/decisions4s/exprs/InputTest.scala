@@ -1,6 +1,6 @@
 package decisions4s.exprs
 
-import decisions4s.exprs.TestUtils.{checkExpression, checkUnaryExpression}
+import decisions4s.exprs.TestUtils.checkUnaryExpression
 import decisions4s.it
 import munit.FunSuite
 

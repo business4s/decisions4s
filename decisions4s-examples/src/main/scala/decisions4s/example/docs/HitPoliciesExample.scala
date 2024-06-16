@@ -1,9 +1,9 @@
 package decisions4s.example.docs
 
-import decisions4s.HKD
 
 object HitPoliciesExample {
 
+  import decisions4s.HKD
   case class In[F[_]]() derives HKD
   case class Out[F[_]]() derives HKD
 
