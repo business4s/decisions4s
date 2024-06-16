@@ -25,7 +25,7 @@ Which produces a debug string containing
   * Predicates' results (satisfied or not)
   * Rule output
 
-Example: 
+## Example
 ```text file=./test/resources/docs/pull-request-diagnostics.txt
 ```
 

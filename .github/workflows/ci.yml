@@ -13,8 +13,30 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+      # required for dmn-to-image tests
+      - uses: nanasess/setup-chromedriver@v2
       - name: Build and Test
         run: sbt test
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: yarn
+          cache-dependency-path: 'decisions4s-dmn-to-image/js-bundle/yarn.lock'
+      # js bundle is kept commited in repository, but we verify if it is up to date if re-generated from scratch
+      - name: Build dmn-to-image js bundle
+        run: |
+          cd decisions4s-dmn-to-image/js-bundle
+          yarn install
+          yarn run build
+      - name: Check for uncommitted changes
+        run: |
+          if [[ $(git status --porcelain) ]]; then
+            echo "There are uncommitted changes in the working directory:"
+            git status --porcelain
+            exit 1
+          fi
+        shell: bash
   test-website:
     runs-on: ubuntu-latest
     defaults:

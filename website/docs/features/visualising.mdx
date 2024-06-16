@@ -1,0 +1,47 @@
+---
+sidebar_position: 6.1
+---
+
+# Visualisation
+
+Providing a visual representation of decision logic is a core concern of Decisions4s.
+See below for the available ways of getting such representation.
+
+## Generating DMN Model
+
+DMN model can be generated using the following dependency:
+
+import SbtDependency from '@site/src/components/SbtDependency';
+
+<SbtDependency moduleName="decisions4s-dmn"/>
+
+:::info
+As of now, rendering relies on [camunda-dmn-model](https://github.com/camunda/camunda-bpm-platform/tree/master/model-api/dmn-model)
+and exposes this dependency directly in the API.
+This might change in the near future.
+:::
+
+```scala file=./main/scala/decisions4s/example/docs/DmnRenderingExample.scala start=start_dmn_raw end=end_dmn_raw
+```
+
+## Rendering DMN Model As Image
+
+DMN is an xml file that is not human-friendly without a way to render it.
+Decisions4s comes with additional utility
+that allows to convert the dmn into an image through [dmn-js](https://github.com/bpmn-io/dmn-js) library.
+:::warning
+Rendering the image involves running a web browser through [Selenium](https://www.selenium.dev/) and capturing screenshots from there.
+By default, the assumed browser is Chrome and so [ChromeDriver](https://developer.chrome.com/docs/chromedriver) needs to be installed.
+
+This process is rather slow and not recommended for live server-side usage.
+:::
+
+<SbtDependency moduleName="decisions4s-dmn-to-image"/>
+
+```scala file=./main/scala/decisions4s/example/docs/DmnRenderingExample.scala start=start_dmn_image end=end_dmn_image
+```
+
+## Alternative Visualizations
+
+It's fully possible to convert a `DecisionTable` into markdown or csv file.
+This is not provided out of the box, but please reach out if you think it should be.

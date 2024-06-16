@@ -1,1 +1,8 @@
 **/target/
+
+# Following files are geenerated by the build process and should be ingored by CI when checking git clean state
+# DMNs will probably be removed in near future
+ElderlyScamCheckDecision.dmn
+TotalWealthCheckDecision.dmn
+banking-provider-decision.dmn
+decisions4s-dmn-to-image/js-bundle/node_modules/

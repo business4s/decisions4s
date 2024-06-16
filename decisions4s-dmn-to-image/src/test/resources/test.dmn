@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions id="definitions" name="definitions" namespace="http://camunda.org/schema/1.0/dmn" xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/">
+  <decision id="decision_7404e5e8-5516-49d5-8e95-5da8eea3c057" name="BankingProviderSelection">
+    <decisionTable hitPolicy="FIRST" id="decisionTable_9c67715f-6a42-45bc-b5bd-a7fa18be4d29">
+      <input id="input_fd0772b3-6004-4277-847a-39c2b41d7284" label="userResidenceCountry">
+        <inputExpression id="inputExpression_c7c51b83-7910-43b4-9733-903e7c84df00"/>
+      </input>
+      <input id="input_eefca0ea-6856-4e31-aeaf-991c6075cd61" label="currency">
+        <inputExpression id="inputExpression_7c050c75-b331-4668-bdae-6d50c1dedb19"/>
+      </input>
+      <output id="output_11b44ce2-a60f-4e8e-a143-16edf5017434" label="provider"/>
+      <rule id="rule_0a4ab19c-ac53-4e01-a812-b67316a68690">
+        <inputEntry id="inputEntry_c9f96348-e361-4371-92cb-648d3893c930">
+          <text>isEEA(?)</text>
+        </inputEntry>
+        <inputEntry id="inputEntry_7eefafe3-8230-439d-85ff-7c60446746c3">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="outputEntry_c42ac67f-affa-4dd3-8aa0-71ed6a12b57f">
+          <text>FooInc</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule_3394eff4-26db-42d4-9465-2b84d034521c">
+        <inputEntry id="inputEntry_dc2b4113-452b-40c6-b1fc-3b0e8252577c">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry_02a0ceae-2eae-44ff-9847-06d947344006">
+          <text>EUR</text>
+        </inputEntry>
+        <outputEntry id="outputEntry_1909e720-88ec-40b1-a475-abb7b5be564a">
+          <text>AcmeCorp</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule_b4886a20-0b08-4eba-bbca-905b9f17de55">
+        <inputEntry id="inputEntry_8b486580-ba38-4cb4-811b-708418eedd7a">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry_209c80ab-3dbd-4b99-b731-bbe2b3e96a15">
+          <text>CHF, PLN</text>
+        </inputEntry>
+        <outputEntry id="outputEntry_33ef3bc8-5058-42d6-a360-d40f09bf9e45">
+          <text>BarLtd</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule_b2ed1ddb-bd44-4cf5-aa0f-f333222d4ae4">
+        <inputEntry id="inputEntry_678d6270-35af-4c9e-9e8f-b6da88c3db4e">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="inputEntry_0f789c92-c70a-4dc4-bb92-0ae376392aab">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="outputEntry_c2178b42-4e5c-4c54-8911-bb76ac2b4041">
+          <text>BazCo</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
