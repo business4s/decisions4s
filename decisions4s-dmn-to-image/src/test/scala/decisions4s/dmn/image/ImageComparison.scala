@@ -1,7 +1,7 @@
 package decisions4s.dmn.image
 
 import java.awt.image.BufferedImage
-import java.io.{ByteArrayInputStream, File}
+import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
 object ImageComparison {
@@ -9,8 +9,8 @@ object ImageComparison {
   // gives a value between 0 and 100. 0 means no difference, 100 means very different.
   def getDifferencePercent(img1: IArray[Byte], img2: IArray[Byte]): Double = {
     getDifferencePercent(
-      ImageIO.read(new ByteArrayInputStream(img1.toArray)),
-      ImageIO.read(new ByteArrayInputStream(img2.toArray)),
+      ImageIO.read(new ByteArrayInputStream(IArray.genericWrapArray(img1).toArray)),
+      ImageIO.read(new ByteArrayInputStream(IArray.genericWrapArray(img2).toArray)),
     )
   }
 

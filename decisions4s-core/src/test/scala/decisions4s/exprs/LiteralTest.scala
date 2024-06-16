@@ -1,11 +1,9 @@
 package decisions4s.exprs
 
 import decisions4s.LiteralShow
-import munit.{Compare, FunSuite}
-import org.camunda.feel.syntaxtree.ZonedTime
+import munit.FunSuite
 
-import java.time.{Duration, LocalDate, LocalDateTime, LocalTime, OffsetDateTime, OffsetTime, Period, ZoneId, ZonedDateTime}
-import scala.jdk.CollectionConverters.CollectionHasAsScala
+import java.time.*
 
 class LiteralTest extends FunSuite {
 

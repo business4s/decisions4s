@@ -1,6 +1,6 @@
 package decisions4s.dmn
 
-import decisions4s.{DecisionTable, HKD}
+import decisions4s.DecisionTable
 import decisions4s.internal.HKDUtils
 import org.camunda.bpm.model.dmn.instance.{
   Decision,
@@ -71,7 +71,7 @@ object DmnConverter {
         case DecisionTable.HitPolicy.CollectMin   => Some(BuiltinAggregator.MIN)
         case DecisionTable.HitPolicy.CollectMax   => Some(BuiltinAggregator.MAX)
         case DecisionTable.HitPolicy.CollectCount => Some(BuiltinAggregator.COUNT)
-        case _                               => None
+        case _                                    => None
       }
       aggr.foreach(tableElem.setAggregation)
       tableElem
