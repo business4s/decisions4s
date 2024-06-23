@@ -13,7 +13,9 @@ import shapeless3.deriving.Const
 import scala.collection.mutable
 import scala.util.chaining.scalaUtilChainingOps
 
-private class MemoizingEvaluator[Input[_[_]]: HKD, Output[_[_]]: HKD, F[_]: Concurrent](val dt: DecisionTable[Input, Output, HitPolicy.First]) {
+class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent](val dt: DecisionTable[Input, Output, HitPolicy.First]) {
+
+  import dt.given
 
   def evaluateFirst(in: Input[F]): F[EvalResult.First[Input, Output]] = {
     for {

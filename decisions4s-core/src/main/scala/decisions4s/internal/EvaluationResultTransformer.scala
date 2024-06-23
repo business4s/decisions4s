@@ -2,7 +2,7 @@ package decisions4s.internal
 
 import decisions4s.*
 
-class EvaluationResultTransformer[Input[_[_]]: HKD, Output[_[_]]](
+class EvaluationResultTransformer[Input[_[_]], Output[_[_]]](
     rawResults: Seq[() => Rule.Result[Input, Output]],
     table: DecisionTable[Input, Output, _],
     input: Input[Value],
@@ -69,6 +69,7 @@ class EvaluationResultTransformer[Input[_[_]]: HKD, Output[_[_]]](
 
   private def result[T](rawResults: List[Rule.Result[Input, Output]], output: T): EvalResult[Input, Output, T] = {
     val toSome: Value ~> Option = [t] => (v: t) => Some(v): Option[t]
+    import table.given
     EvalResult(table, input.mapK(toSome), rawResults, output)
   }
 

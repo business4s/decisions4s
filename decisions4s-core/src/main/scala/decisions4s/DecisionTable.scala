@@ -56,40 +56,40 @@ object DecisionTable {
     case object CollectCount extends HitPolicy
   }
 
-  extension [Input[_[_]]: HKD, Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.Single]) {
+  extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.Single]) {
     def evaluateSingle(in: Input[Value]): EvalResult.Single[Input, Output] =
       transformer(dt, in).single()
   }
-  extension [Input[_[_]]: HKD, Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.Distinct]) {
+  extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.Distinct]) {
     def evaluateDistinct(in: Input[Value]): EvalResult.Distinct[Input, Output] =
       transformer(dt, in).distinct()
   }
-  extension [Input[_[_]]: HKD, Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.First]) {
+  extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.First]) {
     def evaluateFirst(in: Input[Value]): EvalResult.First[Input, Output] =
       transformer(dt, in).first()
   }
-  extension [Input[_[_]]: HKD, Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.Collect]) {
+  extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.Collect]) {
     def evaluateCollect(in: Input[Value]): EvalResult.Collect[Input, Output] =
       transformer(dt, in).collect()
   }
-  extension [Input[_[_]]: HKD, Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.CollectSum]) {
+  extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.CollectSum]) {
     def evaluateSum(in: Input[Value])(merge: (Output[Value], Output[Value]) => Output[Value]): EvalResult.Sum[Input, Output] =
       transformer(dt, in).collectSum(merge)
   }
-  extension [Input[_[_]]: HKD, Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.CollectMin]) {
+  extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.CollectMin]) {
     def evaluateMin(in: Input[Value])(using Ordering[Output[Value]]): EvalResult.Min[Input, Output] =
       transformer(dt, in).collectMin()
   }
-  extension [Input[_[_]]: HKD, Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.CollectMax]) {
+  extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.CollectMax]) {
     def evaluateMax(in: Input[Value])(using ord: Ordering[Output[Value]]): EvalResult.Max[Input, Output] =
       transformer(dt, in).collectMin()(using ord.reverse)
   }
-  extension [Input[_[_]]: HKD, Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.CollectCount]) {
+  extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.CollectCount]) {
     def evaluateCount(in: Input[Value]): EvalResult.Count[Input, Output] =
       transformer(dt, in).collectCount()
   }
 
-  private def transformer[Input[_[_]]: HKD, Output[_[_]]](
+  private def transformer[Input[_[_]], Output[_[_]]](
       dt: DecisionTable[Input, Output, _],
       in: Input[Value],
   ): EvaluationResultTransformer[Input, Output] = dt.evaluateRaw(in).pipe(EvaluationResultTransformer(_, dt, in))
