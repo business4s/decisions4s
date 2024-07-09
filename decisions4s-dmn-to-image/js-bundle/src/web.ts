@@ -4,7 +4,7 @@ import {DmnViewerInterface, OpenOptions, Bounds, ImportDoneEvent} from './interf
 class DmnViewerImpl implements DmnViewerInterface {
     private dmnViewer: DmnJS | null = null;
 
-    getViewer(): DmnJS {
+    private getViewer(): DmnJS {
         if (this.dmnViewer) {
             return this.dmnViewer;
         }
@@ -50,20 +50,6 @@ class DmnViewerImpl implements DmnViewerInterface {
             diagramHeight
         };
         return desiredViewport;
-    }
-
-    toSVG(): Promise<string> {
-        const dmnViewer = this.getViewer();
-
-        return new Promise<string>((resolve, reject) => {
-            dmnViewer.saveSVG((err: Error | null, svg: string) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(svg);
-                }
-            });
-        });
     }
 }
 
