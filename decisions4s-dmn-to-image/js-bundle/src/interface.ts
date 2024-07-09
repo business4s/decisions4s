@@ -1,9 +1,7 @@
 
 
 export interface DmnViewerInterface {
-    getViewer(): any;
     openDiagram(dmnXML: string, options?: OpenOptions): Promise<Bounds>;
-    toSVG(): Promise<string>;
 }
 
 export interface OpenOptions {
