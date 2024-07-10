@@ -190,14 +190,14 @@ class DecisionTableTest extends AnyFreeSpec {
 
   def buildExpectedResult[T](rulesHit: List[Boolean], output: T): EvalResult[Input, Output, T] = ???
 
-  def rawResults(hits: Boolean*): List[Rule.Result[Input, Output]] = {
+  def rawResults(hits: Boolean*): List[RuleResult[Input, Output]] = {
     given EvaluationContext[Input] = new EvaluationContext[Input] {
       override def wholeInput: Input[ValueExpr] = null // variables not sued in those tests
     }
 
     hits.zipWithIndex
       .map((wasHit, idx) =>
-        Rule.Result(
+        RuleResult(
           Input(wasHit),
           if (wasHit) Some(uniqueTestTable.rules(idx).evaluateOutput())
           else None,

@@ -57,6 +57,15 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   )
   .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`, `decisions4s-dmn-to-image`)
 
+lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-scala-2"))
+  .settings(
+    scalaVersion   := "2.13.14",
+    libraryDependencies ++= testDeps,
+    publish / skip := true,
+    scalacOptions ++= Seq("-Ytasty-reader"),
+  )
+  .dependsOn(`decisions4s-core`)
+
 lazy val commonSettings = Seq(
   scalaVersion  := "3.4.2",
   scalacOptions ++= Seq("-no-indent"),

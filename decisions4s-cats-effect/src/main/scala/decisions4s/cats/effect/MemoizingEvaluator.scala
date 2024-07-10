@@ -27,7 +27,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
     } yield EvalResult(dt, evaluatedInputs, ruleResults, output)
   }
 
-  private type RulesResult = (List[Rule.Result[Input, Output]], Option[Output[Value]])
+  private type RulesResult = (List[RuleResult[Input, Output]], Option[Output[Value]])
   private def evaluateRules(in: Input[F]): F[RulesResult] = {
     buildContext(in).use(ctx =>
       dt.rules.foldLeftM[F, RulesResult]((List(), None)) {
@@ -57,7 +57,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
     } yield (updating, refs)
   }
 
-  private def evaluateRule(rule: Rule[Input, Output], input: Input[F])(using EvaluationContext[Input]): F[Rule.Result[Input, Output]] = {
+  private def evaluateRule(rule: Rule[Input, Output], input: Input[F])(using EvaluationContext[Input]): F[RuleResult[Input, Output]] = {
     type FBool[T] = F[Boolean]
     val evaluatedF: Input[FBool] = HKD.map2(rule.matching, input)(
       [t] =>
@@ -74,7 +74,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
       evaluated <- sequenced
       matches    = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
       evalResult = Option.when(matches)(rule.evaluateOutput())
-    } yield Rule.Result(evaluated, evalResult)
+    } yield RuleResult(evaluated, evalResult)
     result
   }
 

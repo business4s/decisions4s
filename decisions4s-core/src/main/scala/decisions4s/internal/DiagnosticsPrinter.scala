@@ -1,12 +1,12 @@
 package decisions4s.internal
 
 import decisions4s.exprs.VariableStub
-import decisions4s.{EvalResult, EvaluationContext, HKD, Rule, ValueExpr}
+import decisions4s.*
 import shapeless3.deriving.Const
 
 class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Output, Out]) {
-  import r.{input, results, table}
   import r.table.given
+  import r.{input, results, table}
 
   private val inputNames: IndexedSeq[String]              = summon[HKD[Input]].fieldNames
   private val matchingExpressions: Vector[Vector[String]] = table.rules.toVector.map(rule => {
@@ -34,7 +34,7 @@ class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Ou
       .mkString("\n")
   }
 
-  private def renderRule(rr: Rule.Result[Input, Output], idx: Int): String = {
+  private def renderRule(rr: RuleResult[Input, Output], idx: Int): String = {
     val fieldSatisfaction: Vector[Boolean] = HKDUtils.collectFields(rr.details).toVector
     val sign                               = if (rr.evaluationResult.isDefined) then "✓" else "✗"
     val output                             = rr.evaluationResult.map(x => s"== ${x.toString}").getOrElse("== ✗")

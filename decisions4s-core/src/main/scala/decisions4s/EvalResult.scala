@@ -16,7 +16,7 @@ import decisions4s.internal.DiagnosticsPrinter
 case class EvalResult[In[_[_]], Out[_[_]], +Output](
     table: DecisionTable[In, Out, ?],
     input: In[Option],
-    results: List[Rule.Result[In, Out]],
+    results: List[RuleResult[In, Out]],
     output: Output,
 ) {
 
