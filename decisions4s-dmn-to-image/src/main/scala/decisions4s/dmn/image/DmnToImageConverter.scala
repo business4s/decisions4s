@@ -12,9 +12,9 @@ import scala.util.Try
 
 /** Helper allowing to convert dmn XML into image through rendering in a browser (using dmn-js) and taking a screenshot.
   */
-class DmnToImageConverter(customDriver: Option[WebDriver with JavascriptExecutor with TakesScreenshot] = None) extends AutoCloseable {
+class DmnToImageConverter(customDriver: Option[WebDriver & JavascriptExecutor & TakesScreenshot] = None) extends AutoCloseable {
 
-  private val (driver, shouldClose): (WebDriver with JavascriptExecutor with TakesScreenshot, Boolean) =
+  private val (driver, shouldClose): (WebDriver & JavascriptExecutor & TakesScreenshot, Boolean) =
     customDriver.map(_ -> false).getOrElse(createDefaultDriver() -> true)
 
   def convertDiagram(dmnXml: String): Try[IArray[Byte]] = Try {
@@ -54,7 +54,7 @@ class DmnToImageConverter(customDriver: Option[WebDriver with JavascriptExecutor
     IArray.unsafeFromArray(os.toByteArray)
   }
 
-  private def createDefaultDriver(): WebDriver with JavascriptExecutor with TakesScreenshot = {
+  private def createDefaultDriver(): WebDriver & JavascriptExecutor & TakesScreenshot = {
     WebDriverManager.chromedriver().setup()
     val options = new ChromeOptions()
     // "--headless" seems to ignore "--windows-size"

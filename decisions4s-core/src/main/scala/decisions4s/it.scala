@@ -11,8 +11,9 @@ object it {
   def value[T]: Expr[T, T] = Input()
 
   @targetName("equalsToOp")
-  def ===[T](value: T)(using LiteralShow[T]): UnaryTest[T]      = UnaryTest.EqualTo(Literal(value))
-  def equalsTo[T](value: T)(using LiteralShow[T]): UnaryTest[T] = UnaryTest.EqualTo(Literal(value))
+  def ===[T](value: T)(using LiteralShow[T]): UnaryTest[T]               = UnaryTest.EqualTo(Literal(value))
+  def equalsTo[T](value: T)(using LiteralShow[T]): UnaryTest[T]          = UnaryTest.EqualTo(Literal(value))
+  def equalsTo[T](value: Expr[T, T])(using LiteralShow[T]): UnaryTest[T] = UnaryTest.EqualTo(value)
 
   def equalsAnyOf[T](values: T*)(using LiteralShow[T]): UnaryTest[T] = Or(values.map(v => Literal(v)))
 

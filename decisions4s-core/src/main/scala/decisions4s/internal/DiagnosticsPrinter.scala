@@ -1,6 +1,7 @@
 package decisions4s.internal
 
-import decisions4s.{EvalResult, HKD, MatchingExpr, Rule}
+import decisions4s.exprs.VariableStub
+import decisions4s.{EvalResult, EvaluationContext, HKD, Rule, ValueExpr}
 import shapeless3.deriving.Const
 
 class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Output, Out]) {
@@ -8,9 +9,12 @@ class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Ou
   import r.table.given
 
   private val inputNames: IndexedSeq[String]              = summon[HKD[Input]].fieldNames
-  private val matchingExpressions: Vector[Vector[String]] = table.rules.toVector.map(rule =>
-    HKDUtils.collectFields(rule.matching.mapK[Const[String]]([t] => (expr: MatchingExpr[t]) => expr.renderExpression)).toVector,
-  )
+  private val matchingExpressions: Vector[Vector[String]] = table.rules.toVector.map(rule => {
+    given EvaluationContext[Input] = new EvaluationContext[Input] {
+      override val wholeInput: Input[ValueExpr] = HKD.typedNames[Input].mapK([t] => name => VariableStub[t](name))
+    }
+    HKDUtils.collectFields(rule.matching.mapK[Const[String]]([t] => expr => expr.renderExpression)).toVector
+  })
   private val inputValues: Vector[Option[Any]]            =
     HKDUtils.collectFields(input.mapK[Const[Option[Any]]]([t] => (value: Option[t]) => (value: Option[Any]))).toVector
   private val maxInputNameLen                             = inputNames.map(_.length).max

@@ -90,7 +90,7 @@ object DecisionTable {
   }
 
   private def transformer[Input[_[_]], Output[_[_]]](
-      dt: DecisionTable[Input, Output, _],
+      dt: DecisionTable[Input, Output, ?],
       in: Input[Value],
   ): EvaluationResultTransformer[Input, Output] = dt.evaluateRaw(in).pipe(EvaluationResultTransformer(_, dt, in))
 

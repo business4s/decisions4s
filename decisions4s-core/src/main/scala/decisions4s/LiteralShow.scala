@@ -16,6 +16,7 @@ object LiteralShow {
   given LiteralShow[Int]            = _.toString
   given LiteralShow[Long]           = _.toString
   given LiteralShow[Double]         = _.toString
+  given LiteralShow[BigDecimal]     = _.toString()
   given LiteralShow[String]         = x => s"\"$x\""
   given LiteralShow[LocalDate]      = temporal("yyyy-MM-dd")
   given LiteralShow[LocalTime]      = temporal("HH:mm:ss")

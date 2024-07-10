@@ -4,7 +4,7 @@ import decisions4s.*
 
 class EvaluationResultTransformer[Input[_[_]], Output[_[_]]](
     rawResults: Seq[() => Rule.Result[Input, Output]],
-    table: DecisionTable[Input, Output, _],
+    table: DecisionTable[Input, Output, ?],
     input: Input[Value],
 ) {
 

@@ -58,7 +58,7 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`, `decisions4s-dmn-to-image`)
 
 lazy val commonSettings = Seq(
-  scalaVersion  := "3.3.3",
+  scalaVersion  := "3.4.2",
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
   organization  := "org.business4s",
