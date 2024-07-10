@@ -164,31 +164,37 @@ class DecisionTableTest extends AnyFreeSpec {
 
   "wholeInput" in {
     case class Input[F[_]](a: F[Int], b: F[Int]) derives HKD
-    case class Output[F[_]](a: F[String]) derives HKD
+    case class Output[F[_]](c: F[Int]) derives HKD
     val table: DecisionTable[Input, Output, HitPolicy.Single.type] = DecisionTable(
       rules = List(
         Rule(
           matching = Input(
-            a = ctx ?=> it.equalsTo(ctx.wholeInput.b),
-            b = it.equalsTo(wholeInput.a),
+            a = ctx ?=> !it.equalsTo(ctx.wholeInput.b),
+            b = !it.equalsTo(wholeInput.a),
           ),
-          output = Output("aa"),
+          output = Output(
+            c = wholeInput.a + wholeInput.b,
+          ),
         ),
       ),
       "test",
       HitPolicy.Single,
     )
 
-    val result = table.evaluateSingle(Input[Value](1, 1))
-    assert(result.output == Right(Some(Output[Value]("aa"))))
+    val result = table.evaluateSingle(Input[Value](1, 3))
+    assert(result.output == Right(Some(Output[Value](4))))
 
-    val result2 = table.evaluateSingle(Input[Value](1, 2))
+    val result2 = table.evaluateSingle(Input[Value](1, 1))
     assert(result2.output == Right(None))
   }
 
   def buildExpectedResult[T](rulesHit: List[Boolean], output: T): EvalResult[Input, Output, T] = ???
 
   def rawResults(hits: Boolean*): List[Rule.Result[Input, Output]] = {
+    given EvaluationContext[Input] = new EvaluationContext[Input] {
+      override def wholeInput: Input[ValueExpr] = null // variables not sued in those tests
+    }
+
     hits.zipWithIndex
       .map((wasHit, idx) =>
         Rule.Result(
