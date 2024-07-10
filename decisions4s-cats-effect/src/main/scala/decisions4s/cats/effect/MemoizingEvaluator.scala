@@ -57,14 +57,13 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
     } yield (updating, refs)
   }
 
-  type FieldIdx = Int
   private def evaluateRule(rule: Rule[Input, Output], input: Input[F])(using EvaluationContext[Input]): F[Rule.Result[Input, Output]] = {
     type FBool[T] = F[Boolean]
     val evaluatedF: Input[FBool] = HKD.map2(rule.matching, input)(
       [t] =>
         (expr, fValue) =>
           {
-            expr match {
+            (expr: UnaryTest[t]) match {
               case UnaryTest.CatchAll => true.pure[F]
               case _                  => fValue.map(expr.evaluate)
             }
