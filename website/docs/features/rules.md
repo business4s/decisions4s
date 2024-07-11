@@ -2,10 +2,13 @@
 sidebar_position: 3
 ---
 
-# Expressions
+# Wiriting Rules
 
-`Decisions4s` uses custom expressions for defining the matching logic for a given rule. Expression is just an object
-that can produce given `Out` based on `In` and statically render its string representation.
+`Decisions4s` uses custom expressions for defining the rules.
+Each rule has two parts: matching on the input and producing the output, both of which are defined using
+expressions.
+
+Expression is just an object that can produce given `Out` based on `In` and statically render its string representation.
 
 ```scala 
 trait Expr[-In, +Out] {
@@ -17,7 +20,7 @@ trait Expr[-In, +Out] {
 
 There is also a specialised type `UnaryTest[In] extends Expr[In, Boolean]` that allows us to closely follow
 the [FEEL model](https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/). This could be
-considered an internal complexity of the library, but all the rules have to be of type `UnaryTest[T]`.
+considered an internal complexity of the library, but all the matching logic has to be of type `UnaryTest[T]`.
 
 <!-- @formatter:off -->
 ```scala
@@ -28,14 +31,8 @@ case class Rule[Input[_[_]], Output[_[_]]](
 ```
 <!-- @formatter:on -->
 
-Implicit conversions between `Expr` and `UnaryTest` are provided based on the rules below.
-
-> A unary-tests expression returns true if one of the following conditions is fulfilled:
->
-> - The expression evaluates to true when the input value is applied to it.
-> - The expression evaluates to a list, and the input value is equal to at least one of the values in that list.
-> - The expression evaluates to a value, and the input value is equal to that value.
-> - The expression is equal to - (a dash).
+All the most common ways of building `UnaryTest`s are accesisble through `it` object.
+Implicit conversion between `Expr[T, Boolean]` is also defined.
 
 ## Built-in Expressions
 
@@ -69,3 +66,13 @@ can rely on a properly specified format instead of defining our own. Having said
 tables.
 
 User-defined expressions don't have to keep FEEL compatibility.
+
+## Accessing Other Inputs
+
+By default, all matching logic operates on the input it is defined for.
+To access other pieces of input one can use `wholeInput` method.
+The same way can be used to build the output value based on inputs.
+The example below compares `a` with `b` and returns their sum if they are equal.
+
+```scala file=./main/scala/decisions4s/example/docs/RulesExample.scala start=start_whole_input end=end_whole_input
+```

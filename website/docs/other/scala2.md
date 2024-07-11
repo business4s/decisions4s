@@ -17,14 +17,12 @@ We recommend the following approach:
 
 * Define a separate module `your-app-decisions` that will use Scala 3 and depend only on `Decisions4s`. Define your
   decisions there.
-  This is needed to leverage typeclass derivation that is based on macros that can be invoked only from Scala 3 module.
-
-  Alternatively the decisions can be defined directly in Scala 2 module, but this will require writing `HKD` instance by
-  hand or implementing a custom derivation mechanism.
+  This is needed
+  to leverage typeclass derivation that is based on macros that can be invoked only from Scala 3 module.
+  Also, rules definitions rely on context functions, which cannot be used from Scala 2.
 * Leverage
   the [ability to use Scala 3 from Scala 2](https://docs.scala-lang.org/scala3/guides/migration/compatibility-classpath.html#a-scala-213-module-can-depend-on-a-scala-3-artifact)
-  and `.dependsOn()` on the new module from the main one.
-  You can use all the features of Decisions4s (other than typeclass derivation) from within Scala 2 codebase.
+  and `.dependsOn()` on the new module from the main one. You can evaluate and visualize decisions from within Scala 2 codebase.
 * If you're using `decisions4s-cats-effect`, exclude the cats-effect dependency,
   to avoid the situation where both scala-3 and scala-2 versions land on the classpath. This is not entirely safe in
   theory but should work in practice.
