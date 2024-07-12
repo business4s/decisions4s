@@ -3,8 +3,8 @@ package decisions4s.internal
 import decisions4s.*
 
 class EvaluationResultTransformer[Input[_[_]], Output[_[_]]](
-    rawResults: Seq[() => Rule.Result[Input, Output]],
-    table: DecisionTable[Input, Output, _],
+    rawResults: Seq[() => RuleResult[Input, Output]],
+    table: DecisionTable[Input, Output, ?],
     input: Input[Value],
 ) {
 
@@ -33,7 +33,7 @@ class EvaluationResultTransformer[Input[_[_]], Output[_[_]]](
   }
 
   def first(): EvalResult.First[Input, Output] = {
-    val (results, firstSatisfied) = rawResults.foldLeft((List.empty[Rule.Result[Input, Output]], Option.empty[Output[Value]])) {
+    val (results, firstSatisfied) = rawResults.foldLeft((List.empty[RuleResult[Input, Output]], Option.empty[Output[Value]])) {
       case ((acc, None), getResult)    =>
         val result = getResult()
 
@@ -67,7 +67,7 @@ class EvaluationResultTransformer[Input[_[_]], Output[_[_]]](
     result(raw, count)
   }
 
-  private def result[T](rawResults: List[Rule.Result[Input, Output]], output: T): EvalResult[Input, Output, T] = {
+  private def result[T](rawResults: List[RuleResult[Input, Output]], output: T): EvalResult[Input, Output, T] = {
     val toSome: Value ~> Option = [t] => (v: t) => Some(v): Option[t]
     import table.given
     EvalResult(table, input.mapK(toSome), rawResults, output)

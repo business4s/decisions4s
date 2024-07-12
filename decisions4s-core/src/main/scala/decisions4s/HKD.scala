@@ -1,6 +1,5 @@
 package decisions4s
 
-import decisions4s.Tuple2K
 import shapeless3.deriving.{Const, K11, Labelling, ~>}
 
 /** Specialised typeclass to expose operations on higher kinded data (case-classes where each field is wrapped in F[_])
@@ -53,5 +52,22 @@ object HKD {
   }
 
   inline def derived[F[_[_]]](using K11.ProductGeneric[F], Labelling[F[Const[Any]]]): HKD[F] = shapeGen
+
+  def map2[F[_[_]]: HKD, A[_], B[_], C[_]](fa: F[A], fb: F[B])(func: [t] => (A[t], B[t]) => C[t]): F[C] = {
+    fa.productK(fb).mapK([t] => (x: Tuple2K[A, B][t]) => func(x._1, x._2))
+  }
+
+  // TODO no point in recreating it every time
+  def typedNames[F[_[_]]](using hkd: HKD[F]): F[Const[String]] = {
+    var index = 0;
+    hkd.pure(
+      [t] =>
+        () => {
+          val name = hkd.fieldNames(index)
+          index += 1
+          name
+      },
+    )
+  }
 
 }

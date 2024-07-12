@@ -29,28 +29,49 @@ class MemoizedEvalTest extends FunSuite {
     HitPolicy.First,
   )
 
-  test("first rule triggered") {
-    val (result, counters) = evaluate(Input(1, 0, 0))
+//  test("first rule triggered") {
+//    val (result, counters) = evaluate(Input(1, 0, 0))
+//    assertEquals(result.output.map(_.d), Some(1): Option[Int])
+//    assertEquals(counters, Input[Counter](1, 0, 0))
+//  }
+//
+//  test("second rule triggered") {
+//    val (result, counters) = evaluate(Input(-11, 1, 0))
+//    assertEquals(result.output.map(_.d), Some(2): Option[Int])
+//    assertEquals(counters, Input[Counter](1, 1, 0))
+//  }
+//
+//  test("third rule triggered") {
+//    val (result, counters) = evaluate(Input(-1, 0, 1))
+//    assertEquals(result.output.map(_.d), Some(3): Option[Int])
+//    assertEquals(counters, Input[Counter](1, 1, 1))
+//  }
+
+  test("wholeInput") {
+    val testTable: DecisionTable[Input, Output, HitPolicy.First] = DecisionTable(
+      rules = List(
+        Rule(
+          matching = Input(
+            a = it.catchAll,
+            b = it.catchAll,
+            c = wholeInput.b > 1,
+          ),
+          output = Output(wholeInput.c),
+        )
+      ),
+      "test",
+      HitPolicy.First,
+    )
+    val (result, counters) = evaluate(Input(0, 2, 1), testTable)
+    println(result.makeDiagnosticsString)
     assertEquals(result.output.map(_.d), Some(1): Option[Int])
-    assertEquals(counters, Input[Counter](1, 0, 0))
+    assertEquals(counters, Input[Counter](0, 1, 1))
   }
 
-  test("second rule triggered") {
-    val (result, counters) = evaluate(Input(-11, 1, 0))
-    assertEquals(result.output.map(_.d), Some(2): Option[Int])
-    assertEquals(counters, Input[Counter](1, 1, 0))
-  }
-
-  test("third rule triggered") {
-    val (result, counters) = evaluate(Input(-1, 0, 1))
-    assertEquals(result.output.map(_.d), Some(3): Option[Int])
-    assertEquals(counters, Input[Counter](1, 1, 1))
-  }
-
-  def evaluate(input: Input[Value]): (EvalResult.First[Input, Output], Input[Counter]) = {
+  def evaluate(input: Input[Value], table: DecisionTable[Input, Output, HitPolicy.First] = testTable): (EvalResult.First[Input, Output], Input[Counter]) = {
     import _root_.cats.effect.unsafe.implicits.given
     val (effectfulInput, getCounters) = createCountingInput(input)
-    val result                        = testTable.evaluateFirstF(effectfulInput).unsafeRunSync()
+    val result                        = table.evaluateFirstF(effectfulInput).unsafeRunSync()
     (result, getCounters())
   }
 

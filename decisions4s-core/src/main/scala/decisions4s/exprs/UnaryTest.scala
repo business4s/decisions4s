@@ -69,9 +69,6 @@ object UnaryTest extends LowPriorityUnaryTestConversion {
     override def renderExpression: String = expr.renderExpression
   }
 
-  implicit def oneOf[T](expr: Expr[T, Iterable[T]]): UnaryTest[T] = OneOf(expr)
-  implicit def equalTo[T](expr: Expr[T, T]): UnaryTest[T]         = EqualTo(expr)
-
   extension [I](lhs: UnaryTest[I]) {
     def unary_! : UnaryTest[I]              = Not(lhs)
     def ||(rhs: UnaryTest[I]): UnaryTest[I] = Or(Seq(lhs, rhs))

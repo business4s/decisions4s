@@ -11,7 +11,7 @@ object DmnRenderingExample {
   import decisions4s.dmn.*
   import org.camunda.bpm.model.dmn.{Dmn, DmnModelInstance}
 
-  val decisionTable: DecisionTable[Input, Output, _] = ???
+  val decisionTable: DecisionTable[Input, Output, ?] = ???
   val dmn: DmnModelInstance                          = DmnConverter.convert(decisionTable)
   val dmnXml: String                                 = Dmn.convertToString(dmn)
   // end_dmn_raw

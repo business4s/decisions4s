@@ -1,17 +1,22 @@
 package decisions4s
 
+import decisions4s.exprs.Variable
 import decisions4s.internal.EvaluationResultTransformer
 
 import scala.util.chaining.scalaUtilChainingOps
 
-case class DecisionTable[Input[_[_]]: HKD, Output[_[_]]: HKD, HitPolicy <: DecisionTable.HitPolicy](
+case class DecisionTable[Input[_[_]], Output[_[_]], HitPolicy <: DecisionTable.HitPolicy](
     rules: List[Rule[Input, Output]],
     name: String,
     hitPolicy: HitPolicy,
 )(using val inputHKD: HKD[Input], val outputHKD: HKD[Output]) {
 
-  private def evaluateRaw(in: Input[Value]): Seq[() => Rule.Result[Input, Output]] =
+  private def evaluateRaw(in: Input[Value]): Seq[() => RuleResult[Input, Output]] = {
+    given EvaluationContext[Input] = new EvaluationContext[Input] {
+      override val wholeInput: Input[ValueExpr] = HKD.map2(in, HKD.typedNames[Input])([t] => (value, name) => Variable[t](name, value))
+    }
     rules.map(r => () => r.evaluate(in))
+  }
 
 }
 
@@ -90,7 +95,7 @@ object DecisionTable {
   }
 
   private def transformer[Input[_[_]], Output[_[_]]](
-      dt: DecisionTable[Input, Output, _],
+      dt: DecisionTable[Input, Output, ?],
       in: Input[Value],
   ): EvaluationResultTransformer[Input, Output] = dt.evaluateRaw(in).pipe(EvaluationResultTransformer(_, dt, in))
 

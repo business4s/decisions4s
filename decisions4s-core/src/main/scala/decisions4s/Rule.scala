@@ -1,44 +1,45 @@
 package decisions4s
 
+import decisions4s.exprs.VariableStub
 import decisions4s.internal.HKDUtils
-import shapeless3.deriving.{Const, ~>}
+import shapeless3.deriving.~>
 
 case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
-    matching: Input[MatchingExpr],
-    output: Output[OutputValue],
+    matching: Input[MatchingExpr[Input]],
+    output: Output[OutputExpr[Input]],
     annotation: Option[String] = None,
 ) {
 
-  def evaluateOutput(): Output[Value] = {
-    val evaluate: ValueExpr ~> Value = [t] => (fa: ValueExpr[t]) => fa.evaluate(())
+  def evaluateOutput()(using EvaluationContext[Input]): Output[Value] = {
+    val evaluate: OutputExpr[Input] ~> Value = [t] => expr => expr.evaluate(())
     output.mapK(evaluate)
   }
 
-  def evaluate(in: Input[Value]): Rule.Result[Input, Output] = {
+  def evaluate(in: Input[Value])(using EvaluationContext[Input]): RuleResult[Input, Output] = {
     type Bool[T] = Boolean
-    type Tup[T]  = Tuple2K[MatchingExpr, Value][T]
-    val evaluateMatch: Tup ~> Bool        = [t] => (tuple: Tup[t]) => tuple._1.evaluate(tuple._2)
-    val evaluated: Input[Bool]            = matching.productK(in).mapK(evaluateMatch)
+    val evaluated: Input[Bool]            = HKD.map2(matching, in)([t] => (expr, value) => expr.evaluate(value))
     val matches                           = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
     val evalResult: Option[Output[Value]] = Option.when(matches)(evaluateOutput())
-    Rule.Result(evaluated, evalResult)
+    RuleResult(evaluated, evalResult)
   }
 
   def render(): (Input[Description], Output[Description]) = {
-    val renderInput: MatchingExpr ~> Description = [t] => (expr: MatchingExpr[t]) => expr.renderExpression
-    val renderOutput: ValueExpr ~> Description   = [t] => (expr: ValueExpr[t]) => expr.renderExpression
-    (matching.mapK(renderInput), output.mapK(renderOutput))
+    given EvaluationContext[Input] = new EvaluationContext[Input] {
+      override val wholeInput: Input[ValueExpr] = HKD.typedNames[Input].mapK([t] => name => VariableStub[t](name))
+    }
+    (
+      matching.mapK([t] => expr => expr.renderExpression),
+      output.mapK([t] => expr => expr.renderExpression),
+    )
   }
 
 }
 
 object Rule {
-  def default[Input[_[_]]: HKD, Output[_[_]]: HKD](value: Output[OutputValue]): Rule[Input, Output] = {
+  def default[Input[_[_]]: HKD, Output[_[_]]: HKD](value: Output[OutputExpr[Input]]): Rule[Input, Output] = {
     Rule(
-      matching = HKD[Input].pure[MatchingExpr]([t] => () => it.catchAll[t]),
-      output = value,
+      matching = HKD[Input].pure[MatchingExpr[Input]]([t] => () => it.catchAll[t]),
+      output = value.mapK([t] => v => v),
     )
   }
-
-  case class Result[Input[_[_]], Output[_[_]]](details: Input[Const[Boolean]], evaluationResult: Option[Output[Value]])
 }

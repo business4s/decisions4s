@@ -11,10 +11,12 @@ object it {
   def value[T]: Expr[T, T] = Input()
 
   @targetName("equalsToOp")
-  def ===[T](value: T)(using LiteralShow[T]): UnaryTest[T]      = UnaryTest.EqualTo(Literal(value))
-  def equalsTo[T](value: T)(using LiteralShow[T]): UnaryTest[T] = UnaryTest.EqualTo(Literal(value))
+  def ===[T](value: T)(using LiteralShow[T]): UnaryTest[T]               = UnaryTest.EqualTo(Literal(value))
+  def equalsTo[T](value: T)(using LiteralShow[T]): UnaryTest[T]          = UnaryTest.EqualTo(Literal(value))
+  def equalsTo[T](value: Expr[T, T])(using LiteralShow[T]): UnaryTest[T] = UnaryTest.EqualTo(value)
 
-  def equalsAnyOf[T](values: T*)(using LiteralShow[T]): UnaryTest[T] = Or(values.map(v => Literal(v)))
+  def equalsAnyOf[T](values: T*)(using LiteralShow[T]): UnaryTest[T] = Or(values.map(it.equalsTo))
+  def equalsAnyOf[T](values: Expr[T, Iterable[T]]): UnaryTest[T]     = UnaryTest.OneOf(values)
 
   def >[T](value: T)(using LiteralShow[T], Ordering[T]): UnaryTest[T]  = Compare(Compare.Sign.`>`, Literal(value))
   def >[T](value: Expr[T, T])(using Ordering[T]): UnaryTest[T]         = Compare(Compare.Sign.`>`, value)
@@ -30,4 +32,6 @@ object it {
 
   def isTrue: Expr[Any, Boolean]  = True
   def isFalse: UnaryTest[Boolean] = UnaryTest.EqualTo(Literal(false))
+
+//  def isOneOf[T](values: Iterable[T]): UnaryTest[Boolean] = UnaryTest.OneOf(values)
 }
