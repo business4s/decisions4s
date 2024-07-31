@@ -1,5 +1,7 @@
 package decisions4s
 
+import shapeless3.deriving.{K0, Labelling}
+
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
 import java.time.{Duration, LocalDate, LocalDateTime, LocalTime, OffsetDateTime, OffsetTime, Period, ZonedDateTime}
@@ -28,6 +30,17 @@ object LiteralShow {
   given LiteralShow[Period]         = x => s"@\"${x.toString}\""
 
   given [T](using ls: LiteralShow[T]): LiteralShow[Iterable[T]] = _.map(ls.show).mkString("[", ", ", "]")
+
+  given showGen[T](using inst: K0.ProductInstances[LiteralShow, T], labelling: Labelling[T]): LiteralShow[T] with {
+    def show(t: T): String =
+      if labelling.elemLabels.isEmpty then labelling.label
+      else
+        labelling.elemLabels.zipWithIndex
+          .map((label, i) => s"$label: ${inst.project(t)(i)([t] => (st: LiteralShow[t], pt: t) => st.show(pt))}".indent(2).stripSuffix("\n"))
+          .mkString(s"{\n", ",\n", "\n}")
+  }
+
+  inline def derived[A](using gen: K0.ProductGeneric[A]): LiteralShow[A]           = showGen
 
   private def temporal[T <: TemporalAccessor](format: String): LiteralShow[T] = {
     val formatter = DateTimeFormatter.ofPattern(format)
