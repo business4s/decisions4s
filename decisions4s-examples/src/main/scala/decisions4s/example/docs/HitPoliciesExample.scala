@@ -1,6 +1,5 @@
 package decisions4s.example.docs
 
-
 object HitPoliciesExample {
 
   import decisions4s.HKD

@@ -12,7 +12,7 @@ object EffectfulEvalExample {
   import decisions4s.cats.effect.*
 
   val decisionTable: DecisionTable[Input, Output, HitPolicy.First] = ???
-  val input: Input[IO] = ???
+  val input: Input[IO]                                             = ???
 
   decisionTable.evaluateFirstF(input).map(_.output)
   // end_effect

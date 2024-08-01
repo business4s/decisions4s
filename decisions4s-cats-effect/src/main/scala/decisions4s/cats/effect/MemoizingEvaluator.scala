@@ -105,16 +105,16 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
     Dispatcher
       .sequential[F]
       .map(dispatcher => {
-        val variables: Input[[t] =>> Expr[Any, t]] =
+        val variables: Input[[t] =>> Expr[t]] =
           HKD.map2(input, HKD.typedNames[Input])([t] => (fValue, name) => FVariable[t](name, fValue, dispatcher))
         new EvaluationContext[Input] {
-          override def wholeInput: Input[ValueExpr] = variables
+          override def wholeInput: Input[Expr] = variables
         }
       })
   }
 
-  case class FVariable[T](name: String, value: F[T], dispatcher: Dispatcher[F]) extends Expr[Any, T] {
-    override def evaluate(in: Any): T = dispatcher.unsafeRunSync(value)
+  case class FVariable[T](name: String, value: F[T], dispatcher: Dispatcher[F]) extends Expr[T] {
+    override def evaluate: T = dispatcher.unsafeRunSync(value)
 
     override def renderExpression: String = name
   }

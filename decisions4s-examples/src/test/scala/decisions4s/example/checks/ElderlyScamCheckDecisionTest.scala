@@ -6,11 +6,7 @@ import org.scalatest.freespec.AnyFreeSpec
 
 import java.io.File
 
-class ElderlyScamCheckDecisionTest extends AnyFreeSpec  {
-
-  "evaluate" - {
-
-  }
+class ElderlyScamCheckDecisionTest extends AnyFreeSpec {
 
   "render dmn" in {
     val dmnInstance = DmnConverter.convert(ElderlyScamCheckDecision.decisionTable)

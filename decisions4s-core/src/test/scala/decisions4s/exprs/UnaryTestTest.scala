@@ -8,20 +8,21 @@ import munit.FunSuite
 class UnaryTestTest extends FunSuite {
 
   test("bool conversion") {
-    val bool1: Expr[Int, Boolean]  = it.value[Int] > 1
+    val bool1: Expr[Boolean]   = Literal(1) > 0
     val unary1: UnaryTest[Int] = bool1
     checkUnaryExpression(unary1, 2, true)
-    checkUnaryExpression(unary1, 1, false)
   }
 
   test("comparison with boolean") {
     checkUnaryExpression(UnaryTest.EqualTo(True), false, false)
-    checkUnaryExpression((True: UnaryTest[Boolean]), true, true)
+    checkUnaryExpression(True: UnaryTest[Boolean], true, true)
+    checkUnaryExpression(UnaryTest.EqualTo(False), false, true)
+    checkUnaryExpression(False: UnaryTest[Boolean], true, false)
   }
 
   test("list conversion") {
-    val list: Expr[Int, List[Int]] = Literal(List(1, 2, 3))
-    val unary: UnaryTest[Int]      = it.equalsAnyOf(list)
+    val list: Expr[List[Int]] = Literal(List(1, 2, 3))
+    val unary: UnaryTest[Int] = it.equalsAnyOf(list)
     checkUnaryExpression(unary, 1, true)
     checkUnaryExpression(it.equalsAnyOf(1, 2, 3), 1, true)
     checkUnaryExpression(unary, 2, true)
@@ -30,7 +31,7 @@ class UnaryTestTest extends FunSuite {
     checkUnaryExpression(it.equalsAnyOf(1, 2, 3), 4, false)
   }
   test("value conversion") {
-    val value: Expr[Int, Int] = Literal(1)
+    val value: Expr[Int]      = Literal(1)
     val unary: UnaryTest[Int] = it.equalsTo(value)
     checkUnaryExpression(unary, 1, true)
     checkUnaryExpression(it === 1, 1, true)
@@ -72,7 +73,7 @@ class UnaryTestTest extends FunSuite {
     checkUnaryExpression(Not(Or(Seq(it.equalsTo(1), it.equalsTo(2)))), 2, false)
     checkUnaryExpression(Not(Or(Seq(it.equalsTo(1), it.equalsTo(2)))), 3, true)
 
-    checkUnaryExpression(! (it > 1), 2, false)
+    checkUnaryExpression(!(it > 1), 2, false)
   }
 
 }

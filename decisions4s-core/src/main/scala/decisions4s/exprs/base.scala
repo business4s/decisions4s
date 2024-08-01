@@ -2,18 +2,13 @@ package decisions4s.exprs
 
 import decisions4s.{Expr, LiteralShow}
 
-case class Literal[T](v: T)(using show: LiteralShow[T]) extends Expr[Any, T] {
-  override def evaluate(in: Any): T     = v
+case class Literal[T](v: T)(using show: LiteralShow[T]) extends Expr[T] {
+  override def evaluate: T              = v
   override def renderExpression: String = show.show(v)
 }
 
-case class Input[T]() extends Expr[T, T] {
-  override def evaluate(in: T): T       = in
-  override def renderExpression: String = "?"
-}
-
-case class Comment[I, O](inner: Expr[I, O], comment: String) extends Expr[I, O] {
-  override def evaluate(in: I): O = inner.evaluate(in)
+case class Comment[O](inner: Expr[O], comment: String) extends Expr[O] {
+  override def evaluate: O = inner.evaluate
 
   override def renderExpression: String = {
     val lines              = comment.linesIterator.toList
@@ -25,14 +20,13 @@ case class Comment[I, O](inner: Expr[I, O], comment: String) extends Expr[I, O] 
   }
 }
 
-case class Variable[T](name: String, value: T) extends Expr[Any, T] {
-  override def evaluate(in: Any): T = value
+case class Variable[T](name: String, value: T) extends Expr[T] {
+  override def evaluate: T              = value
   override def renderExpression: String = name
 }
 
 // used only for rendering
-case class VariableStub[T](name: String) extends Expr[Any, T] {
-  override def evaluate(in: Any): T = ???
+case class VariableStub[T](name: String) extends Expr[T] {
+  override def evaluate: T              = ???
   override def renderExpression: String = name
 }
-

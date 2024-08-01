@@ -13,7 +13,7 @@ object ElderlyScamCheckDecision {
     DecisionTable(
       rules,
       name = "ElderlyScamCheck",
-      HitPolicy.Single
+      HitPolicy.Single,
     )
 
   private type Rule = decisions4s.Rule[Input, Output]
