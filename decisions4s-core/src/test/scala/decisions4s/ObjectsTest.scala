@@ -18,20 +18,19 @@ class ObjectsTest extends AnyFreeSpec {
   // <foo>: Foo(...)
 
 
-  class Projection[-In, O1, +O2](base: Expr[In, O1], get: O1 => Expr[In, O2], label: String) extends Expr[In, O2] {
-    override def evaluate(in: In): O2 = base.evaluate(in).pipe(get).evaluate(in)
-
+  class Projection[O1, +O2](base: Expr[O1], get: O1 => Expr[O2], label: String) extends Expr[O2] {
+    override def evaluate: O2 = base.evaluate.pipe(get).evaluate
     override def renderExpression: String = s"${base.renderExpression}.$label"
   }
 
 
-  def projection[In, Data[_[_]]](in: ValueExpr[Data[ValueExpr]])(using hkd: HKD[Data]): Data[[t] =>> Expr[In, t]] = {
-    hkd.construct([t] => (fu: FieldUtils[Data, t]) => Projection[In, Data[ValueExpr], t](in, fu.extract, fu .name))
+  def projection[Data[_[_]]](in: Expr[Data[Expr]])(using hkd: HKD[Data]): Data[[t] =>> Expr[t]] = {
+    hkd.construct([t] => (fu: FieldUtils[Data, t]) => Projection[Data[Expr], t](in, fu.extract, fu.name))
   }
 
-  extension [In, Data[_[_]]](in: ValueExpr[Data[ValueExpr]]) {
+  extension [Data[_[_]]](in: Expr[Data[Expr]]) {
 
-    def inside(using HKD[Data]): Data[ValueExpr] = projection(in)
+    def inside(using HKD[Data]): Data[Expr] = projection(in)
 
   }
 
@@ -43,8 +42,7 @@ class ObjectsTest extends AnyFreeSpec {
           foo = wholeInput.foo.inside.a.equalsTo(1),
           bar = it.catchAll
         ),
-        output = ???
-//        output = Output[OutputExpr[Input]](Baz[OutputExpr[Input]](1,2,3)),
+        output = Output(Baz[OutputValue](1,2,3)),
       ),
     ),
     "test",

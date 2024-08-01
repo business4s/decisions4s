@@ -1,9 +1,9 @@
 package decisions4s.cats.effect
 
 import _root_.cats.effect.std.Dispatcher
-import _root_.cats.{Applicative, Monad}
 import _root_.cats.effect.{Async, Concurrent, Ref, Resource}
-import _root_.cats.implicits.{catsSyntaxApplicativeId, none, toFunctorOps}
+import _root_.cats.implicits.{catsSyntaxApplicativeId, none}
+import _root_.cats.{Applicative, Monad}
 import cats.syntax.all.{toTraverseOps, given}
 import decisions4s.*
 import decisions4s.DecisionTable.HitPolicy
@@ -43,7 +43,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
   private def memoizeInput(input: Input[F]): F[Input[F]] = {
     type Memoized[T] = F[F[T]]
     val memoize: F ~> Memoized = [t] => (f: F[t]) => Concurrent[F].memoize(f)
-    val memoized: F[Input[F]]  = input.mapK(memoize).pipe(sequence[Input, F, F])
+    val memoized: F[Input[F]]  = input.mapK1(memoize).pipe(sequence[Input, F, F])
     memoized
   }
 

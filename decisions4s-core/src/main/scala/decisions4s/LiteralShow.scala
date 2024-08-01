@@ -31,6 +31,10 @@ object LiteralShow {
 
   given [T](using ls: LiteralShow[T]): LiteralShow[Iterable[T]] = _.map(ls.show).mkString("[", ", ", "]")
 
+  given [T]: LiteralShow[Expr[T]] = _.renderExpression
+  given [T]: LiteralShow[OutputValue[T]] = _.renderExpression
+
+  // should we replace with HKD.fieldNames?
   given showGen[T](using inst: K0.ProductInstances[LiteralShow, T], labelling: Labelling[T]): LiteralShow[T] with {
     def show(t: T): String =
       if labelling.elemLabels.isEmpty then labelling.label
@@ -40,7 +44,7 @@ object LiteralShow {
           .mkString(s"{\n", ",\n", "\n}")
   }
 
-  inline def derived[A](using gen: K0.ProductGeneric[A]): LiteralShow[A]           = showGen
+  inline def derived[A](using gen: K0.ProductGeneric[A]): LiteralShow[A] = showGen
 
   private def temporal[T <: TemporalAccessor](format: String): LiteralShow[T] = {
     val formatter = DateTimeFormatter.ofPattern(format)

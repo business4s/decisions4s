@@ -10,6 +10,34 @@ trait Functor[F[_]] {
   }
 }
 
+object Functor {
+
+  given const[A]: Functor[[t] =>> A] with {
+    extension [T](ft: A) {
+      def map[T1](f: T => T1): A = ft
+    }
+  }
+  given id: Functor[[t] =>> t] with {
+    extension [T](ft: T) {
+      def map[T1](f: T => T1): T1 = f(ft)
+    }
+  }
+
+  given option: Functor[Option] = new Functor[Option] {
+    extension [T](ft: Option[T]) {
+      def map[T1](f: T => T1): Option[T1] = ft.map(f)
+    }
+  }
+
+  given compound[F[_], G[_]](using ff: Functor[F], fg: Functor[G]): Functor[[t] =>> F[G[t]]] with {
+    extension [T](ft: F[G[T]]) {
+      def map[T1](f: T => T1): F[G[T1]] = ff.map(ft)(x => fg.map(x)(f))
+    }
+  }
+
+
+}
+
 /** Specialised typeclass to expose operations on higher kinded data (case-classes where each field is wrapped in F[_])
   */
 trait HKD[F[_[_]]] {
@@ -19,8 +47,8 @@ trait HKD[F[_[_]]] {
 
   extension [A[_]](af: F[A]) {
     // allows to map over case class fields
-    def mapK[B[_]](f: A ~> B): F[B]
-
+    def mapK[B[_]](f: A ~> B)(using Functor[B]): F[B]
+    def mapK1[B[_]](f: A ~> B)(using Functor[A]): F[B]
   }
   def indices: F[Const[Int]]
   def fieldNames: IndexedSeq[String]
@@ -41,7 +69,8 @@ object HKD {
     override def pure[A[_]](f: [t] => () => A[t]): A[T] = f[T]()
 
     extension [A[_]](at: A[T]) {
-      def mapK[B[_]](f: A ~> B): B[T] = f(at)
+      def mapK[B[_]](f: A ~> B)(using Functor[B]): B[T] = f(at)
+      def mapK1[B[_]](f: A ~> B)(using Functor[A]): B[T] = f(at)
     }
 
     def fieldNames: IndexedSeq[String] = Vector("<self>")
@@ -52,21 +81,24 @@ object HKD {
 //  type Id[t[_]] = [f[_]] =>> f[t]
 //  given id1Gen[F[_]]: HKD[Id[F]] = ???
 
-//  given idf[Data[_[_]]](using dHKD: HKD[Data]): HKD[[f[_]] =>> f[Data[f]]] with {
-//    override def pure[A[_]](f: [t] => () => A[t]): A[Data[A]] = f[Data[A]]()
-//    extension [A[_]](af: A[Data[A]]) {
-//      def mapK[B[_]](f: A ~> B): B[Data[B]] = dHKD.mapK()
-//    }
-//    override def indices: Const[Int][Data[Const[Int]]]        = 0
-//    override def fieldNames: IndexedSeq[String]               = Vector()
-//  }
+  given wrappedData[Data[_[_]]](using dHKD: HKD[Data]): HKD[[f[_]] =>> f[Data[f]]] with {
+    override def pure[A[_]](f: [t] => () => A[t]): A[Data[A]] = f[Data[A]]()
+    extension [A[_]](af: A[Data[A]]) {
+      def mapK[B[_]](f: A ~> B)(using Functor[B]): B[Data[B]] = f(af).map(_.mapK(f))
+      def mapK1[B[_]](f: A ~> B)(using Functor[A]): B[Data[B]] = f(af.map(_.mapK1(f)))
+    }
+    override def indices: Const[Int][Data[Const[Int]]]        = 0
+    override def fieldNames: IndexedSeq[String]               = Vector()
+  }
 
   given shapeGen[F[_[_]]](using inst: => K11.ProductInstances[HKD, F], labelling: Labelling[F[Const[Any]]]): HKD[F] with {
     override def pure[A[_]](f: [t] => () => A[t]): F[A] = inst.construct([t[_[_]]] => (p: HKD[t]) => p.pure([t1] => () => f[t1]()))
 
     extension [A[_]](fa: F[A]) {
-      def mapK[B[_]](f: A ~> B): F[B] =
+      def mapK[B[_]](f: A ~> B)(using Functor[B]): F[B] =
         inst.map(fa)([t[_[_]]] => (ft: HKD[t], ta: t[A]) => ft.mapK(ta)(f))
+      def mapK1[B[_]](f: A ~> B)(using Functor[A]): F[B] =
+        inst.map(fa)([t[_[_]]] => (ft: HKD[t], ta: t[A]) => ft.mapK1(ta)(f))
     }
 
     def fieldNames: IndexedSeq[String] = labelling.elemLabels
@@ -108,7 +140,7 @@ object HKD {
         }
         override val name: String                  = hkd.fieldNames(idx)
       }
-      hkd.indices.mapK([t] => idx => f[t](new FieldUtilsImpl[t](idx)))
+      hkd.indices.mapK1([t] => idx => f[t](new FieldUtilsImpl[t](idx)))
     }
   }
 

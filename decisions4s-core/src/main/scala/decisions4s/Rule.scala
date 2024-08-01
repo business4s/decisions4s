@@ -4,14 +4,14 @@ import decisions4s.exprs.VariableStub
 import decisions4s.internal.HKDUtils
 import shapeless3.deriving.~>
 
-case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
-    matching: Input[MatchingExpr[Input]],
-    output: Output[OutputExpr[Input]],
-    annotation: Option[String] = None,
+class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
+    val matching: Input[MatchingExpr[Input]],
+    val output: EvaluationContext[Input] ?=> Output[OutputValue],
+    val annotation: Option[String] = None,
 ) {
 
   def evaluateOutput()(using EvaluationContext[Input]): Output[Value] = {
-    val evaluate: OutputExpr[Input] ~> Value = [t] => expr => expr.evaluate
+    val evaluate: OutputValue ~> Value = [t] => expr => expr.evaluate
     output.mapK(evaluate)
   }
 
@@ -25,7 +25,7 @@ case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
 
   def render(): (Input[Description], Output[Description]) = {
     given EvaluationContext[Input] = new EvaluationContext[Input] {
-      override val wholeInput: Input[Expr] = HKD.typedNames[Input].mapK([t] => name => VariableStub[t](name))
+      override val wholeInput: Input[Expr] = HKD.typedNames[Input].mapK1([t] => name => VariableStub[t](name))
     }
     (
       matching.mapK([t] => expr => expr.renderExpression),
@@ -36,10 +36,10 @@ case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
 }
 
 object Rule {
-  def default[Input[_[_]]: HKD, Output[_[_]]: HKD](value: Output[OutputExpr[Input]]): Rule[Input, Output] = {
+  def default[Input[_[_]]: HKD, Output[_[_]]: HKD](value: Output[OutputValue]): Rule[Input, Output] = {
     Rule(
       matching = HKD[Input].pure[MatchingExpr[Input]]([t] => () => it.catchAll[t]),
-      output = value.mapK([t] => v => v),
+      output = value,
     )
   }
 }

@@ -11,7 +11,7 @@ class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Ou
   private val inputNames: IndexedSeq[String]              = summon[HKD[Input]].fieldNames
   private val matchingExpressions: Vector[Vector[String]] = table.rules.toVector.map(rule => {
     given EvaluationContext[Input] = new EvaluationContext[Input] {
-      override val wholeInput: Input[Expr] = HKD.typedNames[Input].mapK([t] => name => VariableStub[t](name))
+      override val wholeInput: Input[Expr] = HKD.typedNames[Input].mapK1([t] => name => VariableStub[t](name))
     }
     HKDUtils.collectFields(rule.matching.mapK[Const[String]]([t] => expr => expr.renderExpression)).toVector
   })
