@@ -57,18 +57,21 @@ class MemoizedEvalTest extends FunSuite {
             c = wholeInput.b > 1,
           ),
           output = Output(wholeInput.c),
-        )
+        ),
       ),
       "test",
       HitPolicy.First,
     )
-    val (result, counters) = evaluate(Input(0, 2, 1), testTable)
+    val (result, counters)                                       = evaluate(Input(0, 2, 1), testTable)
     println(result.makeDiagnosticsString)
     assertEquals(result.output.map(_.d), Some(1): Option[Int])
     assertEquals(counters, Input[Counter](0, 1, 1))
   }
 
-  def evaluate(input: Input[Value], table: DecisionTable[Input, Output, HitPolicy.First] = testTable): (EvalResult.First[Input, Output], Input[Counter]) = {
+  def evaluate(
+      input: Input[Value],
+      table: DecisionTable[Input, Output, HitPolicy.First] = testTable,
+  ): (EvalResult.First[Input, Output], Input[Counter]) = {
     import _root_.cats.effect.unsafe.implicits.given
     val (effectfulInput, getCounters) = createCountingInput(input)
     val result                        = table.evaluateFirstF(effectfulInput).unsafeRunSync()

@@ -13,7 +13,7 @@ case class DecisionTable[Input[_[_]], Output[_[_]], HitPolicy <: DecisionTable.H
 
   private def evaluateRaw(in: Input[Value]): Seq[() => RuleResult[Input, Output]] = {
     given EvaluationContext[Input] = new EvaluationContext[Input] {
-      override val wholeInput: Input[ValueExpr] = HKD.map2(in, HKD.typedNames[Input])([t] => (value, name) => Variable[t](name, value))
+      override val wholeInput: Input[Expr] = HKD.map2(in, HKD.typedNames[Input])([t] => (value, name) => Variable[t](name, value))
     }
     rules.map(r => () => r.evaluate(in))
   }

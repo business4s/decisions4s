@@ -20,7 +20,7 @@ object BankingProviderDecision {
   private lazy val rules: List[Rule] = List(
     Rule(
       matching = Input(
-        userResidenceCountry = IsEEA,
+        userResidenceCountry = it.satisfies(IsEEA.apply),
         currency = it.catchAll,
       ),
       output = Output(

@@ -1,7 +1,7 @@
 package decisions4s.example.docs
 
 import decisions4s.Expr
-import decisions4s.exprs.UnaryTest
+import decisions4s.exprs.{Literal, UnaryTest}
 
 object ExpressionsExample {
 
@@ -9,23 +9,16 @@ object ExpressionsExample {
   import decisions4s.it
   val lowerThan5: UnaryTest[Int]  = it < 5
   val equalFoo: UnaryTest[String] = it.equalsTo("foo")
-  val complex: Expr[Int, Boolean] = it > 1 && it < 5
+  val complex: UnaryTest[Int]     = it.satisfies(v => v > 1 && v < 5)
   // end_expr
 
   // start_custom_generic
-  class EndsWithFoo[In](argument: Expr[In, String]) extends Expr[In, Boolean] {
-    override def evaluate(in: In): Boolean = argument.evaluate(in).endsWith("foo")
-    override def renderExpression: String  = s"endsWithFoo(${argument.renderExpression})"
+  case class EndsWithFoo(argument: Expr[String]) extends Expr[Boolean] {
+    override def evaluate: Boolean        = argument.evaluate.endsWith("foo")
+    override def renderExpression: String = s"endsWithFoo(${argument.renderExpression})"
   }
-  val endsWithFoo: EndsWithFoo[String] = EndsWithFoo(it.value)
+  val endsWithFoo: UnaryTest[String] = it.satisfies(EndsWithFoo.apply)
+  val endsWithFoo2: Expr[Boolean] = EndsWithFoo(Literal("myfoo"))
   // end_custom_generic
-
-  // start_custom_simplified
-  class EndsWithFooSimple extends Expr[String, Boolean] {
-    override def evaluate(in: String): Boolean = in.endsWith("foo")
-    override def renderExpression: String  = s"endsWithFoo()"
-  }
-  val endsWithFooSimple: EndsWithFoo[String] = EndsWithFoo(it.value)
-  // end_custom_simplified
 
 }

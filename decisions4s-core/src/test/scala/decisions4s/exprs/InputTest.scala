@@ -6,7 +6,7 @@ import munit.FunSuite
 
 class InputTest extends FunSuite {
   test("basic") {
-    checkUnaryExpression(it.value[Int] === Literal(1), 1, true)
-    checkUnaryExpression(it.value[Int] === Literal(1), 2, false)
+    checkUnaryExpression(it.satisfies[Int](_ === Literal(1)), 1, true)
+    checkUnaryExpression(it.satisfies[Int](_ === Literal(1)), 2, false)
   }
 }

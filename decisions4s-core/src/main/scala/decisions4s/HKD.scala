@@ -62,11 +62,12 @@ object HKD {
     var index = 0;
     hkd.pure(
       [t] =>
-        () => {
-          val name = hkd.fieldNames(index)
-          index += 1
-          name
-      },
+        () =>
+          {
+            val name = hkd.fieldNames(index)
+            index += 1
+            name
+          },
     )
   }
 

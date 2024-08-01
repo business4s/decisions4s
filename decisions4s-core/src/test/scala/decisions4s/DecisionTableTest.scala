@@ -192,7 +192,7 @@ class DecisionTableTest extends AnyFreeSpec {
 
   def rawResults(hits: Boolean*): List[RuleResult[Input, Output]] = {
     given EvaluationContext[Input] = new EvaluationContext[Input] {
-      override def wholeInput: Input[ValueExpr] = null // variables not sued in those tests
+      override def wholeInput: Input[Expr] = null // variables not sued in those tests
     }
 
     hits.zipWithIndex

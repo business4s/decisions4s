@@ -1,6 +1,5 @@
 package decisions4s.example.docs
 
-
 object DiagnosticsExample {
 
   import decisions4s.HKD

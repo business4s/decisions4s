@@ -15,9 +15,9 @@ object ImageComparison {
   }
 
   private def getDifferencePercent(img1: BufferedImage, img2: BufferedImage): Double = {
-    val width = img1.getWidth
+    val width  = img1.getWidth
     val height = img1.getHeight
-    var diff = 0L
+    var diff   = 0L
 
     for (y <- 0 until height) {
       for (x <- 0 until width) {
