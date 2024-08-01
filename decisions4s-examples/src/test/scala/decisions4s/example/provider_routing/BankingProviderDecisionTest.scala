@@ -13,21 +13,25 @@ class BankingProviderDecisionTest extends AnyFreeSpec {
   "evaluate" - {
 
     "from eea to foo inc" in {
-      val result = BankingProviderDecision.decisionTable.evaluateFirst(
-        Input[Value](
-          userResidenceCountry = IsEEA.eeaCountries.head,
-          currency = Currency("PLN"),
-        ),
-      ).output
+      val result = BankingProviderDecision.decisionTable
+        .evaluateFirst(
+          Input[Value](
+            userResidenceCountry = IsEEA.eeaCountries.head,
+            currency = Currency("PLN"),
+          ),
+        )
+        .output
       assert(result.get.provider == Provider.FooInc)
     }
     "from pln to foo inc" in {
-      val result = BankingProviderDecision.decisionTable.evaluateFirst(
-        Input[Value](
-          userResidenceCountry = Country("XXX"),
-          currency = Currency.PLN,
-        ),
-      ).output
+      val result = BankingProviderDecision.decisionTable
+        .evaluateFirst(
+          Input[Value](
+            userResidenceCountry = Country("XXX"),
+            currency = Currency.PLN,
+          ),
+        )
+        .output
       assert(result.get.provider == Provider.BarLtd)
     }
 

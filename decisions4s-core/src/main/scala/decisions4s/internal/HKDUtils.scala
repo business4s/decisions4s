@@ -13,7 +13,7 @@ object HKDUtils {
     val result = ListBuffer[T]()
     type Void[T] = Any
     val gatherName: Const[T] ~> Void = [t] => (fa: T) => result.append(fa)
-    val _                     = instance.mapK(gatherName)
+    val _                            = instance.mapK(gatherName)
     result.toList
   }
 

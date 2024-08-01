@@ -6,62 +6,67 @@ import scala.math.Ordered.orderingToOrdered
 
 // https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-boolean-expressions/
 
-case class Equal[I, O](a: Expr[I, O], b: Expr[I, O]) extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = a.evaluate(in) == b.evaluate(in)
+case class Equal[O](a: Expr[O], b: Expr[O]) extends Expr[Boolean] {
+  override def evaluate: Boolean        = a.evaluate == b.evaluate
   override def renderExpression: String = s"${a.renderExpression} = ${b.renderExpression}"
 }
 
-case class NotEqual[I, O](a: Expr[I, O], b: Expr[I, O]) extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = a.evaluate(in) != b.evaluate(in)
+case class NotEqual[O](a: Expr[O], b: Expr[O]) extends Expr[Boolean] {
+  override def evaluate: Boolean        = a.evaluate != b.evaluate
   override def renderExpression: String = s"${a.renderExpression} != ${b.renderExpression}"
 }
 
-case class LessThan[I, O: Ordering](a: Expr[I, O], b: Expr[I, O])                                   extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = a.evaluate(in) < b.evaluate(in)
+case class LessThan[O: Ordering](a: Expr[O], b: Expr[O])                                extends Expr[Boolean] {
+  override def evaluate: Boolean        = a.evaluate < b.evaluate
   override def renderExpression: String = s"${a.renderExpression} < ${b.renderExpression}"
 }
-case class LessThanEqual[I, O: Ordering](a: Expr[I, O], b: Expr[I, O])                              extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = a.evaluate(in) <= b.evaluate(in)
+case class LessThanEqual[O: Ordering](a: Expr[O], b: Expr[O])                           extends Expr[Boolean] {
+  override def evaluate: Boolean        = a.evaluate <= b.evaluate
   override def renderExpression: String = s"${a.renderExpression} <= ${b.renderExpression}"
 }
-case class GreaterThan[I, O: Ordering](a: Expr[I, O], b: Expr[I, O])                                 extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = a.evaluate(in) > b.evaluate(in)
+case class GreaterThan[O: Ordering](a: Expr[O], b: Expr[O])                             extends Expr[Boolean] {
+  override def evaluate: Boolean        = a.evaluate > b.evaluate
   override def renderExpression: String = s"${a.renderExpression} > ${b.renderExpression}"
 }
-case class GreaterThanEqual[I, O: Ordering](a: Expr[I, O], b: Expr[I, O])                            extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = a.evaluate(in) >= b.evaluate(in)
+case class GreaterThanEqual[O: Ordering](a: Expr[O], b: Expr[O])                        extends Expr[Boolean] {
+  override def evaluate: Boolean        = a.evaluate >= b.evaluate
   override def renderExpression: String = s"${a.renderExpression} >= ${b.renderExpression}"
 }
-case class Between[I, O: Ordering](arg: Expr[I, O], lowerBound: Expr[I, O], upperBound: Expr[I, O]) extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = {
-    val argValue = arg.evaluate(in)
-    argValue >= lowerBound.evaluate(in) && argValue <= upperBound.evaluate(in)
+case class Between[O: Ordering](arg: Expr[O], lowerBound: Expr[O], upperBound: Expr[O]) extends Expr[Boolean] {
+  override def evaluate: Boolean        = {
+    val argValue = arg.evaluate
+    argValue >= lowerBound.evaluate && argValue <= upperBound.evaluate
   }
   override def renderExpression: String =
     s"${arg.renderExpression} between ${lowerBound.renderExpression} and ${upperBound.renderExpression}"
 }
 
-case object True extends Expr[Any, Boolean] {
-  override def evaluate(in: Any): Boolean   = true
+case object True extends Expr[Boolean] {
+  override def evaluate: Boolean        = true
   override def renderExpression: String = "true"
 }
 
-case object False extends Expr[Any, Boolean] {
-  override def evaluate(in: Any): Boolean   = false
+case object False extends Expr[Boolean] {
+  override def evaluate: Boolean        = false
   override def renderExpression: String = "false"
 }
 
-case class And[I](lhs: Expr[I, Boolean], rhs: Expr[I, Boolean]) extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = lhs.evaluate(in) && rhs.evaluate(in)
+case class Not(expr: Expr[Boolean]) extends Expr[Boolean] {
+  override def evaluate: Boolean        = !expr.evaluate
+  override def renderExpression: String = s"!${expr}"
+}
+
+case class And[I](lhs: Expr[Boolean], rhs: Expr[Boolean]) extends Expr[Boolean] {
+  override def evaluate: Boolean        = lhs.evaluate && rhs.evaluate
   override def renderExpression: String = s"${lhs.renderExpression} and ${rhs.renderExpression}"
 }
 
-case class Or[I](lhs: Expr[I, Boolean], rhs: Expr[I, Boolean])  extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = lhs.evaluate(in) || rhs.evaluate(in)
+case class Or[I](lhs: Expr[Boolean], rhs: Expr[Boolean]) extends Expr[Boolean] {
+  override def evaluate: Boolean        = lhs.evaluate || rhs.evaluate
   override def renderExpression: String = s"${lhs.renderExpression} or ${rhs.renderExpression}"
 }
 
-case class In[I, O](lhs: Expr[I, O], rhs: UnaryTest[O]) extends Expr[I, Boolean] {
-  override def evaluate(in: I): Boolean     = rhs.evaluate(lhs.evaluate(in))
+case class In[O](lhs: Expr[O], rhs: UnaryTest[O]) extends Expr[Boolean] {
+  override def evaluate: Boolean        = rhs.evaluate(lhs.evaluate)
   override def renderExpression: String = s"${lhs.renderExpression} in ${rhs.renderExpression}"
 }

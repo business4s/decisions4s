@@ -25,13 +25,13 @@ object TestUtils {
   }
 
   def checkExpression[T](
-      expr: Expr[Any, T],
+      expr: Expr[T],
       expectedEvalResult: T,
       expectedParseResult: Option[Any] = None,
       expectedFeelExpr: String = null,
   ): Unit = {
     import munit.Assertions.*
-    assert(clue(expr.evaluate(())) == clue(expectedEvalResult))
+    assert(clue(expr.evaluate == clue(expectedEvalResult)))
 
     val feelExpression = clue(expr.renderExpression)
 

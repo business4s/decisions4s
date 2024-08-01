@@ -11,7 +11,7 @@ case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
 ) {
 
   def evaluateOutput()(using EvaluationContext[Input]): Output[Value] = {
-    val evaluate: OutputExpr[Input] ~> Value = [t] => expr => expr.evaluate(())
+    val evaluate: OutputExpr[Input] ~> Value = [t] => expr => expr.evaluate
     output.mapK(evaluate)
   }
 
@@ -25,7 +25,7 @@ case class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
 
   def render(): (Input[Description], Output[Description]) = {
     given EvaluationContext[Input] = new EvaluationContext[Input] {
-      override val wholeInput: Input[ValueExpr] = HKD.typedNames[Input].mapK([t] => name => VariableStub[t](name))
+      override val wholeInput: Input[Expr] = HKD.typedNames[Input].mapK([t] => name => VariableStub[t](name))
     }
     (
       matching.mapK([t] => expr => expr.renderExpression),

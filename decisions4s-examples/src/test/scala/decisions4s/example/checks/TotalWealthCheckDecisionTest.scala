@@ -6,11 +6,7 @@ import org.scalatest.freespec.AnyFreeSpec
 
 import java.io.File
 
-class TotalWealthCheckDecisionTest extends AnyFreeSpec  {
-
-  "evaluate" - {
-
-  }
+class TotalWealthCheckDecisionTest extends AnyFreeSpec {
 
   "render dmn" in {
     val dmnInstance = DmnConverter.convert(TotalWealthCheckDecision.decisionTable)

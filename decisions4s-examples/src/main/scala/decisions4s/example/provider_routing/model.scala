@@ -7,9 +7,9 @@ case class Country(alpha2: String)
 case class Currency(code: String)
 
 object Currency {
-  def EUR: Currency        = Currency("EUR")
-  def PLN: Currency        = Currency("PLN")
-  def CHF: Currency        = Currency("CHF")
+  def EUR: Currency           = Currency("EUR")
+  def PLN: Currency           = Currency("PLN")
+  def CHF: Currency           = Currency("CHF")
   given LiteralShow[Currency] = _.code
 }
 

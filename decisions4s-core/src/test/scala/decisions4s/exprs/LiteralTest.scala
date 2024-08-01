@@ -30,8 +30,8 @@ class LiteralTest extends FunSuite {
     checkLiteralAdj(Period.ofDays(12))(x => Duration.ofHours(x.getDays * 24)) // period below 1 month is parsed as duration
     checkLiteral(Period.ofMonths(2))
 
-    checkLiteral(List(1,2,3))
-    checkLiteral(Vector(1,2,3))
+    checkLiteral(List(1, 2, 3))
+    checkLiteral(Vector(1, 2, 3))
 
     // context is currently unsupported
     // https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-data-types/#context

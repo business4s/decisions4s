@@ -8,17 +8,16 @@ sidebar_position: 3
 Each rule has two parts: matching on the input and producing the output, both of which are defined using
 expressions.
 
-Expression is just an object that can produce given `Out` based on `In` and statically render its string representation.
+Expression is just an object that can produce given `Out` and render its string representation.
 
 ```scala 
-trait Expr[-In, +Out] {
-  def evaluate(in: In): Out
-
+trait Expr[+Out] {
+  def evaluate: Out
   def renderExpression: String
 }
 ```
 
-There is also a specialised type `UnaryTest[In] extends Expr[In, Boolean]` that allows us to closely follow
+There is also a specialised type `UnaryTest[In]` that allows us to loosely follow
 the [FEEL model](https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/). This could be
 considered an internal complexity of the library, but all the matching logic has to be of type `UnaryTest[T]`.
 
@@ -32,7 +31,7 @@ case class Rule[Input[_[_]], Output[_[_]]](
 <!-- @formatter:on -->
 
 All the most common ways of building `UnaryTest`s are accesisble through `it` object.
-Implicit conversion between `Expr[T, Boolean]` is also defined.
+Implicit conversion between `Expr[Boolean]` is also defined.
 
 ## Built-in Expressions
 
@@ -48,13 +47,6 @@ To define a custom expression its enough to extend `Expr` trait.
 
 ```scala file=./main/scala/decisions4s/example/docs/ExpressionsExample.scala start=start_custom_generic end=end_custom_generic
 ```
-
-The same can be simplified if it needs to be applied only to the input of the rule, not to any expression.
-
-```scala file=./main/scala/decisions4s/example/docs/ExpressionsExample.scala start=start_custom_simplified end=end_custom_simplified
-```
-
-The downside is that rendered form might not be clear to the reader
 
 ## FEEL Compatibility
 

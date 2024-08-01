@@ -2,10 +2,13 @@ package decisions4s.example.provider_routing
 
 import decisions4s.Expr
 
-object IsEEA extends Expr[Country, Boolean] {
+case class IsEEA(arg: Expr[Country]) extends Expr[Boolean] {
+
+  override def evaluate: Boolean = IsEEA.eeaCountries.contains(arg.evaluate)
+
+  override def renderExpression: String = s"isEEA(${arg.renderExpression})"
+}
+
+object IsEEA {
   val eeaCountries: Set[Country] = Set(Country("PL"), Country("CH"))
-
-  override def evaluate(in: Country): Boolean = IsEEA.eeaCountries.contains(in)
-
-  override def renderExpression: String = s"isEEA(?)"
 }

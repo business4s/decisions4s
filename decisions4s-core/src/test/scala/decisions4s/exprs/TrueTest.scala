@@ -4,7 +4,7 @@ import decisions4s.exprs.TestUtils.checkExpression
 import munit.FunSuite
 
 class TrueTest extends FunSuite {
-  test("true"){
+  test("true") {
     checkExpression(True, true)
   }
 }

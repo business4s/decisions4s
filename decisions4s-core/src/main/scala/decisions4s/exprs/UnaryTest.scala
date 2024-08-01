@@ -8,17 +8,25 @@ import scala.language.implicitConversions
 import scala.math.Ordered.orderingToOrdered
 
 // https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/
-sealed trait UnaryTest[-T] extends Expr[T, Boolean]
+sealed trait UnaryTest[-T] {
+  def evaluate(in: T): Boolean
+  def renderExpression: String
+}
 
 object UnaryTest extends LowPriorityUnaryTestConversion {
 
-  case class EqualTo[T](expr: Expr[T, T]) extends UnaryTest[T] {
-    override def evaluate(in: T): Boolean = expr.evaluate(in) == in
+  case class WithValue[T](f: Expr[T] => Expr[Boolean]) extends UnaryTest[T] {
+    override def evaluate(in: T): Boolean = f(Variable("?", in)).evaluate
+    override def renderExpression: String = f(VariableStub("?")).renderExpression
+  }
+
+  case class EqualTo[T](expr: Expr[T]) extends UnaryTest[T] {
+    override def evaluate(in: T): Boolean = in == expr.evaluate
     override def renderExpression: String = expr.renderExpression
   }
 
-  case class OneOf[T](expr: Expr[T, Iterable[T]]) extends UnaryTest[T] {
-    override def evaluate(in: T): Boolean = expr.evaluate(in).exists(_ == in)
+  case class OneOf[T](expr: Expr[Iterable[T]]) extends UnaryTest[T] {
+    override def evaluate(in: T): Boolean = expr.evaluate.exists(_ == in)
     override def renderExpression: String = expr.renderExpression
   }
 
@@ -27,12 +35,12 @@ object UnaryTest extends LowPriorityUnaryTestConversion {
     override def renderExpression: String   = "-"
   }
 
-  case class Compare[T: Ordering](sign: Compare.Sign, rhs: Expr[T, T]) extends UnaryTest[T] {
+  case class Compare[T: Ordering](sign: Compare.Sign, rhs: Expr[T]) extends UnaryTest[T] {
     override def evaluate(in: T): Boolean = sign match {
-      case Sign.`<`  => in < rhs.evaluate(in)
-      case Sign.`<=` => in <= rhs.evaluate(in)
-      case Sign.`>`  => in > rhs.evaluate(in)
-      case Sign.`>=` => in >= rhs.evaluate(in)
+      case Sign.`<`  => in < rhs.evaluate
+      case Sign.`<=` => in <= rhs.evaluate
+      case Sign.`>`  => in > rhs.evaluate
+      case Sign.`>=` => in >= rhs.evaluate
     }
 
     override def renderExpression: String = (sign match {
@@ -64,8 +72,8 @@ object UnaryTest extends LowPriorityUnaryTestConversion {
     override def renderExpression: String = s"not(${inner.renderExpression})"
   }
 
-  case class Bool[T](expr: Expr[T, Boolean]) extends UnaryTest[T] {
-    override def evaluate(in: T): Boolean = expr.evaluate(in)
+  case class Bool[T](expr: Expr[Boolean]) extends UnaryTest[T] {
+    override def evaluate(in: T): Boolean = expr.evaluate
     override def renderExpression: String = expr.renderExpression
   }
 
@@ -76,5 +84,5 @@ object UnaryTest extends LowPriorityUnaryTestConversion {
 }
 
 trait LowPriorityUnaryTestConversion {
-  implicit def bool[T](expr: Expr[T, Boolean]): UnaryTest[T] = Bool(expr)
+  implicit def bool[T](expr: Expr[Boolean]): UnaryTest[T] = Bool(expr)
 }
