@@ -14,15 +14,10 @@ class ObjectsTest extends AnyFreeSpec {
   case class Input[F[_]](foo: F[Foo[F]], bar: F[Bar[F]]) derives HKD
   case class Output[F[_]](c: F[Baz[F]]) derives HKD
 
-
-  // <foo>: Foo(...)
-
-
   class Projection[O1, +O2](base: Expr[O1], get: O1 => Expr[O2], label: String) extends Expr[O2] {
-    override def evaluate: O2 = base.evaluate.pipe(get).evaluate
+    override def evaluate: O2             = base.evaluate.pipe(get).evaluate
     override def renderExpression: String = s"${base.renderExpression}.$label"
   }
-
 
   def projection[Data[_[_]]](in: Expr[Data[Expr]])(using hkd: HKD[Data]): Data[[t] =>> Expr[t]] = {
     hkd.construct([t] => (fu: FieldUtils[Data, t]) => Projection[Data[Expr], t](in, fu.extract, fu.name))
@@ -30,19 +25,18 @@ class ObjectsTest extends AnyFreeSpec {
 
   extension [Data[_[_]]](in: Expr[Data[Expr]]) {
 
-    def inside(using HKD[Data]): Data[Expr] = projection(in)
+    def project(using HKD[Data]): Data[Expr] = projection(in)
 
   }
-
 
   val testTable: DecisionTable[Input, Output, HitPolicy.Single] = DecisionTable(
     rules = List(
       Rule(
-        matching = Input(
-          foo = wholeInput.foo.inside.a.equalsTo(1),
-          bar = it.catchAll
+        matching = ctx ?=> Input(
+          foo = wholeInput.foo.project.a.equalsTo(1),
+          bar = it.catchAll,
         ),
-        output = Output(Baz[OutputValue](1,2,3)),
+        output = Output(Baz[OutputValue](1, 2, 3)),
       ),
     ),
     "test",
@@ -50,9 +44,10 @@ class ObjectsTest extends AnyFreeSpec {
   )
 
   "basics" in {
-    val input = Input[Value](Foo(1, 2), Bar(3))
+    val input                                    = Input[Value](Foo(1, 2), Bar(3))
     val result: EvalResult.Single[Input, Output] = testTable.evaluateSingle(input)
-    assert(result.output == Right(Some(Output[Value](Baz(1,2,3)))))
+    assert(result.output == Right(Some(Output[Value](Baz(1, 2, 3)))))
+    println(result.makeDiagnosticsString)
   }
 
 }

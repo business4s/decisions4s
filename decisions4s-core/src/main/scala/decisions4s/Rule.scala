@@ -1,11 +1,12 @@
 package decisions4s
 
-import decisions4s.exprs.VariableStub
+import decisions4s.exprs.{UnaryTest, VariableStub}
 import decisions4s.internal.HKDUtils
+import decisions4s.internal.HKDUtils.Const
 import shapeless3.deriving.~>
 
 class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
-    val matching: Input[MatchingExpr[Input]],
+    val matching: EvaluationContext[Input] ?=> Input[UnaryTest],
     val output: EvaluationContext[Input] ?=> Output[OutputValue],
     val annotation: Option[String] = None,
 ) {
@@ -16,8 +17,7 @@ class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
   }
 
   def evaluate(in: Input[Value])(using EvaluationContext[Input]): RuleResult[Input, Output] = {
-    type Bool[T] = Boolean
-    val evaluated: Input[Bool]            = HKD.map2(matching, in)([t] => (expr, value) => expr.evaluate(value))
+    val evaluated: Input[Const[Boolean]]  = HKD.map2(matching, in)([t] => (expr, value) => expr.evaluate(value))
     val matches                           = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
     val evalResult: Option[Output[Value]] = Option.when(matches)(evaluateOutput())
     RuleResult(evaluated, evalResult)
@@ -38,7 +38,7 @@ class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
 object Rule {
   def default[Input[_[_]]: HKD, Output[_[_]]: HKD](value: Output[OutputValue]): Rule[Input, Output] = {
     Rule(
-      matching = HKD[Input].pure[MatchingExpr[Input]]([t] => () => it.catchAll[t]),
+      matching = HKD[Input].pure[UnaryTest]([t] => () => it.catchAll[t]),
       output = value,
     )
   }

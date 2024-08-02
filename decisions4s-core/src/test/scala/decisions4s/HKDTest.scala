@@ -35,6 +35,10 @@ class HKDTest extends AnyFreeSpec {
     assert(hkd.indices == TestSubject[Const[Int]](0, 1))
   }
 
+  "meta" in {
+    assert(hkd.meta == TestSubject[Meta](Meta(0, "a", None), Meta(1, "b", None)))
+  }
+
   "construct" in {
     val a = TestSubject[Option](Some(1), None)
     val b = hkd.construct[Const[String]]([t] => (fu: HKD.FieldUtils[TestSubject, t]) => fu.extract(a).toString)
