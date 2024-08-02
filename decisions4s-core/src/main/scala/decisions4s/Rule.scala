@@ -1,6 +1,6 @@
 package decisions4s
 
-import decisions4s.exprs.{UnaryTest, VariableStub}
+import decisions4s.exprs.UnaryTest
 import decisions4s.internal.HKDUtils
 import decisions4s.internal.HKDUtils.Const
 import shapeless3.deriving.~>
@@ -24,9 +24,7 @@ class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
   }
 
   def render(): (Input[Description], Output[Description]) = {
-    given EvaluationContext[Input] = new EvaluationContext[Input] {
-      override val wholeInput: Input[Expr] = HKD.typedNames[Input].mapK1([t] => name => VariableStub[t](name))
-    }
+    given EvaluationContext[Input] = EvaluationContext.stub
     (
       matching.mapK([t] => expr => expr.renderExpression),
       output.mapK([t] => expr => expr.renderExpression),

@@ -106,7 +106,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
       .sequential[F]
       .map(dispatcher => {
         val variables: Input[[t] =>> Expr[t]] =
-          HKD.map2(input, HKD.typedNames[Input])([t] => (fValue, name) => FVariable[t](name, fValue, dispatcher))
+          HKD.map2(input, HKD[Input].meta)([t] => (fValue, meta) => FVariable[t](meta.name, fValue, dispatcher))
         new EvaluationContext[Input] {
           override def wholeInput: Input[Expr] = variables
         }

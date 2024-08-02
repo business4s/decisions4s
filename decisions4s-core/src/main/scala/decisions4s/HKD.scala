@@ -205,25 +205,14 @@ object HKD {
     }
   }
 
+
+  // This method is unsafe. It somehow fails a compiler and can create class cast exceptions in runtime
+  // It's why `HKD[I].map2` was created.
+  // The exact source of the problem requires further investigation
   def map2[F[_[_]]: HKD, A[_], B[_], C[_]](fa: F[A], fb: F[B])(func: [t] => (A[t], B[t]) => C[t]): F[C] = {
     HKD[F].construct([t] => (fu: FieldUtils[F, t]) => func[t](fu.extract(fa), fu.extract(fb)))
   }
 
-  def indexes[F[_[_]]](using hkd: HKD[F]): F[Const[Int]]                = {
-    var index = 0;
-    hkd.pure(
-      [t] =>
-        () =>
-          {
-            val i = index
-            index += 1;
-            i
-          },
-    )
-  }
-  def typedNames[F[_[_]]](using hkd: HKD[F]): F[Const[String]]          = {
-    indexes[F].mapK([t] => idx => hkd.fieldNames(idx))
-  }
   def values[F[_[_]], A[_]](fa: F[A])(using hkd: HKD[F]): F[Const[Any]] = {
     fa.mapK[Const[Any]]([t] => (x: A[t]) => x: Any)
   }
