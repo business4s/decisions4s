@@ -31,7 +31,7 @@ object TestUtils {
       expectedFeelExpr: String = null,
   ): Unit = {
     import munit.Assertions.*
-    assert(clue(expr.evaluate == clue(expectedEvalResult)))
+    assert(clue(expr.evaluate) == clue(expectedEvalResult))
 
     val feelExpression = clue(expr.renderExpression)
 
