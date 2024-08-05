@@ -8,7 +8,7 @@ import scala.language.implicitConversions
 import scala.math.Ordered.orderingToOrdered
 
 // https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/
-sealed trait UnaryTest[-T] {
+trait UnaryTest[-T] {
   def evaluate(in: T): Boolean
   def renderExpression: String
 }
@@ -61,7 +61,7 @@ object UnaryTest extends LowPriorityUnaryTestConversion {
     }
   }
 
-  // Intervals not supported yet
+  // Intervals are not supported yet
 
   case class Or[T](parts: Seq[UnaryTest[T]]) extends UnaryTest[T] {
     override def evaluate(in: T): Boolean = parts.exists(_.evaluate(in))

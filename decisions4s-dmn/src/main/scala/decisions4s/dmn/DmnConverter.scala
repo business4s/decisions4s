@@ -22,13 +22,13 @@ import scala.reflect.ClassTag
 
 object DmnConverter {
 
-  def convert[Input[_[_]], Output[_[_]], HP <: DecisionTable.HitPolicy](table: DecisionTable[Input, Output, HP]): DmnModelInstance = {
+  def convert[Input[_[_]], Output[_[_]], HP <: decisions4s.HitPolicy](table: DecisionTable[Input, Output, HP]): DmnModelInstance = {
     val modelInstance = DmnBuilder(table).modelInstance
     Dmn.validateModel(modelInstance)
     modelInstance
   }
 
-  private class DmnBuilder[Input[_[_]], Output[_[_]], HP <: DecisionTable.HitPolicy](table: DecisionTable[Input, Output, HP]) {
+  private class DmnBuilder[Input[_[_]], Output[_[_]], HP <: decisions4s.HitPolicy](table: DecisionTable[Input, Output, HP]) {
     import table.given
 
     val modelInstance: DmnModelInstance  = Dmn.createEmptyModel()
@@ -56,21 +56,21 @@ object DmnConverter {
 
     private def buildDecisionTable = {
       val tableElem = decision.addChild[DmnDecisionTable]
-      tableElem.setHitPolicy((table.hitPolicy: DecisionTable.HitPolicy) match {
-        case DecisionTable.HitPolicy.Single       => HitPolicy.UNIQUE
-        case DecisionTable.HitPolicy.Distinct     => HitPolicy.ANY
-        case DecisionTable.HitPolicy.First        => HitPolicy.FIRST
-        case DecisionTable.HitPolicy.Collect      => HitPolicy.COLLECT
-        case DecisionTable.HitPolicy.CollectSum   => HitPolicy.COLLECT
-        case DecisionTable.HitPolicy.CollectMin   => HitPolicy.COLLECT
-        case DecisionTable.HitPolicy.CollectMax   => HitPolicy.COLLECT
-        case DecisionTable.HitPolicy.CollectCount => HitPolicy.COLLECT
+      tableElem.setHitPolicy((table.hitPolicy: decisions4s.HitPolicy) match {
+        case decisions4s.HitPolicy.Single       => HitPolicy.UNIQUE
+        case decisions4s.HitPolicy.Distinct     => HitPolicy.ANY
+        case decisions4s.HitPolicy.First        => HitPolicy.FIRST
+        case decisions4s.HitPolicy.Collect      => HitPolicy.COLLECT
+        case decisions4s.HitPolicy.CollectSum   => HitPolicy.COLLECT
+        case decisions4s.HitPolicy.CollectMin   => HitPolicy.COLLECT
+        case decisions4s.HitPolicy.CollectMax   => HitPolicy.COLLECT
+        case decisions4s.HitPolicy.CollectCount => HitPolicy.COLLECT
       })
-      val aggr      = (table.hitPolicy: DecisionTable.HitPolicy) match {
-        case DecisionTable.HitPolicy.CollectSum   => Some(BuiltinAggregator.SUM)
-        case DecisionTable.HitPolicy.CollectMin   => Some(BuiltinAggregator.MIN)
-        case DecisionTable.HitPolicy.CollectMax   => Some(BuiltinAggregator.MAX)
-        case DecisionTable.HitPolicy.CollectCount => Some(BuiltinAggregator.COUNT)
+      val aggr      = (table.hitPolicy: decisions4s.HitPolicy) match {
+        case decisions4s.HitPolicy.CollectSum   => Some(BuiltinAggregator.SUM)
+        case decisions4s.HitPolicy.CollectMin   => Some(BuiltinAggregator.MIN)
+        case decisions4s.HitPolicy.CollectMax   => Some(BuiltinAggregator.MAX)
+        case decisions4s.HitPolicy.CollectCount => Some(BuiltinAggregator.COUNT)
         case _                                    => None
       }
       aggr.foreach(tableElem.setAggregation)

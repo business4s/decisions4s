@@ -1,77 +1,11 @@
 package decisions4s
 
-import decisions4s.internal.HKDUtils
+import decisions4s.internal.{Extract, Functor, HKDUtils, Meta}
 import shapeless3.deriving.K11.Id
 import shapeless3.deriving.{Const, K11, Labelling, ~>}
 
-trait Extract[F[_]]{
-  extension [T](ft: F[T]){
-    def extract: T
-  }
-}
 
-object Extract {
-  given id: Extract[[T] =>> T] with {
-    extension [T](ft: T) {
-      def extract: T = ft
-    }
-  }
 
-}
-
-trait Functor[F[_]] {
-  extension [T](ft: F[T]) {
-    def map[T1](f: T => T1): F[T1]
-  }
-}
-
-object Functor {
-
-  given const[A]: Functor[[t] =>> A] with {
-    extension [T](ft: A) {
-      def map[T1](f: T => T1): A = ft
-    }
-  }
-  given id: Functor[[t] =>> t] with       {
-    extension [T](ft: T) {
-      def map[T1](f: T => T1): T1 = f(ft)
-    }
-  }
-
-  given option: Functor[Option] = new Functor[Option] {
-    extension [T](ft: Option[T]) {
-      def map[T1](f: T => T1): Option[T1] = ft.map(f)
-    }
-  }
-
-  given compound[F[_], G[_]](using ff: Functor[F], fg: Functor[G]): Functor[[t] =>> F[G[t]]] with {
-    extension [T](ft: F[G[T]]) {
-      def map[T1](f: T => T1): F[G[T1]] = ff.map(ft)(x => fg.map(x)(f))
-    }
-  }
-
-  given tuple2K[A[_], B[_]](using Functor[A], Functor[B]): Functor[Tuple2K[A, B]] = new Functor[Tuple2K[A, B]] {
-    extension [T](ft: (A[T], B[T])) {
-      def map[T1](f: T => T1): (A[T1], B[T1]) = (ft._1.map(f), ft._2.map(f))
-    }
-  }
-
-}
-
-case class Meta[T](index: Int, name: String, value: Option[T])
-
-object Meta {
-  given Extract[Meta] with {
-    extension [T](ft: Meta[T]) {
-      def extract = ft.value.get
-    }
-  }
-  given Functor[Meta] with {
-    extension [T](ft: Meta[T]) {
-      def map[T1](f: T => T1): Meta[T1] = ft.copy(value = ft.value.map(f))
-    }
-  }
-}
 
 /** Specialised typeclass to expose operations on higher kinded data (case-classes where each field is wrapped in F[_])
   */

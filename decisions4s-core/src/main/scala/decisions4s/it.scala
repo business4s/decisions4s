@@ -30,8 +30,8 @@ object it {
 
   def catchAll[T]: UnaryTest[T] = UnaryTest.CatchAll
 
-  def isTrue: Expr[Boolean]       = True
-  def isFalse: UnaryTest[Boolean] = UnaryTest.EqualTo(Literal(false))
+  def isTrue: UnaryTest[Boolean]  = UnaryTest.EqualTo(True)
+  def isFalse: UnaryTest[Boolean] = UnaryTest.EqualTo(False)
 
 //  def isOneOf[T](values: Iterable[T]): UnaryTest[Boolean] = UnaryTest.OneOf(values)
 }
