@@ -33,5 +33,4 @@ object it {
   def isTrue: UnaryTest[Boolean]  = UnaryTest.EqualTo(True)
   def isFalse: UnaryTest[Boolean] = UnaryTest.EqualTo(False)
 
-//  def isOneOf[T](values: Iterable[T]): UnaryTest[Boolean] = UnaryTest.OneOf(values)
 }

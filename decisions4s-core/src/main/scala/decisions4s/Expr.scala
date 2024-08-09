@@ -1,24 +1,7 @@
 package decisions4s
 
 import decisions4s.HKD.FieldUtils
-import decisions4s.exprs.{
-  And,
-  Between,
-  Equal,
-  GreaterThan,
-  GreaterThanEqual,
-  In,
-  LessThan,
-  LessThanEqual,
-  Literal,
-  Minus,
-  Multiply,
-  NotEqual,
-  Or,
-  Plus,
-  Projection,
-  UnaryTest,
-}
+import decisions4s.exprs.{And, Between, Equal, GreaterThan, GreaterThanEqual, In, IsEmpty, LessThan, LessThanEqual, Literal, Minus, Multiply, NotEqual, Or, Plus, Projection, UnaryTest}
 
 trait Expr[+Out] {
   def evaluate: Out
@@ -57,7 +40,11 @@ object Expr {
     infix def in(rhs: UnaryTest[O]): Expr[Boolean] = In(lhs, rhs)
   }
 
-  extension [I](lhs: Expr[Boolean]) {
+  extension [T](lhs: Expr[Option[T]]) {
+    def isEmpty = IsEmpty(lhs)
+  }
+
+  extension (lhs: Expr[Boolean]) {
     def &&(rhs: Expr[Boolean]): Expr[Boolean]        = And(lhs, rhs)
     infix def and(rhs: Expr[Boolean]): Expr[Boolean] = And(lhs, rhs)
     def ||(rhs: Expr[Boolean]): Expr[Boolean]        = Or(lhs, rhs)

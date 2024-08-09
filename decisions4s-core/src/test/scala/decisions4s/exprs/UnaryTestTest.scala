@@ -13,6 +13,11 @@ class UnaryTestTest extends FunSuite {
     checkUnaryExpression(unary1, 2, true)
   }
 
+  test("negation") {
+    val uTest: UnaryTest[Int] = True
+    checkUnaryExpression(! uTest, 1, false)
+  }
+
   test("comparison with boolean") {
     checkUnaryExpression(UnaryTest.EqualTo(True), false, false)
     checkUnaryExpression(True: UnaryTest[Boolean], true, true)

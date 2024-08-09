@@ -1,6 +1,6 @@
 package decisions4s.exprs
 
-import decisions4s.LiteralShow
+import decisions4s.{LiteralShow, asLiteral}
 import munit.FunSuite
 
 import java.time.*
@@ -42,6 +42,13 @@ class LiteralTest extends FunSuite {
     case class Foo(bar: String, baz: Int) derives LiteralShow
     val foo = Foo("aa", 3)
     checkLiteralAdjusted(foo)(x => Map("bar" -> x.bar, "baz" -> x.baz))
+  }
+  test("options") {
+    checkLiteralAdjusted(Some(1))(_ => 1)
+    checkLiteralAdjusted(None: Option[String])(_ => null)
+  }
+  test("asLiteral") {
+    assert(1.asLiteral == Literal(1))
   }
 
   private def checkLiteral[T: LiteralShow](v: T): Unit                                       = checkLiteralAdjusted(v)(identity)
