@@ -19,7 +19,7 @@ class HKDTest extends AnyFreeSpec {
   "map2" in {
     val a = TestSubject[Option](Some(1), None)
     val b = TestSubject[Option](None, Some(2))
-    val c = HKD.map2(a, b)([ t] => (f1, f2) => f1.orElse(f2))
+    val c = HKD.map2(a, b)([t] => (f1, f2) => f1.orElse(f2))
     assert(c == TestSubject(Some(1), Some(2)))
   }
 

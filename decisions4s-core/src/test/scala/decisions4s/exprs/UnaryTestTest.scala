@@ -15,7 +15,7 @@ class UnaryTestTest extends FunSuite {
 
   test("negation") {
     val uTest: UnaryTest[Int] = True
-    checkUnaryExpression(! uTest, 1, false)
+    checkUnaryExpression(!uTest, 1, false)
   }
 
   test("comparison with boolean") {

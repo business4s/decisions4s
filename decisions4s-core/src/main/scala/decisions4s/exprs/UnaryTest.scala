@@ -33,12 +33,13 @@ object UnaryTest {
   }
 
   case class Compare[T: Ordering](sign: Compare.Sign, rhs: Expr[T]) extends UnaryTest[T] {
-    override def evaluate: T => Boolean = in => sign match {
-      case Sign.`<`  => in < rhs.evaluate
-      case Sign.`<=` => in <= rhs.evaluate
-      case Sign.`>`  => in > rhs.evaluate
-      case Sign.`>=` => in >= rhs.evaluate
-    }
+    override def evaluate: T => Boolean = in =>
+      sign match {
+        case Sign.`<`  => in < rhs.evaluate
+        case Sign.`<=` => in <= rhs.evaluate
+        case Sign.`>`  => in > rhs.evaluate
+        case Sign.`>=` => in >= rhs.evaluate
+      }
 
     override def renderExpression: String = (sign match {
       case Sign.`<`  => "<"
@@ -61,16 +62,16 @@ object UnaryTest {
   // Intervals are not supported yet
 
   case class Or[T](parts: Seq[UnaryTest[T]]) extends UnaryTest[T] {
-    override def evaluate: T => Boolean = in => parts.exists(_.evaluate(in))
+    override def evaluate: T => Boolean   = in => parts.exists(_.evaluate(in))
     override def renderExpression: String = parts.map(_.renderExpression).mkString(", ")
   }
   case class Not[I](inner: UnaryTest[I])     extends UnaryTest[I] {
-    override def evaluate: I => Boolean = in => !inner.evaluate(in)
+    override def evaluate: I => Boolean   = in => !inner.evaluate(in)
     override def renderExpression: String = s"not(${inner.renderExpression})"
   }
 
   case class Bool[T](expr: Expr[Boolean]) extends UnaryTest[T] {
-    override def evaluate: T => Boolean = in => expr.evaluate
+    override def evaluate: T => Boolean   = in => expr.evaluate
     override def renderExpression: String = expr.renderExpression
   }
 

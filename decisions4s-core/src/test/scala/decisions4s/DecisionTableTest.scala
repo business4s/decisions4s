@@ -168,10 +168,11 @@ class DecisionTableTest extends AnyFreeSpec {
     val table: DecisionTable[Input, Output, HitPolicy.Single.type] = DecisionTable(
       rules = List(
         Rule(
-          matching = ctx ?=> Input(
-            a = !it.equalsTo(ctx.wholeInput.b),
-            b = !it.equalsTo(wholeInput.a),
-          ),
+          matching = ctx ?=>
+            Input(
+              a = !it.equalsTo(ctx.wholeInput.b),
+              b = !it.equalsTo(wholeInput.a),
+            ),
           output = Output(
             c = wholeInput.a + wholeInput.b,
           ),
