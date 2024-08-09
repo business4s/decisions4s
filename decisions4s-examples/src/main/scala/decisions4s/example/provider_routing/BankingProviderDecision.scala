@@ -1,7 +1,6 @@
 package decisions4s.example.provider_routing
 
 import decisions4s.*
-import decisions4s.DecisionTable.HitPolicy
 
 object BankingProviderDecision {
 

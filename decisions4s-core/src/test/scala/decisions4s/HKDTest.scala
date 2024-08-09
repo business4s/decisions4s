@@ -1,5 +1,6 @@
 package decisions4s
 
+import decisions4s.internal.Meta
 import org.scalatest.freespec.AnyFreeSpec
 import shapeless3.deriving.Const
 

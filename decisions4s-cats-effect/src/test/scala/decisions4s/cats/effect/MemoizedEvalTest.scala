@@ -2,7 +2,6 @@ package decisions4s.cats.effect
 
 import _root_.cats.effect.IO
 import decisions4s.*
-import decisions4s.DecisionTable.HitPolicy
 import munit.FunSuite
 
 class MemoizedEvalTest extends FunSuite {

@@ -14,6 +14,8 @@ trait LiteralShow[-T] {
 
 object LiteralShow {
 
+  def apply[T](using ls: LiteralShow[T]): LiteralShow[T] = ls
+
   given LiteralShow[Boolean]        = _.toString
   given LiteralShow[Int]            = _.toString
   given LiteralShow[Long]           = _.toString
@@ -30,6 +32,22 @@ object LiteralShow {
   given LiteralShow[Period]         = x => s"@\"${x.toString}\""
 
   given [T](using ls: LiteralShow[T]): LiteralShow[Iterable[T]] = _.map(ls.show).mkString("[", ", ", "]")
+  given [T](using ls: LiteralShow[T]): LiteralShow[Option[T]] = _.map(ls.show).getOrElse("null")
+
+  given [T]: LiteralShow[Expr[T]] = _.renderExpression
+  given [T]: LiteralShow[OutputValue[T]] = _.renderExpression
+
+  // should we replace with HKD.fieldNames?
+  given showGen[T](using inst: K0.ProductInstances[LiteralShow, T], labelling: Labelling[T]): LiteralShow[T] with {
+    def show(t: T): String =
+      if labelling.elemLabels.isEmpty then labelling.label
+      else
+        labelling.elemLabels.zipWithIndex
+          .map((label, i) => s"$label: ${inst.project(t)(i)([t] => (st: LiteralShow[t], pt: t) => st.show(pt))}".indent(2).stripSuffix("\n"))
+          .mkString(s"{\n", ",\n", "\n}")
+  }
+
+  inline def derived[A](using gen: K0.ProductGeneric[A]): LiteralShow[A] = showGen
 
   given [T]: LiteralShow[Expr[T]] = _.renderExpression
   given [T]: LiteralShow[OutputValue[T]] = _.renderExpression
@@ -51,5 +69,9 @@ object LiteralShow {
     (v: T) => {
       s"@\"${formatter.format(v)}\""
     }
+  }
+
+  extension [T](x: T)(using ls: LiteralShow[T]) {
+    def showAsLiteral: String = ls.show(x)
   }
 }

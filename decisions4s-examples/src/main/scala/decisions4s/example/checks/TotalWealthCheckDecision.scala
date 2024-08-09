@@ -1,7 +1,6 @@
 package decisions4s.example.checks
 
 import decisions4s.*
-import decisions4s.DecisionTable.HitPolicy
 
 object TotalWealthCheckDecision {
   sealed trait TotalWealth

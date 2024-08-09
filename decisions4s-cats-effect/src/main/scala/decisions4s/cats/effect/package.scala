@@ -1,8 +1,7 @@
 package decisions4s.cats
 
 import cats.effect.{Async, Concurrent}
-import decisions4s.DecisionTable.HitPolicy
-import decisions4s.{DecisionTable, EvalResult}
+import decisions4s.{DecisionTable, EvalResult, HitPolicy}
 
 package object effect {
 
@@ -12,7 +11,7 @@ package object effect {
     }
   }
 
-  given [F[_]](using cf: cats.Functor[F]): decisions4s.Functor[F] with {
+  given [F[_]](using cf: cats.Functor[F]): decisions4s.internal.Functor[F] with {
     extension [T](ft: F[T]) {
       def map[T1](f: T => T1): F[T1] = cf.map(ft)(f)
     }

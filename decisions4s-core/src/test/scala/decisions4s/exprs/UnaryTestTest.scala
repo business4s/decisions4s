@@ -13,6 +13,11 @@ class UnaryTestTest extends FunSuite {
     checkUnaryExpression(unary1, 2, true)
   }
 
+  test("negation") {
+    val uTest: UnaryTest[Int] = True
+    checkUnaryExpression(! uTest, 1, false)
+  }
+
   test("comparison with boolean") {
     checkUnaryExpression(UnaryTest.EqualTo(True), false, false)
     checkUnaryExpression(True: UnaryTest[Boolean], true, true)
@@ -74,6 +79,12 @@ class UnaryTestTest extends FunSuite {
     checkUnaryExpression(Not(Or(Seq(it.equalsTo(1), it.equalsTo(2)))), 3, true)
 
     checkUnaryExpression(!(it > 1), 2, false)
+  }
+  test("boolean") {
+    checkUnaryExpression(it.isTrue, true, true)
+    checkUnaryExpression(it.isTrue, false, false)
+    checkUnaryExpression(it.isFalse, true, false)
+    checkUnaryExpression(it.isFalse, false, true)
   }
 
 }

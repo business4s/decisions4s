@@ -6,7 +6,6 @@ import _root_.cats.implicits.{catsSyntaxApplicativeId, none}
 import _root_.cats.{Applicative, Monad}
 import cats.syntax.all.{toTraverseOps, given}
 import decisions4s.*
-import decisions4s.DecisionTable.HitPolicy
 import decisions4s.exprs.UnaryTest
 import decisions4s.internal.HKDUtils
 import shapeless3.deriving.Const
