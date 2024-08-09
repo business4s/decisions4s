@@ -43,6 +43,10 @@ class LiteralTest extends FunSuite {
     val foo = Foo("aa", 3)
     checkLiteralAdjusted(foo)(x => Map("bar" -> x.bar, "baz" -> x.baz))
   }
+  test("options") {
+    checkLiteralAdjusted(Some(1))(_ => 1)
+    checkLiteralAdjusted(None: Option[String])(_ => null)
+  }
 
   private def checkLiteral[T: LiteralShow](v: T): Unit                                       = checkLiteralAdjusted(v)(identity)
   private def checkLiteralAdjusted[T: LiteralShow](v: T)(expectedAdjustment: T => Any): Unit =

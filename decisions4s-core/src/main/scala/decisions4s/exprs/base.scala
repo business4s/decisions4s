@@ -38,3 +38,8 @@ class Projection[O1, +O2](base: Expr[O1], get: O1 => Expr[O2], label: String) ex
 
   override def renderExpression: String = s"${base.renderExpression}.$label"
 }
+
+class IsEmpty[T](base: Expr[Option[T]]) extends Expr[Boolean] {
+  override def evaluate: Boolean        = base.evaluate.isEmpty
+  override def renderExpression: String = s"isEmpty(${base.renderExpression})"
+}

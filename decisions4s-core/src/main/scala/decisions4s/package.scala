@@ -2,6 +2,8 @@ import decisions4s.exprs.{Literal, UnaryTest}
 
 package object decisions4s {
 
+  export LiteralShow.showAsLiteral
+
   type ~>[A[_], B[_]]      = [t] => A[t] => B[t]
   type Tuple2K[A[_], B[_]] = [t] =>> (A[t], B[t])
 
@@ -20,5 +22,9 @@ package object decisions4s {
   }
 
   def wholeInput[In[_[_]]](using ec: EvaluationContext[In]): In[Expr] = ec.wholeInput
+
+  extension [T](value: T){
+    def asLiteral(using LiteralShow[T]): Expr[T] = Literal(value)
+  }
 
 }

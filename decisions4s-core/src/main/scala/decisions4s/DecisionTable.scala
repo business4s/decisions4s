@@ -6,7 +6,7 @@ import decisions4s.internal.EvaluationResultTransformer
 import scala.util.chaining.scalaUtilChainingOps
 
 case class DecisionTable[Input[_[_]], Output[_[_]], HitPolicy <: decisions4s.HitPolicy](
-    rules: List[Rule[Input, Output]],
+    rules: Seq[Rule[Input, Output]],
     name: String,
     hitPolicy: HitPolicy,
 )(using val inputHKD: HKD[Input], val outputHKD: HKD[Output]) {
