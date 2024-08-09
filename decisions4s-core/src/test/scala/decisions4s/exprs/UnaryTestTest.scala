@@ -3,29 +3,23 @@ package decisions4s.exprs
 import decisions4s.{Expr, it}
 import decisions4s.exprs.TestUtils.*
 import decisions4s.exprs.UnaryTest.{CatchAll, Not, Or}
-import munit.FunSuite
+import org.scalatest.freespec.AnyFreeSpec
+class UnaryTestTest extends AnyFreeSpec {
 
-class UnaryTestTest extends FunSuite {
-
-  test("bool conversion") {
+  "bool conversion" in {
     val bool1: Expr[Boolean]   = Literal(1) > 0
     val unary1: UnaryTest[Int] = bool1
     checkUnaryExpression(unary1, 2, true)
   }
 
-  test("negation") {
-    val uTest: UnaryTest[Int] = True
-    checkUnaryExpression(!uTest, 1, false)
-  }
-
-  test("comparison with boolean") {
+  "comparison with boolean" in {
     checkUnaryExpression(UnaryTest.EqualTo(True), false, false)
     checkUnaryExpression(True: UnaryTest[Boolean], true, true)
     checkUnaryExpression(UnaryTest.EqualTo(False), false, true)
     checkUnaryExpression(False: UnaryTest[Boolean], true, false)
   }
 
-  test("list conversion") {
+  "list conversion" in {
     val list: Expr[List[Int]] = Literal(List(1, 2, 3))
     val unary: UnaryTest[Int] = it.equalsAnyOf(list)
     checkUnaryExpression(unary, 1, true)
@@ -35,7 +29,7 @@ class UnaryTestTest extends FunSuite {
     checkUnaryExpression(unary, 4, false)
     checkUnaryExpression(it.equalsAnyOf(1, 2, 3), 4, false)
   }
-  test("value conversion") {
+  "value conversion" in {
     val value: Expr[Int]      = Literal(1)
     val unary: UnaryTest[Int] = it.equalsTo(value)
     checkUnaryExpression(unary, 1, true)
@@ -44,11 +38,11 @@ class UnaryTestTest extends FunSuite {
     checkUnaryExpression(unary, 2, false)
     checkUnaryExpression(it === 1, 2, false)
   }
-  test("catchAll") {
+  "catchAll" in {
     checkUnaryExpression(CatchAll, 1, true)
     checkUnaryExpression(it.catchAll, 1, true)
   }
-  test("comparison") {
+  "comparison" in {
     checkUnaryExpression(it > 1, 0, false)
     checkUnaryExpression(it > 1, 1, false)
     checkUnaryExpression(it > 1, 2, true)
@@ -65,12 +59,12 @@ class UnaryTestTest extends FunSuite {
     checkUnaryExpression(it <= 1, 1, true)
     checkUnaryExpression(it <= 1, 2, false)
   }
-  test("or") {
+  "or" in {
     checkUnaryExpression((it < 10) || (it > 50), 9, true)
     checkUnaryExpression((it < 10) || (it > 50), 20, false)
     checkUnaryExpression((it < 10) || (it > 50), 51, true)
   }
-  test("negation") {
+  "negation" in {
     checkUnaryExpression(Not(it.equalsTo(1)), 1, false)
     checkUnaryExpression(Not(it.equalsTo(1)), 2, true)
 
@@ -80,7 +74,7 @@ class UnaryTestTest extends FunSuite {
 
     checkUnaryExpression(!(it > 1), 2, false)
   }
-  test("boolean") {
+  "boolean" in {
     checkUnaryExpression(it.isTrue, true, true)
     checkUnaryExpression(it.isTrue, false, false)
     checkUnaryExpression(it.isFalse, true, false)

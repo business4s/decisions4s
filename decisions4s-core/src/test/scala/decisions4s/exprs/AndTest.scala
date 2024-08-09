@@ -1,10 +1,10 @@
 package decisions4s.exprs
 
 import decisions4s.exprs.TestUtils.checkExpression
-import munit.FunSuite
+import org.scalatest.freespec.AnyFreeSpec
 
-class AndTest extends FunSuite {
-  test("basic") {
+class AndTest extends AnyFreeSpec {
+  "basic" in {
     checkExpression(And(True, True), true)
     checkExpression(True and True, true)
     checkExpression(True && True, true)

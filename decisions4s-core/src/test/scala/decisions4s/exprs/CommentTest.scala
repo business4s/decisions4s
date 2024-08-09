@@ -1,10 +1,9 @@
 package decisions4s.exprs
 
-import munit.FunSuite
+import org.scalatest.freespec.AnyFreeSpec
+class CommentTest extends AnyFreeSpec {
 
-class CommentTest extends FunSuite {
-
-  test("single line") {
+  "single line" in {
     TestUtils.checkExpression(
       Comment(True, "my comment"),
       true,
@@ -13,7 +12,7 @@ class CommentTest extends FunSuite {
     )
   }
 
-  test("multi line") {
+  "multi line" in {
     TestUtils.checkExpression(
       Comment(
         True,

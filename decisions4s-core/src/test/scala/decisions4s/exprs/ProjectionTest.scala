@@ -1,13 +1,12 @@
 package decisions4s.exprs
 
 import decisions4s.*
-import munit.FunSuite
-
-class ProjectionTest extends FunSuite {
+import org.scalatest.freespec.AnyFreeSpec
+class ProjectionTest extends AnyFreeSpec {
 
   case class Foo[F[_]](x: F[Int]) derives HKD
 
-  test("basic") {
+  "basic" in {
     val raw                      = Foo[Expr](Literal(1))
     val fooExpr: Expr[Foo[Expr]] = Literal(raw)
     val projection               = fooExpr.projection.x

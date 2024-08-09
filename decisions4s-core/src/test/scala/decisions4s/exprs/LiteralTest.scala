@@ -1,17 +1,16 @@
 package decisions4s.exprs
 
 import decisions4s.{LiteralShow, asLiteral}
-import munit.FunSuite
-
+import org.scalatest.freespec.AnyFreeSpec
 import java.time.*
 
-class LiteralTest extends FunSuite {
+class LiteralTest extends AnyFreeSpec {
 
   import TestUtils.*
 
   // https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-data-types/
   // TODO property based
-  test("built-ins") {
+  "built-ins" in {
     checkLiteral(1)
     checkLiteral(2.0)
     checkLiteral(3L)
@@ -38,16 +37,16 @@ class LiteralTest extends FunSuite {
 
   }
 
-  test("contexts") {
+  "contexts" in {
     case class Foo(bar: String, baz: Int) derives LiteralShow
     val foo = Foo("aa", 3)
     checkLiteralAdjusted(foo)(x => Map("bar" -> x.bar, "baz" -> x.baz))
   }
-  test("options") {
+  "options" in {
     checkLiteralAdjusted(Some(1))(_ => 1)
     checkLiteralAdjusted(None: Option[String])(_ => null)
   }
-  test("asLiteral") {
+  "asLiteral" in {
     assert(1.asLiteral == Literal(1))
   }
 
