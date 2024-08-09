@@ -1,7 +1,25 @@
 package decisions4s
 
 import decisions4s.HKD.FieldUtils
-import decisions4s.exprs.{And, Between, Equal, GreaterThan, GreaterThanEqual, In, IsEmpty, LessThan, LessThanEqual, Literal, Minus, Multiply, NotEqual, Or, Plus, Projection, UnaryTest}
+import decisions4s.exprs.{
+  And,
+  Between,
+  Equal,
+  GreaterThan,
+  GreaterThanEqual,
+  In,
+  IsEmpty,
+  LessThan,
+  LessThanEqual,
+  Literal,
+  Minus,
+  Multiply,
+  NotEqual,
+  Or,
+  Plus,
+  Projection,
+  UnaryTest,
+}
 
 trait Expr[+Out] {
   def evaluate: Out

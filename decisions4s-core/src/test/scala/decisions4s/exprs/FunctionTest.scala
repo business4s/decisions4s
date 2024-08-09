@@ -17,7 +17,7 @@ class FunctionTest extends AnyFreeSpec {
     assert(f.renderExpression == "add(1, 2)")
   }
   "function3" in {
-    val f = Function[Int]("add")(1.asLiteral, 2.asLiteral, 3.asLiteral)(_ + _ + _ )
+    val f = Function[Int]("add")(1.asLiteral, 2.asLiteral, 3.asLiteral)(_ + _ + _)
     assert(f.evaluate == 6)
     assert(f.renderExpression == "add(1, 2, 3)")
   }

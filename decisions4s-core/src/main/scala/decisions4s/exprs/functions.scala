@@ -8,7 +8,7 @@ object Function {
   def autoNamed[Out](using name: sourcecode.Name) = new Builder[Out](name.value)
 
   class Builder[Out](name: String) {
-    def apply[A](arg: Expr[A])(logic: A => Out): Expr[Out] = new Function1[A, Out](arg, name) {
+    def apply[A](arg: Expr[A])(logic: A => Out): Expr[Out]                                              = new Function1[A, Out](arg, name) {
       override def evaluate(a: A): Out = logic(a)
     }
     def apply[A, B](arg1: Expr[A], arg2: Expr[B])(logic: (A, B) => Out): Expr[Out]                      = new Function2[A, B, Out](arg1, arg2, name) {

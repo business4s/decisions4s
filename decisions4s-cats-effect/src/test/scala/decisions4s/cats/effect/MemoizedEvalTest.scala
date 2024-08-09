@@ -2,9 +2,8 @@ package decisions4s.cats.effect
 
 import _root_.cats.effect.IO
 import decisions4s.*
-import munit.FunSuite
-
-class MemoizedEvalTest extends FunSuite {
+import org.scalatest.freespec.AnyFreeSpec
+class MemoizedEvalTest extends AnyFreeSpec {
 
   case class Input[F[_]](a: F[Int], b: F[Int], c: F[Int]) derives HKD
   case class Output[F[_]](d: F[Int]) derives HKD
@@ -28,25 +27,25 @@ class MemoizedEvalTest extends FunSuite {
     HitPolicy.First,
   )
 
-//  test("first rule triggered") {
-//    val (result, counters) = evaluate(Input(1, 0, 0))
-//    assertEquals(result.output.map(_.d), Some(1): Option[Int])
-//    assertEquals(counters, Input[Counter](1, 0, 0))
-//  }
-//
-//  test("second rule triggered") {
-//    val (result, counters) = evaluate(Input(-11, 1, 0))
-//    assertEquals(result.output.map(_.d), Some(2): Option[Int])
-//    assertEquals(counters, Input[Counter](1, 1, 0))
-//  }
-//
-//  test("third rule triggered") {
-//    val (result, counters) = evaluate(Input(-1, 0, 1))
-//    assertEquals(result.output.map(_.d), Some(3): Option[Int])
-//    assertEquals(counters, Input[Counter](1, 1, 1))
-//  }
+  "first rule triggered" in {
+    val (result, counters) = evaluate(Input(1, 0, 0))
+    assert(result.output.map(_.d).contains(1))
+    assert(counters == Input[Counter](1, 0, 0))
+  }
 
-  test("wholeInput") {
+  "second rule triggered" in {
+    val (result, counters) = evaluate(Input(-11, 1, 0))
+    assert(result.output.map(_.d).contains(2))
+    assert(counters == Input[Counter](1, 1, 0))
+  }
+
+  "third rule triggered" in {
+    val (result, counters) = evaluate(Input(-1, 0, 1))
+    assert(result.output.map(_.d).contains(3))
+    assert(counters == Input[Counter](1, 1, 1))
+  }
+
+  "wholeInput" in {
     val testTable: DecisionTable[Input, Output, HitPolicy.First] = DecisionTable(
       rules = List(
         Rule(
@@ -63,8 +62,8 @@ class MemoizedEvalTest extends FunSuite {
     )
     val (result, counters)                                       = evaluate(Input(0, 2, 1), testTable)
     println(result.makeDiagnosticsString)
-    assertEquals(result.output.map(_.d), Some(1): Option[Int])
-    assertEquals(counters, Input[Counter](0, 1, 1))
+    assert(result.output.map(_.d).contains(1))
+    assert(counters == Input[Counter](0, 1, 1))
   }
 
   def evaluate(

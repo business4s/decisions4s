@@ -71,7 +71,7 @@ object DmnConverter {
         case decisions4s.HitPolicy.CollectMin   => Some(BuiltinAggregator.MIN)
         case decisions4s.HitPolicy.CollectMax   => Some(BuiltinAggregator.MAX)
         case decisions4s.HitPolicy.CollectCount => Some(BuiltinAggregator.COUNT)
-        case _                                    => None
+        case _                                  => None
       }
       aggr.foreach(tableElem.setAggregation)
       tableElem

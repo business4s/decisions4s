@@ -3,25 +3,26 @@ package decisions4s.exprs
 import decisions4s.Expr
 import org.camunda.feel.FeelEngine
 import org.camunda.feel.api.{FailedEvaluationResult, FeelEngineApi, SuccessfulEvaluationResult}
+import org.scalatest.Assertions
 
-object TestUtils {
+object TestUtils extends Assertions {
 
   val engine: FeelEngineApi = new FeelEngineApi(new FeelEngine())
 
   def checkUnaryExpression[I](expr: UnaryTest[I], input: I, expectedEvalResult: Boolean, expectedParseResult: Option[Any] = None): Unit = {
-    import munit.Assertions.*
-    assert(clue(expr.evaluate(input)) == clue(expectedEvalResult))
 
-    val feelExpression  = clue(expr.renderExpression)
-    val feelResult: Any = engine.evaluateUnaryTests(feelExpression, input) match {
-      case SuccessfulEvaluationResult(result, suppressedFailures) => result
-      case FailedEvaluationResult(failure, suppressedFailures)    =>
-        fail(s"Feel evaluation failed: ${failure}")
+    assert(expr.evaluate(input) == expectedEvalResult)
+
+    val feelExpression = expr.renderExpression
+    withClue(feelExpression) {
+      val feelResult: Any = engine.evaluateUnaryTests(feelExpression, input) match {
+        case SuccessfulEvaluationResult(result, suppressedFailures) => result
+        case FailedEvaluationResult(failure, suppressedFailures)    =>
+          fail(s"Feel evaluation failed: ${failure}")
+      }
+      assert(feelResult == expectedParseResult.getOrElse(expectedEvalResult))
     }
-    assert({
-      clue(feelExpression)
-      clue(feelResult) == clue(expectedParseResult.getOrElse(expectedEvalResult))
-    })
+    ()
   }
 
   def checkExpression[T](
@@ -30,24 +31,22 @@ object TestUtils {
       expectedParseResult: Option[Any] = None,
       expectedFeelExpr: String = null,
   ): Unit = {
-    import munit.Assertions.*
-    assert(clue(expr.evaluate) == clue(expectedEvalResult))
+    assert(expr.evaluate == expectedEvalResult)
 
-    val feelExpression = clue(expr.renderExpression)
+    val feelExpression = expr.renderExpression
+    withClue(feelExpression) {
+      Option(expectedFeelExpr).foreach(expectedFeelExpr => {
+        assert(feelExpression == expectedFeelExpr)
+      })
 
-    Option(expectedFeelExpr).foreach(expectedFeelExpr => {
-      assertEquals(feelExpression, expectedFeelExpr)
-    })
-
-    val feelResult: Any = engine.evaluateExpression(feelExpression) match {
-      case SuccessfulEvaluationResult(result, suppressedFailures) => result
-      case FailedEvaluationResult(failure, suppressedFailures)    =>
-        fail(s"Feel evaluation failed: ${failure}")
+      val feelResult: Any = engine.evaluateExpression(feelExpression) match {
+        case SuccessfulEvaluationResult(result, suppressedFailures) => result
+        case FailedEvaluationResult(failure, suppressedFailures)    =>
+          fail(s"Feel evaluation failed: ${failure}")
+      }
+      assert(feelResult == expectedParseResult.getOrElse(expectedEvalResult))
     }
-    assert({
-      clue(feelExpression)
-      clue(feelResult) == clue(expectedParseResult.getOrElse(expectedEvalResult))
-    })
+    ()
   }
 
 }
