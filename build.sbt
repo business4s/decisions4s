@@ -12,10 +12,10 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel"   %% "shapeless3-deriving" % "3.4.0",
-      "org.scalameta"   %% "munit"               % "1.0.0"  % Test,
-      "org.camunda.feel" % "feel-engine"         % "1.17.7" % Test,
-      "ch.qos.logback"   % "logback-classic"     % "1.5.6"  % Test,
+      "org.typelevel"    %% "shapeless3-deriving" % "3.4.0",
+      "com.lihaoyi"      %% "sourcecode"          % "0.4.2",
+      ("org.camunda.feel" % "feel-engine"         % "1.17.7" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
+      "ch.qos.logback"    % "logback-classic"     % "1.5.6"  % Test,
     ),
   )
 
@@ -85,7 +85,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val testDeps = List(
-  "org.scalatest" %% "scalatest" % "3.2.18" % Test,
+  "org.scalatest" %% "scalatest-freespec" % "3.2.18" % Test,
 )
 
 lazy val stableVersion = taskKey[String]("stableVersion")

@@ -3,6 +3,7 @@ import decisions4s.exprs.{Literal, UnaryTest}
 package object decisions4s {
 
   export LiteralShow.showAsLiteral
+  export exprs.Function
 
   type ~>[A[_], B[_]]      = [t] => A[t] => B[t]
   type Tuple2K[A[_], B[_]] = [t] =>> (A[t], B[t])

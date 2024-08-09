@@ -10,13 +10,14 @@ expressions.
 
 Expression is just an object that can produce given `Out` and render its string representation.
 
+<!-- @formatter:off -->
 ```scala 
 trait Expr[+Out] {
   def evaluate: Out
-
   def renderExpression: String
 }
 ```
+<!-- @formatter:on -->
 
 There is also a specialized type `UnaryTest[In]` that allows us to loosely follow
 the [FEEL model](https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/). This could be
@@ -47,6 +48,11 @@ expressions themselves.
 To define a custom expression its enough to extend `Expr` trait.
 
 ```scala file=./main/scala/decisions4s/example/docs/ExpressionsExample.scala start=start_custom_generic end=end_custom_generic
+```
+
+This can be further streamlined by using `Function` helper
+
+```scala file=./main/scala/decisions4s/example/docs/ExpressionsExample.scala start=start_custom_streamlined end=end_custom_streamlined
 ```
 
 ## FEEL Compatibility
