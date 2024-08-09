@@ -168,8 +168,8 @@ class DecisionTableTest extends AnyFreeSpec {
     val table: DecisionTable[Input, Output, HitPolicy.Single.type] = DecisionTable(
       rules = List(
         Rule(
-          matching = Input(
-            a = ctx ?=> !it.equalsTo(ctx.wholeInput.b),
+          matching = ctx ?=> Input(
+            a = !it.equalsTo(ctx.wholeInput.b),
             b = !it.equalsTo(wholeInput.a),
           ),
           output = Output(
@@ -192,7 +192,7 @@ class DecisionTableTest extends AnyFreeSpec {
 
   def rawResults(hits: Boolean*): List[RuleResult[Input, Output]] = {
     given EvaluationContext[Input] = new EvaluationContext[Input] {
-      override def wholeInput: Input[Expr] = null // variables not sued in those tests
+      override def wholeInput: Input[Expr] = null // variables not used in those tests
     }
 
     hits.zipWithIndex

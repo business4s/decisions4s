@@ -75,5 +75,11 @@ class UnaryTestTest extends FunSuite {
 
     checkUnaryExpression(!(it > 1), 2, false)
   }
+  test("boolean") {
+    checkUnaryExpression(it.isTrue, true, true)
+    checkUnaryExpression(it.isTrue, false, false)
+    checkUnaryExpression(it.isFalse, true, false)
+    checkUnaryExpression(it.isFalse, false, true)
+  }
 
 }

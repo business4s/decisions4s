@@ -2,8 +2,6 @@ import decisions4s.exprs.{Literal, UnaryTest}
 
 package object decisions4s {
 
-  export DecisionTable.HitPolicy
-
   type ~>[A[_], B[_]]      = [t] => A[t] => B[t]
   type Tuple2K[A[_], B[_]] = [t] =>> (A[t], B[t])
 
@@ -12,9 +10,7 @@ package object decisions4s {
 
   type MatchingExpr[In[_[_]]] = [T] =>> EvaluationContext[In] ?=> UnaryTest[T]
 
-  trait EvaluationContext[In[_[_]]] {
-    def wholeInput: In[Expr]
-  }
+
 
   type OutputExpr[In[_[_]]]             = [T] =>> EvaluationContext[In] ?=> OutputValue[T]
   opaque type OutputValue[T] <: Expr[T] = Expr[T]

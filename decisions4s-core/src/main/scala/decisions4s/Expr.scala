@@ -1,5 +1,6 @@
 package decisions4s
 
+import decisions4s.HKD.FieldUtils
 import decisions4s.exprs.{
   And,
   Between,
@@ -15,6 +16,7 @@ import decisions4s.exprs.{
   NotEqual,
   Or,
   Plus,
+  Projection,
   UnaryTest,
 }
 
@@ -60,6 +62,13 @@ object Expr {
     infix def and(rhs: Expr[Boolean]): Expr[Boolean] = And(lhs, rhs)
     def ||(rhs: Expr[Boolean]): Expr[Boolean]        = Or(lhs, rhs)
     infix def or(rhs: Expr[Boolean]): Expr[Boolean]  = Or(lhs, rhs)
+  }
+
+  extension [Data[_[_]]](in: Expr[Data[Expr]]) {
+    def projection(using hkd: HKD[Data]): Data[Expr] = {
+      hkd.construct([t] => (fu: FieldUtils[Data, t]) => Projection[Data[Expr], t](in, fu.extract, fu.name))
+    }
+    def prj(using hkd: HKD[Data]): Data[Expr]        = projection
   }
 
 }

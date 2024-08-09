@@ -1,12 +1,11 @@
 package decisions4s.cats.effect
 
 import _root_.cats.effect.std.Dispatcher
-import _root_.cats.{Applicative, Monad}
 import _root_.cats.effect.{Async, Concurrent, Ref, Resource}
-import _root_.cats.implicits.{catsSyntaxApplicativeId, none, toFunctorOps}
+import _root_.cats.implicits.{catsSyntaxApplicativeId, none}
+import _root_.cats.{Applicative, Monad}
 import cats.syntax.all.{toTraverseOps, given}
 import decisions4s.*
-import decisions4s.DecisionTable.HitPolicy
 import decisions4s.exprs.UnaryTest
 import decisions4s.internal.HKDUtils
 import shapeless3.deriving.Const
@@ -43,7 +42,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
   private def memoizeInput(input: Input[F]): F[Input[F]] = {
     type Memoized[T] = F[F[T]]
     val memoize: F ~> Memoized = [t] => (f: F[t]) => Concurrent[F].memoize(f)
-    val memoized: F[Input[F]]  = input.mapK(memoize).pipe(sequence[Input, F, F])
+    val memoized: F[Input[F]]  = input.mapK1(memoize).pipe(sequence[Input, F, F])
     memoized
   }
 
@@ -80,7 +79,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
 
   // Weird implementation of usual sequence/traverse. Collects all the fields, sequences them and reconstruct the case class
   private def sequence[CaseClass[_[_]]: HKD, G[_]: Applicative, H[_]](instance: CaseClass[[t] =>> G[H[t]]]): G[CaseClass[H]] = {
-    val collected: List[G[H[Any]]] = HKDUtils.collectFields[CaseClass, G[H[Any]]](instance.asInstanceOf[CaseClass[Const[G[H[Any]]]]])
+    val collected: Vector[G[H[Any]]] = HKDUtils.collectFields[CaseClass, G[H[Any]]](instance.asInstanceOf[CaseClass[Const[G[H[Any]]]]])
     collected.sequence
       .map(values => {
         var idx                  = 0
@@ -106,7 +105,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
       .sequential[F]
       .map(dispatcher => {
         val variables: Input[[t] =>> Expr[t]] =
-          HKD.map2(input, HKD.typedNames[Input])([t] => (fValue, name) => FVariable[t](name, fValue, dispatcher))
+          HKD.map2(input, HKD[Input].meta)([t] => (fValue, meta) => FVariable[t](meta.name, fValue, dispatcher))
         new EvaluationContext[Input] {
           override def wholeInput: Input[Expr] = variables
         }

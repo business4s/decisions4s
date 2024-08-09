@@ -1,6 +1,5 @@
 package decisions4s.internal
 
-import decisions4s.exprs.VariableStub
 import decisions4s.*
 import shapeless3.deriving.Const
 
@@ -10,13 +9,11 @@ class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Ou
 
   private val inputNames: IndexedSeq[String]              = summon[HKD[Input]].fieldNames
   private val matchingExpressions: Vector[Vector[String]] = table.rules.toVector.map(rule => {
-    given EvaluationContext[Input] = new EvaluationContext[Input] {
-      override val wholeInput: Input[Expr] = HKD.typedNames[Input].mapK([t] => name => VariableStub[t](name))
-    }
-    HKDUtils.collectFields(rule.matching.mapK[Const[String]]([t] => expr => expr.renderExpression)).toVector
+    given EvaluationContext[Input] = EvaluationContext.stub
+    HKDUtils.collectFields(rule.matching.mapK[Const[String]]([t] => expr => expr.renderExpression))
   })
   private val inputValues: Vector[Option[Any]]            =
-    HKDUtils.collectFields(input.mapK[Const[Option[Any]]]([t] => (value: Option[t]) => (value: Option[Any]))).toVector
+    HKDUtils.collectFields(input.mapK[Const[Option[Any]]]([t] => (value: Option[t]) => (value: Option[Any])))
   private val maxInputNameLen                             = inputNames.map(_.length).max
 
   def print: String = {
