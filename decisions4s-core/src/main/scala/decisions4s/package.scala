@@ -1,4 +1,4 @@
-import decisions4s.exprs.{Literal, UnaryTest}
+import decisions4s.exprs.Literal
 
 package object decisions4s {
 
@@ -11,11 +11,6 @@ package object decisions4s {
   type Value[T]       = T
   type Description[T] = String
 
-  type MatchingExpr[In[_[_]]] = [T] =>> EvaluationContext[In] ?=> UnaryTest[T]
-
-
-
-  type OutputExpr[In[_[_]]]             = [T] =>> EvaluationContext[In] ?=> OutputValue[T]
   opaque type OutputValue[T] <: Expr[T] = Expr[T]
   object OutputValue {
     implicit def toLiteral[T](t: T)(using LiteralShow[T]): OutputValue[T] = Literal(t)

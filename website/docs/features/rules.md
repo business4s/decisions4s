@@ -4,12 +4,35 @@ sidebar_position: 3
 
 # Writing Rules
 
-`Decisions4s` uses custom expressions for defining the rules.
-Each rule has two parts: matching on the input and producing the output, both of which are defined using
-expressions.
+Rules can are classes that contain instance of `Input` filled with `UnaryTest`s and instance of `Output` filled
+with `OutputValue`s.
 
-Expression is just an object that can produce given `Out` and render its string representation.
+<!-- @formatter:off -->
+```scala
+class Rule[Input[_[_]], Output[_[_]]](
+  matching: Input[UnaryTest],
+  output: Output[OutputValue]
+)
+```
+<!-- @formatter:on -->
 
+`UnaryTest` is a simple predicate that loosely follows
+the [FEEL model](https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/). `OutputValue`
+exposes implicit conversions for better UX. Both are specialized views on `Expr`.
+
+<!-- @formatter:off -->
+```scala
+trait UnaryTest[-T] extends Expr[T => Boolean]
+
+opaque type OutputValue[T] <: Expr[T] = Expr[T]
+object OutputValue {
+  implicit def toLiteral[T](t: T)(using LiteralShow[T]): OutputValue[T] = Literal(t)
+  implicit def fromExpr[T](expr: Expr[T]): OutputValue[T] = expr
+}
+```
+<!-- @formatter:on -->
+
+So what is `Expr`? It's an expression that can also be statically rendered into a string.
 <!-- @formatter:off -->
 ```scala 
 trait Expr[+Out] {
@@ -19,26 +42,14 @@ trait Expr[+Out] {
 ```
 <!-- @formatter:on -->
 
-There is also a specialized type `UnaryTest[In]` that allows us to loosely follow
-the [FEEL model](https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/). This could be
-considered an internal complexity of the library, but all the matching logic has to be of type `UnaryTest[T]`.
-
-<!-- @formatter:off -->
-```scala
-case class Rule[Input[_[_]], Output[_[_]]](
-  matching: Input[UnaryTest],
-  ...
-)
-```
-<!-- @formatter:on -->
-
 All the most common ways of building `UnaryTest`s are accessible through `it` object.
-Implicit conversion between `Expr[Boolean]` is also defined.
+Implicit conversion between `Expr[Boolean]` and `UnaryTest` is also defined.
 
 ## Built-in Expressions
 
-`Decisions4s` provides basic numeric and boolean expressions that can be used by invoking methods on `it` object or on
-expressions themselves.
+`Decisions4s` provides basic numeric and boolean expressions that can be used by invoking methods on
+expressions.
+Raw values can be converted into expression through `Literal` and `asLiteral` extension method.
 
 ```scala file=./main/scala/decisions4s/example/docs/ExpressionsExample.scala start=start_expr end=end_expr
 ```
