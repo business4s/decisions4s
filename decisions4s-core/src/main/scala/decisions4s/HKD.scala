@@ -4,9 +4,6 @@ import decisions4s.internal.{Extract, Functor, HKDUtils, Meta}
 import shapeless3.deriving.K11.Id
 import shapeless3.deriving.{Const, K11, Labelling, ~>}
 
-
-
-
 /** Specialised typeclass to expose operations on higher kinded data (case-classes where each field is wrapped in F[_])
   */
 trait HKD[Data[_[_]]] {
@@ -20,7 +17,9 @@ trait HKD[Data[_[_]]] {
     def mapK1[B[_]](f: A ~> B)(using Functor[A]): Data[B]
   }
 
-  def map2[A[_], B[_], C[_]](dataA: Data[A], dataB: Data[B])(f: [t] => (A[t], B[t]) => C[t])(using Extract[A], Extract[B], Functor[A], Functor[B]): Data[C]
+  def map2[A[_], B[_], C[_]](dataA: Data[A], dataB: Data[B])(
+      f: [t] => (A[t], B[t]) => C[t],
+  )(using Extract[A], Extract[B], Functor[A], Functor[B]): Data[C]
 
   private[HKD] def meta(index: Int, name: String): Data[Meta]
   lazy val meta: Data[Meta] = meta(0, "")
@@ -63,9 +62,11 @@ object HKD {
       def mapK1[B[_]](f: A ~> B)(using Functor[A]): B[Data[B]] = f(af.map(_.mapK1(f)))
     }
 
-    def map2[A[_], B[_], C[_]](aDataA: A[Data[A]], bDataB: B[Data[B]])(f: [t] => (A[t], B[t]) => C[t])(using Extract[A], Extract[B], Functor[A], Functor[B]): C[Data[C]] = {
+    def map2[A[_], B[_], C[_]](aDataA: A[Data[A]], bDataB: B[Data[B]])(
+        f: [t] => (A[t], B[t]) => C[t],
+    )(using Extract[A], Extract[B], Functor[A], Functor[B]): C[Data[C]] = {
 //      aDataA.map((dataA: Data[A]) => bDataB.map((dataB: Data[B]) => dHKD.map2(dataA, dataB)(f)))
-      val dataC = dHKD.map2(aDataA.extract, bDataB.extract)(f)
+      val dataC  = dHKD.map2(aDataA.extract, bDataB.extract)(f)
       val aDataC = aDataA.map(_ => dataC)
       val bDataC = bDataB.map(_ => dataC)
       f(aDataC, bDataC)
@@ -86,7 +87,9 @@ object HKD {
         inst.map(dataA)([t[_[_]]] => (ft: HKD[t], ta: t[A]) => ft.mapK1(ta)(f))
     }
 
-    def map2[A[_], B[_], C[_]](dataA: Data[A], dataB: Data[B])(f: [t] => (A[t], B[t]) => C[t])(using Extract[A], Extract[B], Functor[A], Functor[B]): Data[C] = {
+    def map2[A[_], B[_], C[_]](dataA: Data[A], dataB: Data[B])(
+        f: [t] => (A[t], B[t]) => C[t],
+    )(using Extract[A], Extract[B], Functor[A], Functor[B]): Data[C] = {
       inst.map2[A, B, C](dataA, dataB)([Data1[_[_]]] => (p: HKD[Data1], data1A: Data1[A], data1B: Data1[B]) => p.map2(data1A, data1B)(f))
     }
 
@@ -94,12 +97,11 @@ object HKD {
       var index = 0;
       inst.construct(
         [Data1[_[_]]] =>
-          (p: HKD[Data1]) =>
-            {
-              val idx = index;
-              index += 1;
-              p.meta(idx, labelling.elemLabels(idx))
-            },
+          (p: HKD[Data1]) => {
+            val idx = index;
+            index += 1;
+            p.meta(idx, labelling.elemLabels(idx))
+        },
       )
     }
 
@@ -112,13 +114,12 @@ object HKD {
           (p: HKD[t]) =>
             p.pure(
               [t1] =>
-                () =>
-                  {
-                    val i = index
-                    index += 1;
-                    i
-                  },
-            ),
+                () => {
+                  val i = index
+                  index += 1;
+                  i
+              },
+          ),
       )
     }
   }
@@ -138,7 +139,6 @@ object HKD {
       hkd.indices.mapK1([t] => idx => f[t](new FieldUtilsImpl[t](idx)))
     }
   }
-
 
   // This method is unsafe. It somehow fails a compiler and can create class cast exceptions in runtime
   // It's why `HKD[I].map2` was created.

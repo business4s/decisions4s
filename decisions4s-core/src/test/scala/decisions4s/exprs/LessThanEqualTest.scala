@@ -1,10 +1,9 @@
 package decisions4s.exprs
 
 import decisions4s.exprs.TestUtils.checkExpression
-import munit.FunSuite
-
-class LessThanEqualTest extends FunSuite {
-  test("basic") {
+import org.scalatest.freespec.AnyFreeSpec
+class LessThanEqualTest extends AnyFreeSpec {
+  "basic" in {
     checkExpression(LessThanEqual(Literal(1), Literal(2)), true)
     checkExpression(Literal(1) <= Literal(2), true)
 

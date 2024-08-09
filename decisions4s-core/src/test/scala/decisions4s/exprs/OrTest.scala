@@ -1,10 +1,9 @@
 package decisions4s.exprs
 
 import decisions4s.exprs.TestUtils.checkExpression
-import munit.FunSuite
-
-class OrTest extends FunSuite {
-  test("basic") {
+import org.scalatest.freespec.AnyFreeSpec
+class OrTest extends AnyFreeSpec {
+  "basic" in {
     checkExpression(Or(True, True), true)
     checkExpression(True or True, true)
     checkExpression(True || True, true)

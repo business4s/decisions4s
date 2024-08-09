@@ -1,10 +1,11 @@
 package decisions4s.exprs
 
 import decisions4s.exprs.TestUtils.checkExpression
-import munit.FunSuite
+import decisions4s.testing.HiddenTripleEquals
+import org.scalatest.freespec.AnyFreeSpec
+class EqualTest extends AnyFreeSpec with HiddenTripleEquals {
 
-class EqualTest extends FunSuite {
-  test("basic") {
+  "basic" in {
     checkExpression(Equal(Literal(1), Literal(1)), true)
     checkExpression(Literal(1) === Literal(1), true)
     checkExpression(Literal(1) === 1, true)

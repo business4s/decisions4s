@@ -14,7 +14,6 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
     libraryDependencies ++= Seq(
       "org.typelevel"    %% "shapeless3-deriving" % "3.4.0",
       "com.lihaoyi"      %% "sourcecode"          % "0.4.2",
-      "org.scalameta"    %% "munit"               % "1.0.0"  % Test,
       ("org.camunda.feel" % "feel-engine"         % "1.17.7" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
       "ch.qos.logback"    % "logback-classic"     % "1.5.6"  % Test,
     ),
@@ -35,7 +34,6 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % "3.5.4",
-      "org.scalameta" %% "munit"       % "1.0.0" % Test,
     ),
   )
 

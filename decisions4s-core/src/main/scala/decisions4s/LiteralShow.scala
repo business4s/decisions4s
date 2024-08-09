@@ -32,9 +32,9 @@ object LiteralShow {
   given LiteralShow[Period]         = x => s"@\"${x.toString}\""
 
   given [T](using ls: LiteralShow[T]): LiteralShow[Iterable[T]] = _.map(ls.show).mkString("[", ", ", "]")
-  given [T](using ls: LiteralShow[T]): LiteralShow[Option[T]] = _.map(ls.show).getOrElse("null")
+  given [T](using ls: LiteralShow[T]): LiteralShow[Option[T]]   = _.map(ls.show).getOrElse("null")
 
-  given [T]: LiteralShow[Expr[T]] = _.renderExpression
+  given [T]: LiteralShow[Expr[T]]        = _.renderExpression
   given [T]: LiteralShow[OutputValue[T]] = _.renderExpression
 
   // should we replace with HKD.fieldNames?

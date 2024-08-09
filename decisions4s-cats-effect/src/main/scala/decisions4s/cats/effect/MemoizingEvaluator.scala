@@ -60,13 +60,12 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
     type FBool[T] = F[Boolean]
     val evaluatedF: Input[FBool] = HKD.map2(rule.matching, input)(
       [t] =>
-        (expr, fValue) =>
-          {
-            (expr: UnaryTest[t]) match {
-              case UnaryTest.CatchAll => true.pure[F]
-              case _                  => fValue.map(expr.evaluate)
-            }
-          },
+        (expr, fValue) => {
+          (expr: UnaryTest[t]) match {
+            case UnaryTest.CatchAll => true.pure[F]
+            case _                  => fValue.map(expr.evaluate)
+          }
+      },
     )
     val sequenced                = sequence[Input, F, Const[Boolean]](evaluatedF)
     val result                   = for {
@@ -85,12 +84,11 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
         var idx                  = 0
         val result: CaseClass[H] = summon[HKD[CaseClass]].pure[H](
           [t] =>
-            () =>
-              {
-                val value = values(idx)
-                idx += 1
-                value.asInstanceOf[H[t]]
-              },
+            () => {
+              val value = values(idx)
+              idx += 1
+              value.asInstanceOf[H[t]]
+          },
         )
         result
       })

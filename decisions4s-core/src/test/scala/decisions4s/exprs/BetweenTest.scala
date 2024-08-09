@@ -1,10 +1,10 @@
 package decisions4s.exprs
 
 import decisions4s.exprs.TestUtils.checkExpression
-import munit.FunSuite
+import org.scalatest.freespec.AnyFreeSpec
 
-class BetweenTest extends FunSuite {
-  test("basic") {
+class BetweenTest extends AnyFreeSpec {
+  "basic" in {
     checkExpression(Between(Literal(2), Literal(1), Literal(3)), true)
     checkExpression(Literal(2).between(Literal(1), Literal(3)), true)
 

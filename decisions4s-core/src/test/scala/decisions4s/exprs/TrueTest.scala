@@ -1,10 +1,9 @@
 package decisions4s.exprs
 
 import decisions4s.exprs.TestUtils.checkExpression
-import munit.FunSuite
-
-class TrueTest extends FunSuite {
-  test("true") {
+import org.scalatest.freespec.AnyFreeSpec
+class TrueTest extends AnyFreeSpec {
+  "true" in {
     checkExpression(True, true)
   }
 }
