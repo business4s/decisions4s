@@ -1,35 +1,23 @@
 package decisions4s.dmn
 
 import decisions4s.DecisionTable
-import decisions4s.internal.HKDUtils
-import org.camunda.bpm.model.dmn.instance.{
-  Decision,
-  DecisionTable as DmnDecisionTable,
-  Definitions,
-  Description,
-  Input as DmnInput,
-  InputEntry,
-  InputExpression,
-  Output as DmnOutput,
-  OutputEntry,
-  Rule as DmnRule,
-  Text,
-}
+import decisions4s.internal.RenderUtils
+import decisions4s.internal.RenderUtils.DecisionRenderInput
+import org.camunda.bpm.model.dmn.instance.{Decision, Definitions, Description, InputEntry, InputExpression, OutputEntry, Text, DecisionTable as DmnDecisionTable, Input as DmnInput, Output as DmnOutput, Rule as DmnRule}
 import org.camunda.bpm.model.dmn.{BuiltinAggregator, Dmn, DmnModelInstance, HitPolicy}
 import org.camunda.bpm.model.xml.instance.ModelElementInstance
 
 import scala.reflect.ClassTag
 
-object DmnConverter {
+object DmnRenderer {
 
-  def convert[Input[_[_]], Output[_[_]], HP <: decisions4s.HitPolicy](table: DecisionTable[Input, Output, HP]): DmnModelInstance = {
-    val modelInstance = DmnBuilder(table).modelInstance
+  def render[In[_[_]], Out[_[_]]](table: DecisionTable[In, Out, ?]): DmnModelInstance = {
+    val modelInstance = DmnBuilder(RenderUtils.prepare(table)).modelInstance
     Dmn.validateModel(modelInstance)
     modelInstance
   }
 
-  private class DmnBuilder[Input[_[_]], Output[_[_]], HP <: decisions4s.HitPolicy](table: DecisionTable[Input, Output, HP]) {
-    import table.given
+  private class DmnBuilder[In[_[_]], Out[_[_]]](table: DecisionRenderInput) {
 
     val modelInstance: DmnModelInstance  = Dmn.createEmptyModel()
     private val definitions: Definitions = buildDefinitions
@@ -78,8 +66,7 @@ object DmnConverter {
     }
 
     private def buildInputs(): Unit = {
-      val names = table.inputHKD.fieldNames
-      names.foreach(name => {
+      table.inputNames.foreach(name => {
         val input = decisionTable.addChild[DmnInput]
         input.setLabel(name)
         input.addChild[InputExpression]
@@ -87,8 +74,7 @@ object DmnConverter {
     }
 
     private def buildOutputs(): Unit = {
-      val names = table.outputHKD.fieldNames
-      names.foreach(name => {
+      table.outputNames.foreach(name => {
         val output = decisionTable.addChild[DmnOutput]
         output.setLabel(name)
       })
@@ -96,20 +82,17 @@ object DmnConverter {
 
     private def buildRules(): Unit = {
       table.rules.foreach(rule => {
-        val ruleInstance      = decisionTable.addChild[DmnRule]
-        val (inDesc, outDesc) = rule.render()
+        val ruleInstance = decisionTable.addChild[DmnRule]
         rule.annotation.foreach(ruleInstance.setDescription(_))
-        HKDUtils
-          .collectFields(inDesc)
-          .foreach(desc => {
+        rule.inputs
+          .foreach(input => {
             val entry = ruleInstance.addChild[InputEntry]
-            entry.setText(desc)
+            entry.setText(input)
           })
-        HKDUtils
-          .collectFields(outDesc)
-          .foreach(desc => {
+        rule.outputs
+          .foreach(output => {
             val entry = ruleInstance.addChild[OutputEntry]
-            entry.setText(desc)
+            entry.setText(output)
           })
       })
     }

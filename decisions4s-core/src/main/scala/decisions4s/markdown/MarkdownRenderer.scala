@@ -1,30 +1,18 @@
 package decisions4s.markdown
 
-import decisions4s.internal.HKDUtils
-import decisions4s.internal.HKDUtils.Const
-import decisions4s.{DecisionTable, EvaluationContext}
+import decisions4s.DecisionTable
+import decisions4s.internal.RenderUtils
 
 object MarkdownRenderer {
 
   def render[In[_[_]], Out[_[_]]](table: DecisionTable[In, Out, ?]): String = {
-
-    import table.{inputHKD, outputHKD}
-
-    val inputNames                = HKDUtils.collectFields(table.inputHKD.meta.mapK([t] => meta => meta.name: Const[String][t])).map(x => s"In:${x}")
-    val outputNames               = HKDUtils.collectFields(table.outputHKD.meta.mapK([t] => meta => meta.name: Const[String][t])).map(x => s"Out:${x}")
-    given EvaluationContext[In]   = EvaluationContext.stub
-    val rows: Seq[Vector[String]] = table.rules.map(rule => {
-      val rules   = HKDUtils.collectFields(rule.matching.mapK([t] => test => test.renderExpression: Const[String][t]))
-      val outputs = HKDUtils.collectFields(rule.output.mapK([t] => expr => expr.renderExpression: Const[String][t]))
-      rules ++ outputs ++ Vector(rule.annotation.getOrElse(""))
-    })
-
-    val mdTable = MarkdownTable(
-      headers = inputNames ++ outputNames ++ Vector("Annotations"),
-      values = rows.toVector,
+    val prepared = RenderUtils.prepare(table)
+    val mdTable  = MarkdownTable(
+      headers = prepared.inputNames.map(x => s"(I) ${x}") ++
+        prepared.outputNames.map(x => s"(O) ${x}") ++
+        Vector("Annotations"),
+      values = prepared.rules.map(r => r.inputs ++ r.outputs ++ r.annotation),
     )
-
-    s"name (hit policy)"
     mdTable.render
   }
 
