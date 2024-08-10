@@ -17,6 +17,7 @@ case class MarkdownTable(headers: IndexedSeq[String], values: IndexedSeq[Indexed
   }
 
   extension (s: String) {
+    // centering is ignored when Markdown is rendered but can be considered useful if viewed as raw text
     private def center(width: Int): String = {
       if (s.length < width) {
         val remaining = width - s.length
