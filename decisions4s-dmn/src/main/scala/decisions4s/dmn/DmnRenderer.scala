@@ -3,7 +3,19 @@ package decisions4s.dmn
 import decisions4s.DecisionTable
 import decisions4s.internal.RenderUtils
 import decisions4s.internal.RenderUtils.DecisionRenderInput
-import org.camunda.bpm.model.dmn.instance.{Decision, Definitions, Description, InputEntry, InputExpression, OutputEntry, Text, DecisionTable as DmnDecisionTable, Input as DmnInput, Output as DmnOutput, Rule as DmnRule}
+import org.camunda.bpm.model.dmn.instance.{
+  Decision,
+  DecisionTable as DmnDecisionTable,
+  Definitions,
+  Description,
+  Input as DmnInput,
+  InputEntry,
+  InputExpression,
+  Output as DmnOutput,
+  OutputEntry,
+  Rule as DmnRule,
+  Text,
+}
 import org.camunda.bpm.model.dmn.{BuiltinAggregator, Dmn, DmnModelInstance, HitPolicy}
 import org.camunda.bpm.model.xml.instance.ModelElementInstance
 

@@ -13,7 +13,7 @@ class MarkdownRendererTest extends AnyFreeSpec {
       Rule(
         matching = Input(
           foo = it > 3,
-          bar = it.equalsTo("some string")
+          bar = it.equalsTo("some string"),
         ),
         output = Output(2),
       ),
