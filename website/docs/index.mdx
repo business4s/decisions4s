@@ -21,7 +21,7 @@ import SbtDependency from '@site/src/components/SbtDependency';
 
 ## Defining the rules
 
- We start by defining the input and out of the decision.
+We start by defining the input and out of the decision.
 
 ```scala file=./main/scala/decisions4s/example/docs/PullRequestDecision.scala start=start_imports end=end_imports
 ```
@@ -70,9 +70,19 @@ Which gives us the following:
 This tells us not only which rules were satisfied but also shows the results of particular predicates.
 This way we can easily say what happened!
 
-## Generating the diagram
+## Visualizing the logic
 
-Let's generate the DMN diagram that can be read by the business. To do this, we need to add another dependency.
+Let's see how our logic presents itself in a more concise and human-friendly way.
+
+```scala file=./main/scala/decisions4s/example/docs/PullRequestDecision.scala start=start_markdown end=end_markdown
+```
+That's the output:
+
+import MDOutput from '../../decisions4s-examples/src/test/resources/docs/pull-request-markdown.md'
+
+<MDOutput/>
+
+And if that's not enough, we can also generate the DMN diagram. But to do this, we need to add another dependency.
 
 <SbtDependency moduleName={"decisions4s-dmn"}/>
 

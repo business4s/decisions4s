@@ -77,9 +77,15 @@ object PullRequestDecision {
     println(result.makeDiagnosticsString)
     // end_diagnose
 
+    // start_markdown
+    import decisions4s.markdown.MarkdownRenderer
+    val markdown = MarkdownRenderer.render(decisionTable)
+    // end_markdown
+    markdown.toString // unused
+
     // start_dmn
-    import decisions4s.dmn.DmnConverter
-    val dmnInstance = DmnConverter.convert(decisionTable)
+    import decisions4s.dmn.DmnRenderer
+    val dmnInstance = DmnRenderer.render(decisionTable)
     import org.camunda.bpm.model.dmn.Dmn
     Dmn.writeModelToFile(new java.io.File(s"./${decisionTable.name}.dmn"), dmnInstance)
     // end_dmn
