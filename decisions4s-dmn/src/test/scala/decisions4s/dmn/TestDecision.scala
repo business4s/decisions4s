@@ -22,8 +22,7 @@ object TestDecision {
     HitPolicy.First,
   )
 
-
-  lazy val random                   = new Random(1)
+  lazy val random              = new Random(1)
   def randomString(): String   = random.alphanumeric.take(10).mkString
   def randomExpr[T](): Expr[T] = VariableStub(randomString())
 

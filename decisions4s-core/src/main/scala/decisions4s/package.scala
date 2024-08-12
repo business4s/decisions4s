@@ -5,7 +5,7 @@ package object decisions4s {
   export LiteralShow.showAsLiteral
   export exprs.Function
 
-  type Value[T]       = T
+  type Value[T] = T
 
   opaque type OutputValue[T] <: Expr[T] = Expr[T]
   object OutputValue {
