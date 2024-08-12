@@ -64,7 +64,7 @@ const config: Config = {
                     label: 'Docs',
                 },
                 {
-                    href: 'https://github.com/Krever/workflows4s',
+                    href: 'https://github.com/business4s/decisions4s',
                     label: 'GitHub',
                     position: 'right',
                 },
