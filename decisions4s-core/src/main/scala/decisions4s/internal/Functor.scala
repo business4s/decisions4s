@@ -1,7 +1,5 @@
 package decisions4s.internal
 
-import decisions4s.Tuple2K
-
 trait Functor[F[_]] {
   extension [T](ft: F[T]) {
     def map[T1](f: T => T1): F[T1]
@@ -27,7 +25,7 @@ object Functor {
     }
   }
 
-  given compound[F[_], G[_]](using ff: Functor[F], fg: Functor[G]): Functor[[t] =>> F[G[t]]] with {
+  given composed[F[_], G[_]](using ff: Functor[F], fg: Functor[G]): Functor[[t] =>> F[G[t]]] with {
     extension [T](ft: F[G[T]]) {
       def map[T1](f: T => T1): F[G[T1]] = ff.map(ft)(x => fg.map(x)(f))
     }

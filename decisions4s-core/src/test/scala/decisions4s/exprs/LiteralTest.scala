@@ -6,7 +6,7 @@ import java.time.*
 
 class LiteralTest extends AnyFreeSpec {
 
-  import TestUtils.*
+  import decisions4s.testing.TestUtils.*
 
   // https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-data-types/
   // TODO property based

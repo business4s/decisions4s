@@ -12,7 +12,6 @@ trait UnaryTest[-T] extends Expr[T => Boolean]
 object UnaryTest {
 
   case class WithValue[T](f: Expr[T] => Expr[Boolean]) extends UnaryTest[T] {
-
     override def evaluate: T => Boolean   = in => f(Variable("?", in)).evaluate
     override def renderExpression: String = f(VariableStub("?")).renderExpression
   }

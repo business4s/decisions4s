@@ -1,6 +1,6 @@
 package decisions4s.exprs
 
-import decisions4s.exprs.TestUtils.checkExpression
+import decisions4s.testing.TestUtils.checkExpression
 import decisions4s.it
 import org.scalatest.freespec.AnyFreeSpec
 class InTest extends AnyFreeSpec {

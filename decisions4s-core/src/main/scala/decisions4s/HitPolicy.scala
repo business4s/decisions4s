@@ -34,7 +34,7 @@ object HitPolicy {
   type CollectMax = CollectMax.type
   case object CollectMax extends HitPolicy
 
-  // Number of satisfied rules is returned
+  // The number of satisfied rules is returned
   type CollectCount = CollectCount.type
   case object CollectCount extends HitPolicy
 }

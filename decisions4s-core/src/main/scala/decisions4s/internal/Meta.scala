@@ -5,7 +5,8 @@ case class Meta[T](index: Int, name: String, value: Option[T])
 object Meta {
   given Extract[Meta] with {
     extension [T](ft: Meta[T]) {
-      def extract = ft.value.get
+      // unsafe but works for the current usages (probably by accident)
+      def extract: T = ft.value.get
     }
   }
   given Functor[Meta] with {

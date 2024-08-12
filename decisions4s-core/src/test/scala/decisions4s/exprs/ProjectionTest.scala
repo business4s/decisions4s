@@ -1,6 +1,7 @@
 package decisions4s.exprs
 
 import decisions4s.*
+import decisions4s.testing.TestUtils
 import org.scalatest.freespec.AnyFreeSpec
 class ProjectionTest extends AnyFreeSpec {
 

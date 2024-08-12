@@ -1,6 +1,5 @@
 package decisions4s.internal
 
-import decisions4s.internal.HKDUtils.Const
 import decisions4s.{DecisionTable, EvaluationContext, HitPolicy}
 
 object RenderUtils {

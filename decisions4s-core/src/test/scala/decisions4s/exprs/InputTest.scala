@@ -1,6 +1,6 @@
 package decisions4s.exprs
 
-import decisions4s.exprs.TestUtils.checkUnaryExpression
+import decisions4s.testing.TestUtils.checkUnaryExpression
 import decisions4s.it
 import decisions4s.testing.HiddenTripleEquals
 import org.scalatest.freespec.AnyFreeSpec

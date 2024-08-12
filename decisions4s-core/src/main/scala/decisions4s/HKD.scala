@@ -33,6 +33,7 @@ object HKD {
   trait FieldUtils[F[_[_]], T] {
     def extract[A[_]](in: F[A]): A[T]
     def name: String
+    def idx: Int
   }
 
   def apply[F[_[_]]](using hkd: HKD[F]): HKD[F] = hkd
@@ -129,7 +130,7 @@ object HKD {
   extension [F[_[_]]](hkd: HKD[F]) {
     def construct[A[_]](f: [t] => FieldUtils[F, t] => A[t]): F[A] = {
       given HKD[F] = hkd
-      class FieldUtilsImpl[T](idx: Int) extends FieldUtils[F, T] {
+      class FieldUtilsImpl[T](val idx: Int) extends FieldUtils[F, T] {
         override def extract[A[_]](in: F[A]): A[T] = {
           val allValues: Vector[Any] = HKDUtils.collectFields(values(in))
           allValues(idx).asInstanceOf[A[T]]

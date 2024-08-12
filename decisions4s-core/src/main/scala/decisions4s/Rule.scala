@@ -1,9 +1,7 @@
 package decisions4s
 
 import decisions4s.exprs.UnaryTest
-import decisions4s.internal.HKDUtils
-import decisions4s.internal.HKDUtils.Const
-import shapeless3.deriving.~>
+import decisions4s.internal.{Const, HKDUtils, ~>}
 
 class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
     val matching: EvaluationContext[Input] ?=> Input[UnaryTest],
@@ -21,14 +19,6 @@ class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
     val matches                           = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
     val evalResult: Option[Output[Value]] = Option.when(matches)(evaluateOutput())
     RuleResult(evaluated, evalResult)
-  }
-
-  def render(): (Input[Description], Output[Description]) = {
-    given EvaluationContext[Input] = EvaluationContext.stub
-    (
-      matching.mapK([t] => expr => expr.renderExpression),
-      output.mapK([t] => expr => expr.renderExpression),
-    )
   }
 
 }

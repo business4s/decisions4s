@@ -7,7 +7,7 @@ import _root_.cats.{Applicative, Monad}
 import cats.syntax.all.{toTraverseOps, given}
 import decisions4s.*
 import decisions4s.exprs.UnaryTest
-import decisions4s.internal.HKDUtils
+import decisions4s.internal.{HKDUtils, ~>}
 import shapeless3.deriving.Const
 
 import scala.util.chaining.scalaUtilChainingOps
@@ -46,8 +46,9 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
     memoized
   }
 
-  // collectValues
   type OptionRef[T] = Ref[F, Option[T]]
+
+  // each field, when evaluated, will set the value in the corresponding Ref
   private def collectValues(input: Input[F]): F[(Input[F], Input[OptionRef])] = {
     val refsF: Input[[t] =>> F[OptionRef[t]]] = dt.inputHKD.pure([t] => () => Ref[F].of(none[t]))
     for {
@@ -62,33 +63,29 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
       [t] =>
         (expr, fValue) => {
           (expr: UnaryTest[t]) match {
-            case UnaryTest.CatchAll => true.pure[F]
+            case UnaryTest.CatchAll => true.pure[F] // this makes evaluation lazy
             case _                  => fValue.map(expr.evaluate)
           }
       },
     )
-    val sequenced                = sequence[Input, F, Const[Boolean]](evaluatedF)
     val result                   = for {
-      evaluated <- sequenced
-      matches    = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
+      evaluated <- sequence[Input, F, Const[Boolean]](evaluatedF)
+      matches    = HKDUtils.collectFields(evaluated).forall(identity)
       evalResult = Option.when(matches)(rule.evaluateOutput())
     } yield RuleResult(evaluated, evalResult)
     result
   }
 
-  // Weird implementation of usual sequence/traverse. Collects all the fields, sequences them and reconstruct the case class
+  // Weird implementation of the usual sequence/traverse. Collects all the fields, sequences them and reconstruct the case class
   private def sequence[CaseClass[_[_]]: HKD, G[_]: Applicative, H[_]](instance: CaseClass[[t] =>> G[H[t]]]): G[CaseClass[H]] = {
+    // TODO, this case is safe only for covariant H, and G
     val collected: Vector[G[H[Any]]] = HKDUtils.collectFields[CaseClass, G[H[Any]]](instance.asInstanceOf[CaseClass[Const[G[H[Any]]]]])
     collected.sequence
       .map(values => {
-        var idx                  = 0
-        val result: CaseClass[H] = summon[HKD[CaseClass]].pure[H](
-          [t] =>
-            () => {
-              val value = values(idx)
-              idx += 1
-              value.asInstanceOf[H[t]]
-          },
+        // TODO this will break for nested strcutures,
+        //  but behaviour of the whole module is undefined and not supported in such case anyway
+        val result: CaseClass[H] = summon[HKD[CaseClass]].construct[H](
+          [t] => fu => values(fu.idx).asInstanceOf[H[t]],
         )
         result
       })
@@ -111,8 +108,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
   }
 
   case class FVariable[T](name: String, value: F[T], dispatcher: Dispatcher[F]) extends Expr[T] {
-    override def evaluate: T = dispatcher.unsafeRunSync(value)
-
+    override def evaluate: T              = dispatcher.unsafeRunSync(value)
     override def renderExpression: String = name
   }
 
