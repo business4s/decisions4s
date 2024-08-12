@@ -23,10 +23,10 @@ import scala.reflect.ClassTag
 
 object DmnRenderer {
 
-  def render[In[_[_]], Out[_[_]]](table: DecisionTable[In, Out, ?]): DmnModelInstance = {
+  def render[In[_[_]], Out[_[_]]](table: DecisionTable[In, Out, ?]): DMNModel = {
     val modelInstance = DmnBuilder(RenderUtils.prepare(table)).modelInstance
     Dmn.validateModel(modelInstance)
-    modelInstance
+    DMNModel(modelInstance)
   }
 
   private class DmnBuilder[In[_[_]], Out[_[_]]](table: DecisionRenderInput) {
@@ -51,11 +51,13 @@ object DmnRenderer {
     private def buildDecision = {
       val decision = definitions.addChild[Decision]
       decision.setName(table.name)
+      decision.setId("decision_1")
       decision
     }
 
     private def buildDecisionTable = {
       val tableElem = decision.addChild[DmnDecisionTable]
+      tableElem.setId("table_1")
       tableElem.setHitPolicy((table.hitPolicy: decisions4s.HitPolicy) match {
         case decisions4s.HitPolicy.Single       => HitPolicy.UNIQUE
         case decisions4s.HitPolicy.Distinct     => HitPolicy.ANY
@@ -78,32 +80,38 @@ object DmnRenderer {
     }
 
     private def buildInputs(): Unit = {
-      table.inputNames.foreach(name => {
+      table.inputNames.zipWithIndex.foreach((name, idx) => {
         val input = decisionTable.addChild[DmnInput]
         input.setLabel(name)
-        input.addChild[InputExpression]
+        input.setId(s"input_${idx}")
+        val expr  = input.addChild[InputExpression]
+        expr.setId(s"input_${idx}_expr_1")
       })
     }
 
     private def buildOutputs(): Unit = {
-      table.outputNames.foreach(name => {
+      table.outputNames.zipWithIndex.foreach((name, idx) => {
         val output = decisionTable.addChild[DmnOutput]
+        output.setId(s"output_${idx}")
         output.setLabel(name)
       })
     }
 
     private def buildRules(): Unit = {
-      table.rules.foreach(rule => {
+      table.rules.zipWithIndex.foreach((rule, ruleIdx) => {
         val ruleInstance = decisionTable.addChild[DmnRule]
+        ruleInstance.setId(s"rule_${ruleIdx}")
         rule.annotation.foreach(ruleInstance.setDescription(_))
-        rule.inputs
-          .foreach(input => {
+        rule.inputs.zipWithIndex
+          .foreach((input, idx) => {
             val entry = ruleInstance.addChild[InputEntry]
+            entry.setId(s"rule_${ruleIdx}_input_${idx}")
             entry.setText(input)
           })
-        rule.outputs
-          .foreach(output => {
+        rule.outputs.zipWithIndex
+          .foreach((output, idx) => {
             val entry = ruleInstance.addChild[OutputEntry]
+            entry.setId(s"rule_${ruleIdx}_output_${idx}")
             entry.setText(output)
           })
       })
