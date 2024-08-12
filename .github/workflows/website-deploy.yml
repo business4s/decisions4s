@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - "main"
-      - "fix-website-publish"
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -47,7 +46,6 @@ jobs:
         run: |
           cd ../
           sbt -batch -error 'print stableVersion' # something unexpected gets added to stdout on first run
-          sbt -batch -error 'print stableVersion' | head -n 1
           export DECISIONS4S_VERSION=$(sbt -batch -error 'print stableVersion' | head -n 1)
           cd website
           yarn build
