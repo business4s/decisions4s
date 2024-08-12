@@ -27,15 +27,14 @@ case class Variable[T](name: String, value: T) extends Expr[T] {
   override def renderExpression: String = name
 }
 
-// used only for rendering
+// should be used only for rendering
 case class VariableStub[T](name: String) extends Expr[T] {
   override def evaluate: T              = ???
   override def renderExpression: String = name
 }
 
 class Projection[O1, +O2](base: Expr[O1], get: O1 => Expr[O2], label: String) extends Expr[O2] {
-  override def evaluate: O2 = base.evaluate.pipe(get).evaluate
-
+  override def evaluate: O2             = base.evaluate.pipe(get).evaluate
   override def renderExpression: String = s"${base.renderExpression}.$label"
 }
 

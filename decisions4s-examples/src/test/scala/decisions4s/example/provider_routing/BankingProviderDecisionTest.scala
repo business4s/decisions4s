@@ -2,10 +2,9 @@ package decisions4s.example.provider_routing
 
 import decisions4s.*
 import decisions4s.dmn.DmnRenderer
-import org.camunda.bpm.model.dmn.Dmn
 import org.scalatest.freespec.AnyFreeSpec
 
-import java.io.File
+import java.nio.file.{Files, Path}
 
 class BankingProviderDecisionTest extends AnyFreeSpec {
   import decisions4s.example.provider_routing.BankingProviderDecision.Input
@@ -39,7 +38,7 @@ class BankingProviderDecisionTest extends AnyFreeSpec {
 
   "render dmn" in {
     val dmnInstance = DmnRenderer.render(BankingProviderDecision.decisionTable)
-    Dmn.writeModelToFile(new File("./banking-provider-decision.dmn"), dmnInstance)
+    Files.writeString(Path.of("./banking-provider-decision.dmn"), dmnInstance.toXML)
   }
 
 }

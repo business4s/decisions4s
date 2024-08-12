@@ -13,8 +13,8 @@ const FeatureList: FeatureItem[] = [
         title: 'Model',
         description: (
             <>
-                Decision logic is expressed as rules, where each rule have inputs and outputs. This constrained model
-                let us define the decision in organised way with no arbitrary if expressions.
+                Decision logic is expressed as rules, where each rule have inputs and outputs. Such constrained model
+                allows defining the decisions in an organised way with no arbitrary if expressions.
             </>
         ),
     },
@@ -22,7 +22,7 @@ const FeatureList: FeatureItem[] = [
         title: 'Visualize',
         description: (
             <>
-                Rules can be rendered into a DMN diagram that can be understood by non-technical people.
+                Rules can be rendered into a visual representation (e.g. Markdown or DMN) that can be understood by non-technical people.
             </>
         ),
     },

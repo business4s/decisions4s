@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions id="definitions" name="definitions" namespace="http://camunda.org/schema/1.0/dmn" xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/">
+  <decision id="decision_1" name="TableName">
+    <decisionTable hitPolicy="FIRST" id="table_1">
+      <input id="input_0" label="a">
+        <inputExpression id="input_0_expr_1"/>
+      </input>
+      <input id="input_1" label="b">
+        <inputExpression id="input_1_expr_1"/>
+      </input>
+      <output id="output_0" label="b"/>
+      <output id="output_1" label="c"/>
+      <rule id="rule_0">
+        <description>NAvZuGESoI</description>
+        <inputEntry id="rule_0_input_0">
+          <text>4iWta9qh1y</text>
+        </inputEntry>
+        <inputEntry id="rule_0_input_1">
+          <text>p4iuhRxkra</text>
+        </inputEntry>
+        <outputEntry id="rule_0_output_0">
+          <text>Bq7ZFYeOIN</text>
+        </outputEntry>
+        <outputEntry id="rule_0_output_1">
+          <text>8pKbyLI3gO</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule_1">
+        <description>J7hbqOIsAV</description>
+        <inputEntry id="rule_1_input_0">
+          <text>YbIvKewK3Q</text>
+        </inputEntry>
+        <inputEntry id="rule_1_input_1">
+          <text>3sDEuVsXZD</text>
+        </inputEntry>
+        <outputEntry id="rule_1_output_0">
+          <text>yiFctJPfRA</text>
+        </outputEntry>
+        <outputEntry id="rule_1_output_1">
+          <text>9OuKpfNN0g</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>

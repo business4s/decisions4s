@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Writing Rules
 
-Rules can are classes that contain instance of `Input` filled with `UnaryTest`s and instance of `Output` filled
+Rules are classes that contain instance of `Input` filled with `UnaryTest`s and instance of `Output` filled
 with `OutputValue`s.
 
 <!-- @formatter:off -->
@@ -32,7 +32,7 @@ object OutputValue {
 ```
 <!-- @formatter:on -->
 
-So what is `Expr`? It's an expression that can also be statically rendered into a string.
+So what is `Expr`? It's an expression that can be statically rendered into a string.
 <!-- @formatter:off -->
 ```scala 
 trait Expr[+Out] {

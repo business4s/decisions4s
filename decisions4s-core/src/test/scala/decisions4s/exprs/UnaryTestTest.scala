@@ -1,7 +1,7 @@
 package decisions4s.exprs
 
 import decisions4s.{Expr, it}
-import decisions4s.exprs.TestUtils.*
+import decisions4s.testing.TestUtils.*
 import decisions4s.exprs.UnaryTest.{CatchAll, Not, Or}
 import org.scalatest.freespec.AnyFreeSpec
 class UnaryTestTest extends AnyFreeSpec {

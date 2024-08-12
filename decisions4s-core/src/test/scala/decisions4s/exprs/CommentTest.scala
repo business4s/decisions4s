@@ -1,5 +1,6 @@
 package decisions4s.exprs
 
+import decisions4s.testing.TestUtils
 import org.scalatest.freespec.AnyFreeSpec
 class CommentTest extends AnyFreeSpec {
 

@@ -4,15 +4,12 @@ sidebar_position: 2
 
 # Production Readiness
 
-`Decisions4s` can be considered production-ready for **application usage**.
+`Decisions4s` is considered production-ready for **application usage**.
 
-* All the functionalities are well-tested and safe to use in your code.
-    * The surface area is small by design and functionalities are fully deterministic.
-* We provide **no backward-compatibility guarantees** for `0.x` series.
-    * Source-compatibility will be handled through a best-effort approach, we will try to use deprecations whenever
-      possible, but we keep the right to break the API if needed.
-    * Binary-compatibility is not provided for now. This means we do not recommend building _libraries_ based
-      on `Decisions4s`. It has no implications for _application_ use-cases.
-* Version `0.1.0` will be released after the first confirmed production usage.
-  Versions in series `0.0.x` might go through more significant changes and can be
-  considered experimental.
+* All functionalities are thoroughly tested and safe for integration into your codebase.
+    * The library is intentionally designed with a small, deterministic surface area to minimize complexity.
+* **Backward-compatibility guarantees** are not provided for the `0.x` series.
+    * We aim to maintain source compatibility on a best-effort basis, using deprecations where possible. However, we reserve the right to make breaking changes to the API if necessary.
+    * Binary compatibility is not guaranteed at this stage, meaning we do not recommend building _libraries_ based on `Decisions4s`. This limitation does not affect _application_ use cases.
+* Version `0.1.0` will be released following the first confirmed production deployment.
+    * Versions in the `0.0.x` series may undergo significant changes and should be considered experimental.

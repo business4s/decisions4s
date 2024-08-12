@@ -7,8 +7,6 @@ import scala.collection.mutable.ListBuffer
 
 object HKDUtils {
 
-  type Const[T] = [t] =>> T
-
   def collectFields[F[_[_]]: HKD, T](instance: F[Const[T]]): Vector[T] = {
     val result = ListBuffer[T]()
     type Void[T] = Any

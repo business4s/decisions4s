@@ -6,25 +6,25 @@ sidebar_position: 1
 
 ## DMN
 
-Decisions4s is heavily inspired
-by [Decision Model and Notation](https://en.wikipedia.org/wiki/Decision_Model_and_Notation) (DMN)
-which is an open standard developed by business analysis community in 2015 and refined since then.
+`Decisions4s` is heavily inspired
+by [Decision Model and Notation](https://en.wikipedia.org/wiki/Decision_Model_and_Notation) (DMN), an open standard
+developed by the business analysis community in 2015 and refined since then.
 
-DMN was designed as a model-first solution, where you define the rules in the model and execute that model. Decisions4s
-reverse that approach, rules are defined as code and model is generated from that. This aims at making it much more
-developer friendly while keeping the benefits of the standard.
+DMN was designed as a model-first solution, where you define the rules within the model and then execute that model.
+`Decisions4s` reverses that approach — rules are defined in code, and the model is generated from that. This approach aims
+to make the library more developer-friendly while retaining the benefits of the DMN standard.
 
-DMN allows modeling single decisions as well as more complex decision trees.
-`Decisions4s` limits itself to single decisions for now, as supporting decision trees would multiply the library
-complexity. This could be explored in future versions of the library.
+DMN allows for modeling both single decisions and complex decision trees. However, `Decisions4s` currently focuses on
+single decisions, as supporting decision trees would significantly increase the library's complexity. This feature may
+be explored in future versions of the library.
 
-## Higher kinded data
+## Higher-Kinded Data
 
-Decisions4s is build around higher-kinded data - a pattern where case class fields are wrapped in the higher-kinded
-type `F[_]`. To facilitate generic operations on such data structures, we use a custom `HKD` typeclass. This type class
-is a merge of few more principled typeclases, such as `FunctorK` and `SemigrupalK`. We intentionally don't use those
-concepts for a couple of reasons
+`Decisions4s` is built around higher-kinded data — a pattern where case class fields are wrapped in the higher-kinded type
+`F[_]`. To facilitate generic operations on such data structures, the library uses a custom `HKD` typeclass. This
+typeclass merges several more principled typeclasses, such as `FunctorK` and `SemigroupalK`. We intentionally avoid
+using these individual concepts for a few reasons:
 
-* `HKD` is a single typeclass, lowering general complexity of the library
-* `HKD` is specialised for case classes (doesn't support sealed traits), allowing us to expose more operations
-* `HKD` is based on scala 3 primitives, which might be hard to achieve in libraries such as `cats-tagless` 
+* `HKD` is a single typeclass, which simplifies the overall complexity of the library.
+* `HKD` is specialized for case classes (and doesn't support sealed traits), enabling us to expose more operations.
+* `HKD` is based on Scala 3 primitives, which might be challenging to achieve in libraries like `cats-tagless`.

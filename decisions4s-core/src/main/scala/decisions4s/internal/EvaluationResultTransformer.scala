@@ -8,8 +8,7 @@ class EvaluationResultTransformer[Input[_[_]], Output[_[_]]](
     input: Input[Value],
 ) {
 
-  /** Return result if exactly one rule was satisfied Could be made lazy (stop evaluation on second unique result) if needed
-    * @return
+  /** Return a result if exactly one rule was satisfied. Could be made lazy (stop evaluation on the second unique result) if needed.
     */
   def single(): EvalResult.Single[Input, Output] = {
     val raw              = rawResults.map(_.apply()).toList
@@ -36,7 +35,6 @@ class EvaluationResultTransformer[Input[_[_]], Output[_[_]]](
     val (results, firstSatisfied) = rawResults.foldLeft((List.empty[RuleResult[Input, Output]], Option.empty[Output[Value]])) {
       case ((acc, None), getResult)    =>
         val result = getResult()
-
         (acc :+ result, result.evaluationResult)
       case ((acc, found @ Some(_)), _) => (acc, found)
     }

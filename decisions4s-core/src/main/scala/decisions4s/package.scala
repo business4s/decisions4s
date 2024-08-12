@@ -5,11 +5,7 @@ package object decisions4s {
   export LiteralShow.showAsLiteral
   export exprs.Function
 
-  type ~>[A[_], B[_]]      = [t] => A[t] => B[t]
-  type Tuple2K[A[_], B[_]] = [t] =>> (A[t], B[t])
-
-  type Value[T]       = T
-  type Description[T] = String
+  type Value[T] = T
 
   opaque type OutputValue[T] <: Expr[T] = Expr[T]
   object OutputValue {

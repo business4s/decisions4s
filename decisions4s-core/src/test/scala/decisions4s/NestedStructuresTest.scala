@@ -30,12 +30,14 @@ class NestedStructuresTest extends AnyFreeSpec {
     val result: EvalResult.Single[Input, Output] = testTable.evaluateSingle(input)
     assert(result.output == Right(Some(Output[Value](Baz(1, 3, 4)))))
 
-    assert(testTable.rules.head.render()._1.foo == "foo.a = 1")
-    assert(testTable.rules.head.render()._2.c == """{
-                                                   |  d: 1,
-                                                   |  e: bar.c,
-                                                   |  f: 4
-                                                   |}""".stripMargin)
+    given EvaluationContext[Input] = EvaluationContext.stub
+
+    assert(testTable.rules.head.matching.foo.renderExpression == "foo.a = 1")
+    assert(testTable.rules.head.output.c.renderExpression == """{
+                                                               |  d: 1,
+                                                               |  e: bar.c,
+                                                               |  f: 4
+                                                               |}""".stripMargin)
   }
 
 }

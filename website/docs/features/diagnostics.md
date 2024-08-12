@@ -16,22 +16,25 @@ Results of evaluation carry all the information needed, such as:
 ```
 
 Which produces a debug string containing
+
 * Name of the decision
 * Hit policy
 * Result of the evaluation
 * Input used
 * All the evaluated rules, including:
-  * Their predicates
-  * Predicates' results (satisfied or not)
-  * Rule output
+    * Their predicates
+    * Predicates' results (satisfied or not)
+    * Rule output
 
 ## Example
+
 ```text file=./test/resources/docs/pull-request-diagnostics.txt
 ```
 
-
 ## Customization
 
-Currently, there is no option to customize the message. It should be fully possible to define a custom format on the
-user side, by replicating the logic from `DiagnosticsPrinter`. If you believe it's worth exposing some cusomization
-options from the library itself, or to modify the format in general, please reach out!
+Currently,
+there is no option to customize the message
+but users are encouraged to implement their own formats by replicating the logic from `DiagnosticsPrinter`.
+If you believe it's worth exposing some customization options from the library itself, or to modify the format in
+general, please reach out!

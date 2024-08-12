@@ -85,10 +85,10 @@ object PullRequestDecision {
 
     // start_dmn
     import decisions4s.dmn.DmnRenderer
-    val dmnInstance = DmnRenderer.render(decisionTable)
-    import org.camunda.bpm.model.dmn.Dmn
-    Dmn.writeModelToFile(new java.io.File(s"./${decisionTable.name}.dmn"), dmnInstance)
+    val dmnXML: String = DmnRenderer.render(decisionTable).toXML
     // end_dmn
+    dmnXML.toString
+    ()
 
   }
 

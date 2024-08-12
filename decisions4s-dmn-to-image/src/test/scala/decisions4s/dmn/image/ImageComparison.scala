@@ -6,7 +6,7 @@ import javax.imageio.ImageIO
 
 object ImageComparison {
 
-  // gives a value between 0 and 100. 0 means no difference, 100 means very different.
+  // gives a value between 0 and 100. 0 means no difference, 100 means completely different.
   def getDifferencePercent(img1: IArray[Byte], img2: IArray[Byte]): Double = {
     getDifferencePercent(
       ImageIO.read(new ByteArrayInputStream(IArray.genericWrapArray(img1).toArray)),

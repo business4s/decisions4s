@@ -1,6 +1,7 @@
-package decisions4s.exprs
+package decisions4s.testing
 
 import decisions4s.Expr
+import decisions4s.exprs.UnaryTest
 import org.camunda.feel.FeelEngine
 import org.camunda.feel.api.{FailedEvaluationResult, FeelEngineApi, SuccessfulEvaluationResult}
 import org.scalatest.Assertions
