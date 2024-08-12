@@ -20,7 +20,7 @@ class DmnToImageConverter(customDriver: Option[WebDriver & JavascriptExecutor & 
   def convertDiagram(dmnXml: String): Try[IArray[Byte]] = Try {
     openSkeleton()
     loadDmn(dmnXml)
-    takesScreenshot()
+    takeScreenshot()
   }
 
   private def openSkeleton(): Unit = {
@@ -41,7 +41,7 @@ class DmnToImageConverter(customDriver: Option[WebDriver & JavascriptExecutor & 
     ()
   }
 
-  private def takesScreenshot(): IArray[Byte] = {
+  private def takeScreenshot(): IArray[Byte] = {
     val screenshotBytes = driver.getScreenshotAs(OutputType.BYTES)
     val dmnTable        = driver.findElement(By.className("tjs-container"))
     val point           = dmnTable.getLocation

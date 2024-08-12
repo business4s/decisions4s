@@ -41,7 +41,7 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.seleniumhq.selenium" % "selenium-java"    % "4.21.0",
+      "org.seleniumhq.selenium" % "selenium-java"    % "4.22.0",
       "io.github.bonigarcia"    % "webdrivermanager" % "5.8.0",
     ),
     libraryDependencies ++= Seq(
@@ -84,7 +84,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val testDeps = List(
-  "org.scalatest" %% "scalatest-freespec" % "3.2.18" % Test,
+  "org.scalatest" %% "scalatest-freespec" % "3.2.19" % Test,
 )
 
 lazy val stableVersion = taskKey[String]("stableVersion")
