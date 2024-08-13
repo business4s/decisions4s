@@ -64,6 +64,11 @@ const config: Config = {
                     label: 'Docs',
                 },
                 {
+                    href: 'https://medium.com/business4s-blog',
+                    label: 'Blog',
+                    position: 'right',
+                },
+                {
                     href: 'https://github.com/business4s/decisions4s',
                     label: 'GitHub',
                     position: 'right',
