@@ -1,3 +1,6 @@
+
+ThisBuild/usePipelining := true
+
 lazy val `decisions4s` = (project in file("."))
   .settings(commonSettings)
   .aggregate(
@@ -66,7 +69,7 @@ lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-
   .dependsOn(`decisions4s-core`)
 
 lazy val commonSettings = Seq(
-  scalaVersion  := "3.4.2",
+  scalaVersion  := "3.5.0",
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
   organization  := "org.business4s",

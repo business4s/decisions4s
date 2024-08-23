@@ -1,12 +1,14 @@
 package decisions4s.example.docs
 
+import scala.annotation.nowarn
+
+@nowarn("msg=unused value")
 object HitPoliciesExample {
 
-  import decisions4s.HKD
+  import decisions4s.*
   case class In[F[_]]() derives HKD
   case class Out[F[_]]() derives HKD
 
-  import decisions4s.*
   val in: In[Value]              = ???
   val rules: List[Rule[In, Out]] = ???
   val name: String               = ???

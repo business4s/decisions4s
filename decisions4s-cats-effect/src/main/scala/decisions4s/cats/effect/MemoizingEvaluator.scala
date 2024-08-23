@@ -2,7 +2,7 @@ package decisions4s.cats.effect
 
 import _root_.cats.effect.std.Dispatcher
 import _root_.cats.effect.{Async, Concurrent, Ref, Resource}
-import _root_.cats.implicits.{catsSyntaxApplicativeId, none}
+import _root_.cats.implicits.{none}
 import _root_.cats.{Applicative, Monad}
 import cats.syntax.all.{toTraverseOps, given}
 import decisions4s.*

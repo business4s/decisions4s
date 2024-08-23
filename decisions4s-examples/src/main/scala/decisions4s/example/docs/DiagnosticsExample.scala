@@ -1,5 +1,9 @@
 package decisions4s.example.docs
 
+import scala.annotation.nowarn
+
+@nowarn("msg=unused value")
+@nowarn("msg=unused import")
 object DiagnosticsExample {
 
   import decisions4s.HKD

@@ -2,6 +2,10 @@ package decisions4s.example.docs
 
 import decisions4s.markdown.MarkdownRenderer
 
+import scala.annotation.nowarn
+import scala.util.Try
+
+@nowarn("msg=unused import")
 object RenderingExample {
 
   import decisions4s.HKD
@@ -24,8 +28,8 @@ object RenderingExample {
   // start_dmn_image
   import decisions4s.dmn.image.*
 
-  val converter = DmnToImageConverter()
-  converter.convertDiagram(dmnXml)
+  val converter                = DmnToImageConverter()
+  val image: Try[IArray[Byte]] = converter.convertDiagram(dmnXml)
   // end_dmn_image
 
 }

@@ -2,6 +2,8 @@ package decisions4s.example.docs
 
 import decisions4s.exprs.{Literal, UnaryTest}
 
+import scala.annotation.nowarn
+
 object ExpressionsExample {
 
   // start_expr
@@ -31,6 +33,5 @@ object ExpressionsExample {
     }
     val endsWithFoo: UnaryTest[String] = it.satisfies(_.endsWith("foo".asLiteral))
     // end_custom_streamlined
-    endsWithFoo.toString // to bypass not used
-  }
+  }: @nowarn("msg=unused local definition")
 }
