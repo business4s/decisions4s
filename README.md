@@ -13,6 +13,6 @@ See the [**Website**](https://business4s.github.io/decisions4s/) for details and
 ### Adopters
 
 <!--- adopters_start -->
-* [SwissBorg](swissborg.com)
+* [SwissBorg](https://swissborg.com)
 <!--- adopters_end -->
 * [[Your Company]](example.com)
