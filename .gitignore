@@ -1,4 +1,6 @@
-**/target/
+target/
+.bsp/
+.idea/
 
 # Following files are geenerated by the build process and should be ingored by CI when checking git clean state
 # DMNs will probably be removed in near future
