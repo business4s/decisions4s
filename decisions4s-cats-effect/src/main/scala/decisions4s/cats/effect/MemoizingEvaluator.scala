@@ -2,9 +2,8 @@ package decisions4s.cats.effect
 
 import _root_.cats.effect.std.Dispatcher
 import _root_.cats.effect.{Async, Concurrent, Ref, Resource}
-import _root_.cats.implicits.{none}
 import _root_.cats.{Applicative, Monad}
-import cats.syntax.all.{toTraverseOps, given}
+import cats.syntax.all.*
 import decisions4s.*
 import decisions4s.exprs.UnaryTest
 import decisions4s.internal.{HKDUtils, ~>}
@@ -12,7 +11,7 @@ import shapeless3.deriving.Const
 
 import scala.util.chaining.scalaUtilChainingOps
 
-class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val dt: DecisionTable[Input, Output, HitPolicy.First]) {
+class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: {Concurrent, Async}](val dt: DecisionTable[Input, Output, HitPolicy.First]) {
 
   import dt.given
 
@@ -42,7 +41,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
   private def memoizeInput(input: Input[F]): F[Input[F]] = {
     type Memoized[T] = F[F[T]]
     val memoize: F ~> Memoized = [t] => (f: F[t]) => Concurrent[F].memoize(f)
-    val memoized: F[Input[F]]  = input.mapK1(memoize).pipe(sequence[Input, F, F])
+    val memoized: F[Input[F]]  = input.mapK1(memoize)(using decisions4sFunctor).pipe(sequence[Input, F, F])
     memoized
   }
 
@@ -58,7 +57,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
   }
 
   private def evaluateRule(rule: Rule[Input, Output], input: Input[F])(using EvaluationContext[Input]): F[RuleResult[Input, Output]] = {
-    type FBool[T] = F[Boolean]
+    type FBool[_] = F[Boolean]
     val evaluatedF: Input[FBool] = HKD.map2(rule.matching, input)(
       [t] =>
         (expr, fValue) => {
@@ -92,6 +91,15 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
   }
 
   private def collectEvaluatedFields(refs: Input[OptionRef]): F[Input[Option]] = {
+    type FOpt[T] = F[Option[T]]
+    // Scala 3.7 given resolution breaks instance derivation/conversion somehow
+    // We could probably fix it "properly" but it desn't seem worth it right now.
+    // Especially considering this new given reoslution is not yet set in stone
+    given decisions4s.internal.Functor[FOpt] with {
+      extension [T](ft: FOpt[T]) {
+        def map[T1](f: T => T1): FOpt[T1] = _root_.cats.Functor[F].map(ft)(_.map(f))
+      }
+    }
     sequence(refs.mapK([t] => ref => ref.get))
   }
 
