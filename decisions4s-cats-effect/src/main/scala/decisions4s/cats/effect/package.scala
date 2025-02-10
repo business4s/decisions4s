@@ -11,7 +11,7 @@ package object effect {
     }
   }
 
-  def decisions4sFunctor [F[_]](using cf: cats.Functor[F]): decisions4s.internal.Functor[F] = new decisions4s.internal.Functor[F] {
+  def decisions4sFunctor[F[_]](using cf: cats.Functor[F]): decisions4s.internal.Functor[F] = new decisions4s.internal.Functor[F] {
     extension [T](ft: F[T]) {
       def map[T1](f: T => T1): F[T1] = cf.map(ft)(f)
     }
