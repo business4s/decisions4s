@@ -1,11 +1,15 @@
 package decisions4s.example.docs
 
+import scala.annotation.nowarn
+@nowarn("msg=unused import")
+@nowarn("msg=unused value of type cats.effect.IO")
 object EffectfulEvalExample {
 
   import decisions4s.HKD
   case class Input[F[_]]() derives HKD
   case class Output[F[_]]() derives HKD
 
+  import _root_.cats
   // start_effect
   import cats.effect.IO
   import decisions4s.*

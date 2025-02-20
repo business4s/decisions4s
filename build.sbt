@@ -1,3 +1,5 @@
+ThisBuild / usePipelining := true
+
 lazy val `decisions4s` = (project in file("."))
   .settings(commonSettings)
   .aggregate(
@@ -58,7 +60,7 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
 
 lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-scala-2"))
   .settings(
-    scalaVersion   := "2.13.14",
+    scalaVersion   := "2.13.15",
     libraryDependencies ++= testDeps,
     publish / skip := true,
     scalacOptions ++= Seq("-Ytasty-reader"),
@@ -66,8 +68,15 @@ lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-
   .dependsOn(`decisions4s-core`)
 
 lazy val commonSettings = Seq(
-  scalaVersion  := "3.4.2",
-  scalacOptions ++= Seq("-no-indent"),
+  scalaVersion  := "3.6.3",
+  scalacOptions ++= Seq(
+    "-no-indent",
+    "-source",
+    "3.7"
+  ),
+  Test / scalacOptions ++= Seq(
+    "-Wconf:msg=unused value of type org.scalatest.compatible.Assertion:s"
+  ),
   libraryDependencies ++= testDeps,
   organization  := "org.business4s",
   homepage      := Some(url("https://business4s.github.io/decisions4s/")),

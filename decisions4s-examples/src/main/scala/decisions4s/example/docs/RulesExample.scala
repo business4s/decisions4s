@@ -1,6 +1,5 @@
 package decisions4s.example.docs
 
-import decisions4s.{Expr, Rule, it, wholeInput}
 import decisions4s.*
 
 object RulesExample {
