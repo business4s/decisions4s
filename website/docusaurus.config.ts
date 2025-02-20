@@ -130,6 +130,12 @@ const config: Config = {
             darkTheme: prismThemes.dracula,
             additionalLanguages: ['java', 'scala', "json"]
         },
+        algolia: {
+            appId: 'I7ZZK24QE1',
+            apiKey: '0811b470182434e8a88ddfc571928db6',
+            indexName: 'business4s',
+            searchPagePath: 'search',
+        },
     } satisfies Preset.ThemeConfig,
     customFields: {
         decisions4sVersion: process.env.DECISIONS4S_VERSION,
