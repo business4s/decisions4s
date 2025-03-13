@@ -14,4 +14,4 @@ Rule 1 [✓]:
   numOfApprovals          [✓]: > 1
   isTargetBranchProtected [✓]: true
   authorIsAdmin           [✓]: -
-  == Output(true,false)
+  == Output(allowMerging = true, notifyUnusualAction = false)
