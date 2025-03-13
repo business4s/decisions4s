@@ -36,7 +36,7 @@ class DiagnosticsPrinterTest extends AnyFreeSpec {
           |Rule 0 [✓]:
           |  inputField1          [✓]: "foo"
           |  inputField2Something [✓]: -
-          |  == Output(1.0,true)
+          |  == Output(outputField1 = 1.0, outputField2 = true)
           |Rule 1 [✗]:
           |  inputField1          [✗]: "bar"
           |  inputField2Something [✗]: > 1
