@@ -52,9 +52,9 @@ class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Ou
     }
   }
   def renderOutput(output: Output[Value]): String = {
-    val outputNames: IndexedSeq[String]    = summon[HKD[Output]].fieldNames
-    val outputValues: Vector[String] = HKDUtils.collectFields(output.mapK[Const[String]]([t] => (value: t) => value.toString))
-    val fields = outputValues.zipWithIndex
+    val outputNames: IndexedSeq[String] = summon[HKD[Output]].fieldNames
+    val outputValues: Vector[String]    = HKDUtils.collectFields(output.mapK[Const[String]]([t] => (value: t) => value.toString))
+    val fields                          = outputValues.zipWithIndex
       .map((value, idx) => s"${outputNames(idx)} = $value")
       .mkString(", ")
     s"${output.getClass.getSimpleName}($fields)"
