@@ -1,6 +1,11 @@
 target/
 .bsp/
 .idea/
+.bloop/
+.metals/
+.vscode/
+project/metals.sbt
+project/project
 
 # Following files are geenerated by the build process and should be ingored by CI when checking git clean state
 # DMNs will probably be removed in near future
