@@ -21,7 +21,7 @@ case class EvalResult[In[_[_]], Out[_[_]], +Output](
 ) {
 
   lazy val diagnosticsData: DiagnosticsData = DiagnosticsDataBuilder(this).get
-  def makeDiagnosticsString: String = DiagnosticsPrinter(diagnosticsData).print
+  def makeDiagnosticsString: String         = DiagnosticsPrinter(diagnosticsData).print
 
 }
 

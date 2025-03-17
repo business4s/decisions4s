@@ -49,7 +49,7 @@ class DiagnosticsDataBuilder[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input
       ),
     )
   }
-  
+
   extension [T](v: Seq[T]) {
     def toIndexedMap[K](createKey: Int => K): Map[K, T] = {
       v.zipWithIndex.map((elem, idx) => (createKey(idx), elem)).toMap

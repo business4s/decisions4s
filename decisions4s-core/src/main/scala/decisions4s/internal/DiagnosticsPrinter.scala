@@ -21,16 +21,17 @@ class DiagnosticsPrinter(data: DiagnosticsData) {
   }
 
   private def renderRule(rr: DiagnosticsData.Rule): String = {
-    val sign                               = if (rr.output.isDefined) then "✓" else "✗"
-    val output                             = rr.output.map(x => s"== ${renderOutput(x)}").getOrElse("== ✗")
-    val conditions = rr.evaluationResults.toSeq.sortBy(_._1)
+    val sign       = if (rr.output.isDefined) then "✓" else "✗"
+    val output     = rr.output.map(x => s"== ${renderOutput(x)}").getOrElse("== ✗")
+    val conditions = rr.evaluationResults.toSeq
+      .sortBy(_._1)
       .map((fIdx, satisfied) => renderRuleField(fIdx, satisfied, rr))
     s"""Rule ${rr.idx} [$sign]:
        |${conditions.mkString("\n").indent_(2)}
        |  $output""".stripMargin
   }
 
-  private val maxInputNameLen                                                     = data.input.fieldNames.values.map(_.length).max
+  private val maxInputNameLen                                                                             = data.input.fieldNames.values.map(_.length).max
   private def renderRuleField(idx: InputFieldIdx, satisfied: Boolean, rule: DiagnosticsData.Rule): String = {
     val sign = if (satisfied) then "✓" else "✗"
     s"""${data.input.fieldNames(idx).padTo(maxInputNameLen, ' ')} [$sign]: ${rule.renderedConditions(idx)}""".stripMargin
@@ -43,7 +44,8 @@ class DiagnosticsPrinter(data: DiagnosticsData) {
     }
   }
   def renderOutput(output: DiagnosticsData.Rule.Output): String = {
-    val fields                          = output.fieldValues.toSeq.sortBy(_._1)
+    val fields = output.fieldValues.toSeq
+      .sortBy(_._1)
       .map((idx, value) => s"${data.output.fieldNames(idx)} = $value")
       .mkString(", ")
     s"${output.getClass.getSimpleName}($fields)"
