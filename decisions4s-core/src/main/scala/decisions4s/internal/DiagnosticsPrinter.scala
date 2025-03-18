@@ -27,7 +27,8 @@ class DiagnosticsPrinter(data: DiagnosticsData) {
       val conditions = evaluation.evaluationResults.toSeq
         .sortBy(_._1)
         .map((fIdx, satisfied) => renderRuleField(fIdx, satisfied, rr))
-      s"""Rule ${rr.idx} [$sign]:
+      val annotation = data.table.rules(rr.idx).annotation.map(an => s" $an").getOrElse("")
+      s"""Rule ${rr.idx} [$sign]:$annotation
          |${conditions.mkString("\n").indent_(2)}
          |  $output""".stripMargin
     })
