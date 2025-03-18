@@ -30,9 +30,9 @@ class DiagnosticsPrinter[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Ou
     val fieldSatisfaction: Vector[Boolean] = HKDUtils.collectFields(rr.details)
     val sign                               = if (rr.evaluationResult.isDefined) then "✓" else "✗"
     val output                             = rr.evaluationResult.map(x => s"== ${renderOutput(x)}").getOrElse("== ✗")
-    val annotation                         = table.rules(idx).annotation.getOrElse("")
+    val annotation                         = table.rules(idx).annotation.map(an => s" $an").getOrElse("")
 
-    s"""Rule $idx [$sign]: $annotation
+    s"""Rule $idx [$sign]:$annotation
        |${fieldSatisfaction.zipWithIndex.map((satisfied, fIdx) => renderRuleField(idx, fIdx, satisfied)).mkString("\n").indent_(2)}
        |  $output""".stripMargin
   }
