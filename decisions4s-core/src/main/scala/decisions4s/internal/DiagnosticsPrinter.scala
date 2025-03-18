@@ -1,7 +1,7 @@
 package decisions4s.internal
 
 import decisions4s.*
-import decisions4s.internal.DiagnosticsData.InputFieldIdx
+import decisions4s.DiagnosticsData.InputFieldIdx
 
 class DiagnosticsPrinter(data: DiagnosticsData) {
   def print: String = {
@@ -10,7 +10,7 @@ class DiagnosticsPrinter(data: DiagnosticsData) {
        |Result: ${data.output.rawValue}
        |Input:
        |${renderInput().indent_(2)}
-       |${data.table.rules.map(renderRule).mkString("\n")}""".stripMargin
+       |${data.table.rules.flatMap(renderRule).mkString("\n")}""".stripMargin
   }
 
   private def renderInput() = {
@@ -20,15 +20,18 @@ class DiagnosticsPrinter(data: DiagnosticsData) {
       .mkString("\n")
   }
 
-  private def renderRule(rr: DiagnosticsData.Rule): String = {
-    val sign       = if (rr.output.isDefined) then "✓" else "✗"
-    val output     = rr.output.map(x => s"== ${renderOutput(x)}").getOrElse("== ✗")
-    val conditions = rr.evaluationResults.toSeq
-      .sortBy(_._1)
-      .map((fIdx, satisfied) => renderRuleField(fIdx, satisfied, rr))
-    s"""Rule ${rr.idx} [$sign]:
-       |${conditions.mkString("\n").indent_(2)}
-       |  $output""".stripMargin
+  private def renderRule(rr: DiagnosticsData.Rule): Option[String] = {
+    rr.evaluation.map(evaluation => {
+      val sign       = if (evaluation.output).isDefined then "✓" else "✗"
+      val output     = evaluation.output.map(x => s"== ${renderOutput(x)}").getOrElse("== ✗")
+      val conditions = evaluation.evaluationResults.toSeq
+        .sortBy(_._1)
+        .map((fIdx, satisfied) => renderRuleField(fIdx, satisfied, rr))
+      s"""Rule ${rr.idx} [$sign]:
+         |${conditions.mkString("\n").indent_(2)}
+         |  $output""".stripMargin
+    })
+
   }
 
   private val maxInputNameLen                                                                             = data.input.fieldNames.values.map(_.length).max

@@ -1,6 +1,6 @@
 package decisions4s
 
-import decisions4s.internal.{DiagnosticsData, DiagnosticsDataBuilder, DiagnosticsPrinter}
+import decisions4s.internal.{DiagnosticsDataBuilder, DiagnosticsPrinter}
 
 /** Results of evaluating a decision. Contains all the data required to analyze why the decision was taken.
   *

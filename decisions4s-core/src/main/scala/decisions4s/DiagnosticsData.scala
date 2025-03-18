@@ -1,6 +1,4 @@
-package decisions4s.internal
-
-import decisions4s.HitPolicy
+package decisions4s
 
 case class DiagnosticsData(
     table: DiagnosticsData.Table,
@@ -32,10 +30,13 @@ object DiagnosticsData {
       idx: RuleIdx,
       annotation: Option[String],
       renderedConditions: Map[InputFieldIdx, String],
-      evaluationResults: Map[InputFieldIdx, Boolean],
-      output: Option[Rule.Output],
+      evaluation: Option[Rule.Evaluation],
   )
   case object Rule      {
+    case class Evaluation(
+        evaluationResults: Map[InputFieldIdx, Boolean],
+        output: Option[Rule.Output],
+    )
     case class Output(
         rawValue: Any,
         fieldValues: Map[OutputFieldIdx, Any],

@@ -1,7 +1,7 @@
 package decisions4s.internal
 
 import decisions4s.*
-import decisions4s.internal.DiagnosticsData.{InputFieldIdx, OutputFieldIdx, RuleIdx}
+import DiagnosticsData.{InputFieldIdx, OutputFieldIdx, RuleIdx}
 import shapeless3.deriving.Const
 
 class DiagnosticsDataBuilder[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Output, Out]) {
@@ -13,7 +13,7 @@ class DiagnosticsDataBuilder[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input
       table = DiagnosticsData.Table(
         name = r.table.name,
         hitPolicy = r.table.hitPolicy,
-        rules = r.results.zipWithIndex.map(buildRule.tupled),
+        rules = r.table.rules.zipWithIndex.map(buildRule),
       ),
       input = DiagnosticsData.Input(
         fieldNames = summon[HKD[Input]].fieldNames.toIndexedMap(InputFieldIdx.apply),
@@ -29,8 +29,8 @@ class DiagnosticsDataBuilder[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input
     )
   }
 
-  private def buildRule(rr: RuleResult[Input, Output], idx: Int): DiagnosticsData.Rule = {
-    val rule = table.rules(idx)
+  private def buildRule(rule: Rule[Input, Output], idx: Int): DiagnosticsData.Rule = {
+    val rr = r.results.lift.apply(idx)
     DiagnosticsData.Rule(
       idx = RuleIdx(idx),
       annotation = rule.annotation,
@@ -40,11 +40,15 @@ class DiagnosticsDataBuilder[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input
           .collectFields(rule.matching.mapK[Const[String]]([t] => expr => expr.renderExpression))
           .toIndexedMap(InputFieldIdx(_))
       },
-      evaluationResults = HKDUtils.collectFields(rr.details).toIndexedMap(InputFieldIdx.apply),
-      output = rr.evaluationResult.map(result =>
-        DiagnosticsData.Rule.Output(
-          rawValue = result,
-          fieldValues = HKDUtils.collectFields(result.mapK[Const[Any]]([t] => (value: t) => value: Any)).toIndexedMap(OutputFieldIdx.apply),
+      evaluation = rr.map(rr =>
+        DiagnosticsData.Rule.Evaluation(
+          evaluationResults = HKDUtils.collectFields(rr.details).toIndexedMap(InputFieldIdx.apply),
+          output = rr.evaluationResult.map(result =>
+            DiagnosticsData.Rule.Output(
+              rawValue = result,
+              fieldValues = HKDUtils.collectFields(result.mapK[Const[Any]]([t] => (value: t) => value: Any)).toIndexedMap(OutputFieldIdx.apply),
+            ),
+          ),
         ),
       ),
     )

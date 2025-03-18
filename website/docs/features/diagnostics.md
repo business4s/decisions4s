@@ -33,8 +33,12 @@ Which produces a debug string containing
 
 ## Customization
 
-Currently,
-there is no option to customize the message
-but users are encouraged to implement their own formats by replicating the logic from `DiagnosticsPrinter`.
-If you believe it's worth exposing some customization options from the library itself, or to modify the format in
-general, please reach out!
+You can easily produce your own diagnostics format:
+
+```scala file=./test/scala/decisions4s/example/docs/PullRequestDecisionTest.scala start=start_customization end=end_customization
+```
+
+To get something like this:
+
+```text file=./test/resources/docs/pull-request-custom-diagnostics.txt
+```
