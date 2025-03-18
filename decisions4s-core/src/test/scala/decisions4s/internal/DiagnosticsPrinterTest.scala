@@ -13,12 +13,12 @@ class DiagnosticsPrinterTest extends AnyFreeSpec {
       Rule(
         Input(inputField1 = it.equalsTo("foo"), inputField2Something = it.catchAll),
         Output(outputField1 = 1.0, outputField2 = true),
-        annotation = Some("foo")
+        annotation = Some("foo"),
       ),
       Rule(
         Input(inputField1 = it.equalsTo("bar"), inputField2Something = it > 1),
         Output(outputField1 = 2.0, outputField2 = false),
-        annotation = Some("bar")
+        annotation = Some("bar"),
       ),
     ),
     "test",
