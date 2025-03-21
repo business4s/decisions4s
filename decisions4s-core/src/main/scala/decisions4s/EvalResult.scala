@@ -1,6 +1,6 @@
 package decisions4s
 
-import decisions4s.internal.DiagnosticsPrinter
+import decisions4s.internal.{DiagnosticsDataBuilder, DiagnosticsPrinter}
 
 /** Results of evaluating a decision. Contains all the data required to analyze why the decision was taken.
   *
@@ -20,7 +20,8 @@ case class EvalResult[In[_[_]], Out[_[_]], +Output](
     output: Output,
 ) {
 
-  def makeDiagnosticsString: String = DiagnosticsPrinter(this).print
+  lazy val diagnosticsData: DiagnosticsData = DiagnosticsDataBuilder(this).get
+  def makeDiagnosticsString: String         = DiagnosticsPrinter(diagnosticsData).print
 
 }
 
