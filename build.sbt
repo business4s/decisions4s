@@ -17,7 +17,7 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
       "org.typelevel"    %% "shapeless3-deriving" % "3.4.0",
       "com.lihaoyi"      %% "sourcecode"          % "0.4.2",
       ("org.camunda.feel" % "feel-engine"         % "1.19.3" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
-      "ch.qos.logback"    % "logback-classic"     % "1.5.18"  % Test,
+      "ch.qos.logback"    % "logback-classic"     % "1.5.18" % Test,
     ),
   )
 
@@ -83,7 +83,7 @@ lazy val commonSettings = Seq(
     ),
   ),
   versionScheme := Some("semver-spec"),
-  Test / tpolecatExcludeOptions += ScalacOptions.warnNonUnitStatement
+  Test / tpolecatExcludeOptions += ScalacOptions.warnNonUnitStatement,
 )
 
 lazy val testDeps = List(
