@@ -13,7 +13,7 @@ object it {
   @targetName("equalsToOp")
   def ===[T](value: T)(using LiteralShow[T]): UnaryTest[T]            = UnaryTest.EqualTo(Literal(value))
   def equalsTo[T](value: T)(using LiteralShow[T]): UnaryTest[T]       = UnaryTest.EqualTo(Literal(value))
-  def equalsTo[T](value: Expr[T])(using LiteralShow[T]): UnaryTest[T] = UnaryTest.EqualTo(value)
+  def equalsTo[T](value: Expr[T]): UnaryTest[T] = UnaryTest.EqualTo(value)
 
   def equalsAnyOf[T](values: T*)(using LiteralShow[T]): UnaryTest[T] = UnaryTest.Or(values.map(it.equalsTo))
   def equalsAnyOf[T](values: Expr[Iterable[T]]): UnaryTest[T]        = UnaryTest.OneOf(values)

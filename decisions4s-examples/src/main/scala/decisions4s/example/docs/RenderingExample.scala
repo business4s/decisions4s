@@ -2,6 +2,9 @@ package decisions4s.example.docs
 
 import decisions4s.markdown.MarkdownRenderer
 
+import scala.annotation.nowarn
+
+@nowarn("msg=unused value")
 object RenderingExample {
 
   import decisions4s.HKD

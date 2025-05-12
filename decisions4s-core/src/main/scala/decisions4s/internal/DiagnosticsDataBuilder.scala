@@ -6,7 +6,7 @@ import shapeless3.deriving.Const
 
 class DiagnosticsDataBuilder[Input[_[_]], Output[_[_]], Out](r: EvalResult[Input, Output, Out]) {
   import r.table.given
-  import r.{input, results, table}
+  import r.{input, table}
 
   def get: DiagnosticsData = {
     DiagnosticsData(

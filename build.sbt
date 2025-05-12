@@ -1,3 +1,5 @@
+import org.typelevel.scalacoptions.ScalacOptions
+
 lazy val `decisions4s` = (project in file("."))
   .settings(commonSettings)
   .aggregate(
@@ -14,8 +16,8 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
     libraryDependencies ++= Seq(
       "org.typelevel"    %% "shapeless3-deriving" % "3.4.0",
       "com.lihaoyi"      %% "sourcecode"          % "0.4.2",
-      ("org.camunda.feel" % "feel-engine"         % "1.17.7" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
-      "ch.qos.logback"    % "logback-classic"     % "1.5.6"  % Test,
+      ("org.camunda.feel" % "feel-engine"         % "1.19.3" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
+      "ch.qos.logback"    % "logback-classic"     % "1.5.18"  % Test,
     ),
   )
 
@@ -24,7 +26,7 @@ lazy val `decisions4s-dmn` = (project in file("decisions4s-dmn"))
   .dependsOn(`decisions4s-core`)
   .settings(
     libraryDependencies ++= Seq(
-      "org.camunda.bpm.model" % "camunda-dmn-model" % "7.21.0",
+      "org.camunda.bpm.model" % "camunda-dmn-model" % "7.23.0",
     ),
   )
 
@@ -41,11 +43,11 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.seleniumhq.selenium" % "selenium-java"    % "4.22.0",
-      "io.github.bonigarcia"    % "webdrivermanager" % "5.8.0",
+      "org.seleniumhq.selenium" % "selenium-java"    % "4.32.0",
+      "io.github.bonigarcia"    % "webdrivermanager" % "6.1.0",
     ),
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.5.6" % Test,
+      "ch.qos.logback" % "logback-classic" % "1.5.18" % Test,
     ),
   )
 
@@ -58,7 +60,7 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
 
 lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-scala-2"))
   .settings(
-    scalaVersion   := "2.13.14",
+    scalaVersion   := "2.13.16",
     libraryDependencies ++= testDeps,
     publish / skip := true,
     scalacOptions ++= Seq("-Ytasty-reader"),
@@ -66,7 +68,7 @@ lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-
   .dependsOn(`decisions4s-core`)
 
 lazy val commonSettings = Seq(
-  scalaVersion  := "3.4.2",
+  scalaVersion  := "3.7.0",
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
   organization  := "org.business4s",
@@ -81,6 +83,7 @@ lazy val commonSettings = Seq(
     ),
   ),
   versionScheme := Some("semver-spec"),
+  Test / tpolecatExcludeOptions += ScalacOptions.warnNonUnitStatement
 )
 
 lazy val testDeps = List(

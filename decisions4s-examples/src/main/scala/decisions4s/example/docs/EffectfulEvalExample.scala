@@ -1,5 +1,8 @@
 package decisions4s.example.docs
 
+import scala.annotation.nowarn
+
+@nowarn("msg=unused value")
 object EffectfulEvalExample {
 
   import decisions4s.HKD

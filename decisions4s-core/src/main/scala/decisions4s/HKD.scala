@@ -4,6 +4,8 @@ import decisions4s.internal.{Extract, Functor, HKDUtils, Meta}
 import shapeless3.deriving.K11.Id
 import shapeless3.deriving.{Const, K11, Labelling, ~>}
 
+import scala.annotation.nowarn
+
 /** Specialised typeclass to expose operations on higher kinded data (case-classes where each field is wrapped in F[_])
   */
 trait HKD[Data[_[_]]] {
@@ -39,6 +41,7 @@ object HKD {
   def apply[F[_[_]]](using hkd: HKD[F]): HKD[F] = hkd
 
   // special instance for simple types, where F = K11.Id[T], and so F[A] = T
+  @nowarn("msg=unused implicit parameter") // scalac doesn't seem to handle unused in override well
   given id[T]: HKD[[f[_]] =>> f[T]] with {
     override def pure[A[_]](f: [t] => () => A[t]): A[T] = f[T]()
 
