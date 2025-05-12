@@ -70,7 +70,7 @@ object UnaryTest {
   }
 
   case class Bool[T](expr: Expr[Boolean]) extends UnaryTest[T] {
-    override def evaluate: T => Boolean   = in => expr.evaluate
+    override def evaluate: T => Boolean   = _ => expr.evaluate
     override def renderExpression: String = expr.renderExpression
   }
 

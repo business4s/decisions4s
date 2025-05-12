@@ -2,6 +2,9 @@ package decisions4s.example.docs
 
 import decisions4s.exprs.{Literal, UnaryTest}
 
+import scala.annotation.nowarn
+
+@nowarn("msg=unused value")
 object ExpressionsExample {
 
   // start_expr
