@@ -34,10 +34,10 @@ object Expr {
     def equalsTo(rhs: O)(using LiteralShow[O]): Expr[Boolean] = Equal(lhs, Literal(rhs))
     def ===(rhs: O)(using LiteralShow[O]): Expr[Boolean]      = Equal(lhs, Literal(rhs))
 
-    def !==(rhs: Expr[O]): Expr[Boolean]           = NotEqual(lhs, rhs)
-    def !==(rhs: O)(using LiteralShow[O]): Expr[Boolean] = NotEqual(lhs, Literal(rhs))
-    def >(rhs: Expr[O])(using Ordering[O]): Expr[Boolean]             = GreaterThan(lhs, rhs)
-    def >(rhs: O)(using Ordering[O], LiteralShow[O]): Expr[Boolean]   = GreaterThan(lhs, Literal(rhs))
+    def !==(rhs: Expr[O]): Expr[Boolean]                            = NotEqual(lhs, rhs)
+    def !==(rhs: O)(using LiteralShow[O]): Expr[Boolean]            = NotEqual(lhs, Literal(rhs))
+    def >(rhs: Expr[O])(using Ordering[O]): Expr[Boolean]           = GreaterThan(lhs, rhs)
+    def >(rhs: O)(using Ordering[O], LiteralShow[O]): Expr[Boolean] = GreaterThan(lhs, Literal(rhs))
 
     def >=(rhs: Expr[O])(using Ordering[O]): Expr[Boolean]           = GreaterThanEqual(lhs, rhs)
     def >=(rhs: O)(using Ordering[O], LiteralShow[O]): Expr[Boolean] = GreaterThanEqual(lhs, Literal(rhs))
