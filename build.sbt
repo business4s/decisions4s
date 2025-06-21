@@ -1,4 +1,5 @@
 import org.typelevel.scalacoptions.ScalacOptions
+import sbt.Keys.localStaging
 
 lazy val `decisions4s` = (project in file("."))
   .settings(commonSettings)
@@ -95,4 +96,10 @@ lazy val stableVersion = taskKey[String]("stableVersion")
 stableVersion := {
   if (isVersionStable.value && !isSnapshot.value) version.value
   else previousStableVersion.value.getOrElse("unreleased")
+}
+
+ThisBuild / publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if (isSnapshot.value) Some("central-snapshots" at centralSnapshots)
+  else localStaging.value
 }
