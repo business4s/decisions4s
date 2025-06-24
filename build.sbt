@@ -36,7 +36,7 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
   .dependsOn(`decisions4s-core`)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % "3.5.4",
+      "org.typelevel" %% "cats-effect" % "3.5.7",
     ),
   )
 
