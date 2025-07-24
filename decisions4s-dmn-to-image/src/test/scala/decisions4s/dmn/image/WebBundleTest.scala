@@ -7,11 +7,10 @@ import java.net.URLClassLoader
 import java.nio.file.{Files, Path}
 import java.util.jar.{JarEntry, JarOutputStream}
 
-
 class WebBundleTest extends AnyFreeSpec {
 
   "unpack files from jar" in {
-    val jarFile = createTestJar()
+    val jarFile     = createTestJar()
     val classLoader = new URLClassLoader(Array(jarFile.toURI.toURL), this.getClass.getClassLoader)
 
     val webBundle = WebBundle.fromResources("test", classLoader)
@@ -44,5 +43,3 @@ class WebBundleTest extends AnyFreeSpec {
     jarFile
   }
 }
-
-

@@ -68,6 +68,5 @@ class DmnToImageConverter(customDriver: Option[WebDriver & JavascriptExecutor & 
     new ChromeDriver(options)
   }
 
-
   override def close(): Unit = if (shouldClose) driver.quit()
 }
