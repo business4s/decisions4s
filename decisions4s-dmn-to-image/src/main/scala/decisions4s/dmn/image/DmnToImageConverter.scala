@@ -17,6 +17,8 @@ class DmnToImageConverter(customDriver: Option[WebDriver & JavascriptExecutor & 
   private val (driver, shouldClose): (WebDriver & JavascriptExecutor & TakesScreenshot, Boolean) =
     customDriver.map(_ -> false).getOrElse(createDefaultDriver() -> true)
 
+  private lazy val webBundle: WebBundle = WebBundle.fromResources("generated-web-bundle")
+
   def convertDiagram(dmnXml: String): Try[IArray[Byte]] = Try {
     openSkeleton()
     loadDmn(dmnXml)
@@ -25,7 +27,7 @@ class DmnToImageConverter(customDriver: Option[WebDriver & JavascriptExecutor & 
 
   private def openSkeleton(): Unit = {
     // Load the bundled HTML
-    val url  = getClass.getResource("/generated-web-bundle/index.html").toString
+    val url  = webBundle.indexHtmlUri.toString
     driver.get(url)
     // Wait until the page is loaded
     val wait = new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -65,6 +67,7 @@ class DmnToImageConverter(customDriver: Option[WebDriver & JavascriptExecutor & 
     options.addArguments("--allow-file-access-from-files")
     new ChromeDriver(options)
   }
+
 
   override def close(): Unit = if (shouldClose) driver.quit()
 }

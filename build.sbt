@@ -1,5 +1,4 @@
 import org.typelevel.scalacoptions.ScalacOptions
-import sbt.Keys.localStaging
 
 lazy val `decisions4s` = (project in file("."))
   .settings(commonSettings)
@@ -59,7 +58,7 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   )
   .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`, `decisions4s-dmn-to-image`)
 
-lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-scala-2"))
+lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-scala2"))
   .settings(
     scalaVersion   := "2.13.16",
     libraryDependencies ++= testDeps,
