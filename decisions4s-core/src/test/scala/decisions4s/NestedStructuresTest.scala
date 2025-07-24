@@ -6,7 +6,7 @@ class NestedStructuresTest extends AnyFreeSpec {
 
   case class Foo[F[_]](a: F[Int], b: F[Int]) derives HKD
   case class Bar[F[_]](c: F[Int]) derives HKD
-  case class Baz[F[_]](d: F[Int], e: F[Int], f: F[Int])
+  case class Baz[F[_]](d: F[Int], e: F[Int], f: F[Int]) derives HKD
 
   case class Input[F[_]](foo: F[Foo[F]], bar: F[Bar[F]]) derives HKD
   case class Output[F[_]](c: F[Baz[F]]) derives HKD
