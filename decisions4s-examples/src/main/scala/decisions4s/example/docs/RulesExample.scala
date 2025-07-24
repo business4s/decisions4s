@@ -6,8 +6,8 @@ import decisions4s.*
 object RulesExample {
 
   {
-    case class Input[F[_]](a: F[Int], b: F[Int])
-    case class Output[F[_]](c: F[Int])
+    case class Input[F[_]](a: F[Int], b: F[Int]) derives HKD
+    case class Output[F[_]](c: F[Int]) derives HKD
 
     // start_whole_input
     Rule(
