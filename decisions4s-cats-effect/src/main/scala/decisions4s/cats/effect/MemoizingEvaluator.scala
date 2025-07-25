@@ -59,13 +59,12 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
 
   private def evaluateRule(rule: Rule[Input, Output], input: Input[F])(using EvaluationContext[Input]): F[RuleResult[Input, Output]] = {
     type FBool[T] = F[Boolean]
-    val evaluatedF: Input[FBool] = HKD.map2(rule.matching, input)(
-      [t] =>
-        (expr, fValue) => {
-          (expr: UnaryTest[t]) match {
-            case UnaryTest.CatchAll => true.pure[F] // this makes evaluation lazy
-            case _                  => fValue.map(expr.evaluate)
-          }
+    val evaluatedF: Input[FBool] = HKD.map2(rule.matching, input)([t] =>
+      (expr, fValue) => {
+        (expr: UnaryTest[t]) match {
+          case UnaryTest.CatchAll => true.pure[F] // this makes evaluation lazy
+          case _                  => fValue.map(expr.evaluate)
+        }
       },
     )
     val result                   = for {
@@ -84,9 +83,7 @@ class MemoizingEvaluator[Input[_[_]], Output[_[_]], F[_]: Concurrent: Async](val
       .map(values => {
         // TODO this will break for nested strcutures,
         //  but behaviour of the whole module is undefined and not supported in such case anyway
-        val result: CaseClass[H] = summon[HKD[CaseClass]].construct[H](
-          [t] => fu => values(fu.idx).asInstanceOf[H[t]],
-        )
+        val result: CaseClass[H] = summon[HKD[CaseClass]].construct[H]([t] => fu => values(fu.idx).asInstanceOf[H[t]])
         result
       })
   }

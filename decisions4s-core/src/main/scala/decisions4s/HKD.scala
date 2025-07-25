@@ -99,12 +99,11 @@ object HKD {
 
     def meta(index: Int, name: String): Data[Meta] = {
       var index = 0;
-      inst.construct(
-        [Data1[_[_]]] =>
-          (p: HKD[Data1]) => {
-            val idx = index;
-            index += 1;
-            p.meta(idx, labelling.elemLabels(idx))
+      inst.construct([Data1[_[_]]] =>
+        (p: HKD[Data1]) => {
+          val idx = index;
+          index += 1;
+          p.meta(idx, labelling.elemLabels(idx))
         },
       )
     }
@@ -113,16 +112,14 @@ object HKD {
 
     override def indices: Data[Const[Int]] = {
       var index = 0
-      inst.construct(
-        [t[_[_]]] =>
-          (p: HKD[t]) =>
-            p.pure(
-              [t1] =>
-                () => {
-                  val i = index
-                  index += 1;
-                  i
-              },
+      inst.construct([t[_[_]]] =>
+        (p: HKD[t]) =>
+          p.pure([t1] =>
+            () => {
+              val i = index
+              index += 1;
+              i
+            },
           ),
       )
     }

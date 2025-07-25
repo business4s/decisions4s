@@ -14,7 +14,7 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel"    %% "shapeless3-deriving" % "3.4.3",
+      "org.typelevel"    %% "shapeless3-deriving" % "3.5.0",
       "com.lihaoyi"      %% "sourcecode"          % "0.4.2",
       ("org.camunda.feel" % "feel-engine"         % "1.19.3" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
       "ch.qos.logback"    % "logback-classic"     % "1.5.18" % Test,
@@ -35,7 +35,7 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
   .dependsOn(`decisions4s-core`)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % "3.5.7",
+      "org.typelevel" %% "cats-effect" % "3.6.3",
     ),
   )
 
@@ -43,8 +43,8 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.seleniumhq.selenium" % "selenium-java"    % "4.33.0",
-      "io.github.bonigarcia"    % "webdrivermanager" % "6.1.0",
+      "org.seleniumhq.selenium" % "selenium-java"    % "4.34.0",
+      "io.github.bonigarcia"    % "webdrivermanager" % "6.1.1",
     ),
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % "1.5.18" % Test,
