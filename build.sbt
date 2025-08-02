@@ -44,7 +44,7 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
   .settings(
     libraryDependencies ++= Seq(
       "org.seleniumhq.selenium" % "selenium-java"    % "4.34.0",
-      "io.github.bonigarcia"    % "webdrivermanager" % "6.1.1",
+      "io.github.bonigarcia"    % "webdrivermanager" % "6.2.0",
     ),
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % "1.5.18" % Test,
@@ -68,7 +68,7 @@ lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-
   .dependsOn(`decisions4s-core`)
 
 lazy val commonSettings = Seq(
-  scalaVersion  := "3.7.1",
+  scalaVersion  := "3.7.2",
   scalacOptions ++= Seq("-no-indent"),
   libraryDependencies ++= testDeps,
   organization  := "org.business4s",
