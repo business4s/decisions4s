@@ -51,6 +51,17 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
     ),
   )
 
+lazy val `decisions4s-cel` = (project in file("decisions4s-cel"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "dev.cel"   % "cel"          % "0.10.1",
+      "io.circe" %% "circe-core"   % "0.14.14",
+      "io.circe" %% "circe-parser" % "0.14.14",
+    ),
+  )
+  .dependsOn(`decisions4s-core`)
+
 lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(commonSettings)
   .settings(
