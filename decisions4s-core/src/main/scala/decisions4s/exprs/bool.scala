@@ -2,7 +2,7 @@ package decisions4s.exprs
 
 import decisions4s.Expr
 
-import scala.math.Ordered.orderingToOrdered
+import scala.math.Ordering.Implicits.given
 
 // https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-boolean-expressions/
 

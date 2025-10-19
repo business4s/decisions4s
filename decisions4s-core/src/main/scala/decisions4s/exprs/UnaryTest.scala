@@ -4,7 +4,7 @@ import decisions4s.Expr
 import decisions4s.exprs.UnaryTest.Compare.Sign
 
 import scala.language.implicitConversions
-import scala.math.Ordered.orderingToOrdered
+import scala.math.Ordering.Implicits.given
 
 // https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-unary-tests/
 trait UnaryTest[-T] extends Expr[T => Boolean]
