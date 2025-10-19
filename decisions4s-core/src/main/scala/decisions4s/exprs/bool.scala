@@ -2,7 +2,7 @@ package decisions4s.exprs
 
 import decisions4s.Expr
 
-import scala.math.Ordered.orderingToOrdered
+import scala.math.Ordering.Implicits.given
 
 // https://docs.camunda.io/docs/components/modeler/feel/language-guide/feel-boolean-expressions/
 
@@ -49,11 +49,6 @@ case object True extends Expr[Boolean] {
 case object False extends Expr[Boolean] {
   override def evaluate: Boolean        = false
   override def renderExpression: String = "false"
-}
-
-case class Not(expr: Expr[Boolean]) extends Expr[Boolean] {
-  override def evaluate: Boolean        = !expr.evaluate
-  override def renderExpression: String = s"!${expr}"
 }
 
 case class And[I](lhs: Expr[Boolean], rhs: Expr[Boolean]) extends Expr[Boolean] {

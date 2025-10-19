@@ -3,16 +3,14 @@ package decisions4s.internal
 import decisions4s.HKD
 import shapeless3.deriving.~>
 
-import scala.collection.mutable.ListBuffer
-
 object HKDUtils {
 
   def collectFields[F[_[_]]: HKD, T](instance: F[Const[T]]): Vector[T] = {
-    val result = ListBuffer[T]()
-    type Void[T] = Any
-    val gatherName: Const[T] ~> Void = [t] => (fa: T) => result.append(fa)
+    val acc = Vector.newBuilder[T]
+    type Void[_] = Any
+    val gatherName: Const[T] ~> Void = [t] => (fa: T) => acc += fa
     val _                            = instance.mapK(gatherName)
-    result.toVector
+    acc.result()
   }
 
 }

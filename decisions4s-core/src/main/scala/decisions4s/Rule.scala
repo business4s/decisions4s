@@ -16,7 +16,7 @@ class Rule[Input[_[_]]: HKD, Output[_[_]]: HKD](
 
   def evaluate(in: Input[Value])(using EvaluationContext[Input]): RuleResult[Input, Output] = {
     val evaluated: Input[Const[Boolean]]  = HKD.map2(matching, in)([t] => (expr, value) => expr.evaluate(value))
-    val matches                           = HKDUtils.collectFields(evaluated).foldLeft(true)(_ && _)
+    val matches                           = HKDUtils.collectFields(evaluated).forall(identity)
     val evalResult: Option[Output[Value]] = Option.when(matches)(evaluateOutput())
     RuleResult(evaluated, evalResult)
   }
