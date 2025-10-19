@@ -26,7 +26,7 @@ lazy val `decisions4s-dmn` = (project in file("decisions4s-dmn"))
   .dependsOn(`decisions4s-core`)
   .settings(
     libraryDependencies ++= Seq(
-      "org.camunda.bpm.model" % "camunda-dmn-model" % "7.23.0",
+      "org.camunda.bpm.model" % "camunda-dmn-model" % "7.24.0",
     ),
   )
 
