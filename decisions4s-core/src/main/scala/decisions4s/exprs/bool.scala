@@ -51,11 +51,6 @@ case object False extends Expr[Boolean] {
   override def renderExpression: String = "false"
 }
 
-case class Not(expr: Expr[Boolean]) extends Expr[Boolean] {
-  override def evaluate: Boolean        = !expr.evaluate
-  override def renderExpression: String = s"!${expr}"
-}
-
 case class And[I](lhs: Expr[Boolean], rhs: Expr[Boolean]) extends Expr[Boolean] {
   override def evaluate: Boolean        = lhs.evaluate && rhs.evaluate
   override def renderExpression: String = s"${lhs.renderExpression} and ${rhs.renderExpression}"
