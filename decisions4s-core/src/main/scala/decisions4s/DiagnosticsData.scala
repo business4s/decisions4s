@@ -32,7 +32,7 @@ object DiagnosticsData {
       renderedConditions: Map[InputFieldIdx, String],
       evaluation: Option[Rule.Evaluation],
   )
-  case object Rule      {
+  case object Rule {
     case class Evaluation(
         evaluationResults: Map[InputFieldIdx, Boolean],
         output: Option[Rule.Output],

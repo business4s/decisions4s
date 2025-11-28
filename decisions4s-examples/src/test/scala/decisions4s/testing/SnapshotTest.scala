@@ -8,9 +8,9 @@ object SnapshotTest {
 
   private val testResourcesPath = Paths
     .get(getClass.getResource("/").toURI) // decisions4s-examples/target/scala-3.4.2/test-classes
-    .getParent // decisions4s-examples/target/scala-3.4.2
-    .getParent // decisions4s-examples/target
-    .getParent // decisions4s-examples
+    .getParent                            // decisions4s-examples/target/scala-3.4.2
+    .getParent                            // decisions4s-examples/target
+    .getParent                            // decisions4s-examples
     .resolve("src/test/resources")
 
   def testSnapshot(content: String, path: String) = {
