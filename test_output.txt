@@ -1,0 +1,81 @@
+[info] welcome to sbt 1.12.0 (Oracle Corporation Java 20.0.2)
+[info] loading settings for project decisions4s-build from plugins.sbt...
+[info] loading project definition from /Users/krrishbiswas/Desktop/GSoC/decisions4s/project
+[info] loading settings for project decisions4s from build.sbt...
+[info] set current project to decisions4s (in build file:/Users/krrishbiswas/Desktop/GSoC/decisions4s/)
+[info] set current project to decisions4s-core (in build file:/Users/krrishbiswas/Desktop/GSoC/decisions4s/)
+[info] HtmlRendererTest:
+[info] HtmlRenderer
+[info] - should render a basic table *** FAILED ***
+[info]   "<!DOCTYPE html>
+[info]   <html>
+[info]   <head>
+[info]   <style>
+[info]     .decision-table {
+[info]       font-family: Arial, sans-serif;
+[info]       border-collapse: collapse;
+[info]       width: 100%;
+[info]       margin: 20px 0;
+[info]     }
+[info]     .decision-table th, .decision-table td {
+[info]       border: 1px solid #ddd;
+[info]       padding: 8px;
+[info]       text-align: left;
+[info]     }
+[info]     .decision-table th {
+[info]       background-color: #f2f2f2;
+[info]     }
+[info]     .header-main {
+[info]       text-align: center;
+[info]       font-weight: bold;
+[info]     }
+[info]     .section-header {
+[info]       background-color: #e0e0e0;
+[info]       text-align: center;
+[info]       font-weight: bold;
+[info]     }
+[info]   </style>
+[info]   </head>
+[info]   <body>
+[info]   
+[info]   <table class="decision-table">
+[info]     <thead>
+[info]       <tr>
+[info]         <th colspan="3" class="header-main">test</th>
+[info]       </tr>
+[info]       <tr>
+[info]         <th colspan="2" class="section-header">Inputs</th>
+[info]         <th colspan="1" class="section-header">Outputs</th>
+[info]         
+[info]       </tr>
+[info]       <tr>
+[info]         <th>foo</th>
+[info]         <th>bar</th>
+[info]         <th>c</th>
+[info]         
+[info]       </tr>
+[info]     </thead>
+[info]     <tbody>
+[info]       <tr><td>> 3</td><td>"some string"</td><td>2</td></tr>
+[info]       <tr><td>-</td><td>-</td><td>1</td></tr>
+[info]     </tbody>
+[info]     <tfoot>
+[info]       <tr>
+[info]         <td colspan="3">Hit Policy: Single</td>
+[info]       </tr>
+[info]     </tfoot>
+[info]   </table>
+[info]   
+[info]   </body>
+[info]   </html>
+[info]   " did not contain "&gt; 3" (HtmlRendererTest.scala:38)
+[info] - should handle annotations
+[info] Run completed in 336 milliseconds.
+[info] Total number of tests run: 2
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 1, failed 1, canceled 0, ignored 0, pending 0
+[info] *** 1 TEST FAILED ***
+[error] Failed tests:
+[error] 	decisions4s.html.HtmlRendererTest
+[error] (Test / testOnly) sbt.TestsFailedException: Tests unsuccessful
+[error] Total time: 1 s, completed Jan 11, 2026, 11:04:58 AM
