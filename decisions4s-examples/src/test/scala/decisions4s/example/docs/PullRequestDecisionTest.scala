@@ -1,6 +1,7 @@
 package decisions4s.example.docs
 
 import decisions4s.{DiagnosticsData, Value}
+import decisions4s.html.HtmlRenderer
 import decisions4s.markdown.MarkdownRenderer
 import decisions4s.testing.SnapshotTest
 import org.scalatest.freespec.AnyFreeSpec
@@ -15,6 +16,11 @@ class PullRequestDecisionTest extends AnyFreeSpec {
   "markdown" in {
     val liveString = MarkdownRenderer.render(PullRequestDecision.decisionTable)
     SnapshotTest.testSnapshot(liveString, "docs/pull-request-markdown.md")
+  }
+
+  "html" in {
+    val liveString = HtmlRenderer.render(PullRequestDecision.decisionTable)
+    SnapshotTest.testSnapshot(liveString, "docs/pull-request-html.html")
   }
 
   "generate custom diagnostics" in {
