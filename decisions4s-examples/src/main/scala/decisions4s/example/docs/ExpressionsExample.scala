@@ -7,6 +7,13 @@ import scala.annotation.nowarn
 @nowarn("msg=unused value")
 object ExpressionsExample {
 
+  // start_quoted
+  import decisions4s.Expr
+  import decisions4s.Expr.quoted
+
+  val quotedExpr: Expr[Int] = quoted(1 + 1)
+  // end_quoted
+
   // start_expr
   import decisions4s.*
 
