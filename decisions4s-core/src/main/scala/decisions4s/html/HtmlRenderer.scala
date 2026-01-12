@@ -24,7 +24,7 @@ object HtmlRenderer {
        |  .decision-table {
        |    font-family: Arial, sans-serif;
        |    border-collapse: collapse;
-       |    width: 100%;
+       |    width: auto;
        |    margin: 20px 0;
        |  }
        |  .decision-table th, .decision-table td {
@@ -51,7 +51,7 @@ object HtmlRenderer {
        |<table class="decision-table">
        |  <thead>
        |    <tr>
-       |      <th colspan="$totalCols" class="header-main">${data.name}</th>
+       |      <th colspan="$totalCols" class="header-main">${data.name} (Hit Policy: ${data.hitPolicy})</th>
        |    </tr>
        |    <tr>
        |      <th colspan="$inputCols" class="section-header">Inputs</th>
@@ -67,11 +67,6 @@ object HtmlRenderer {
        |  <tbody>
        |    ${data.rules.map(renderRule(annoCols > 0)).mkString("\n    ")}
        |  </tbody>
-       |  <tfoot>
-       |    <tr>
-       |      <td colspan="$totalCols">Hit Policy: ${data.hitPolicy}</td>
-       |    </tr>
-       |  </tfoot>
        |</table>
        |
        |</body>

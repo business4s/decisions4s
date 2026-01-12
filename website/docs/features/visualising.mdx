@@ -14,6 +14,16 @@ Markdown representation is provided out-of-the box in the core module.
 ```scala file=./main/scala/decisions4s/example/docs/RenderingExample.scala start=start_markdown end=end_markdown
 ```
 
+## HTML
+
+An HTML representation is also provided in the core module, which can be useful for rendering decision tables in web applications or reports.
+
+```scala
+import decisions4s.html.HtmlRenderer
+
+val html = HtmlRenderer.render(decisionTable)
+```
+
 ## Decision Model and Notation (DMN)
 
 [DMN](https://en.wikipedia.org/wiki/Decision_Model_and_Notation) model can be generated using the following dependency:

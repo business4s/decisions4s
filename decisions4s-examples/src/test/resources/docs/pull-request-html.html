@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .decision-table {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    width: auto;
+    margin: 20px 0;
+  }
+  .decision-table th, .decision-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  .decision-table th {
+    background-color: #f2f2f2;
+  }
+  .header-main {
+    text-align: center;
+    font-weight: bold;
+  }
+  .section-header {
+    background-color: #e0e0e0;
+    text-align: center;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<table class="decision-table">
+  <thead>
+    <tr>
+      <th colspan="5" class="header-main">PullRequestDecision (Hit Policy: First)</th>
+    </tr>
+    <tr>
+      <th colspan="3" class="section-header">Inputs</th>
+      <th colspan="2" class="section-header">Outputs</th>
+      
+    </tr>
+    <tr>
+      <th>numOfApprovals</th>
+      <th>isTargetBranchProtected</th>
+      <th>authorIsAdmin</th>
+      <th>allowMerging</th>
+      <th>notifyUnusualAction</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>&gt; 0</td><td>false</td><td>-</td><td>true</td><td>false</td></tr>
+    <tr><td>&gt; 1</td><td>true</td><td>-</td><td>true</td><td>false</td></tr>
+    <tr><td>-</td><td>-</td><td>true</td><td>true</td><td>true</td></tr>
+    <tr><td>-</td><td>-</td><td>-</td><td>false</td><td>false</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>
