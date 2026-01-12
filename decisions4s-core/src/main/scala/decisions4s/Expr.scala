@@ -20,6 +20,7 @@ import decisions4s.exprs.{
   Projection,
   UnaryTest,
 }
+import scala.quoted.*
 
 trait Expr[+Out] {
   def evaluate: Out
@@ -27,6 +28,19 @@ trait Expr[+Out] {
 }
 
 object Expr {
+  inline def quoted[T](inline expr: T): Expr[T] = ${ quotedImpl('expr) }
+
+  private def quotedImpl[T: Type](expr: scala.quoted.Expr[T])(using Quotes): scala.quoted.Expr[Expr[T]] = {
+    import quotes.reflect.*
+    val pos = expr.asTerm.pos
+    val code = pos.sourceCode.getOrElse("???")
+    '{
+      new Expr[T] {
+        def evaluate: T = $expr
+        def renderExpression: String = ${scala.quoted.Expr(code)}
+      }
+    }
+  }
 
   extension [O](lhs: Expr[O]) {
     def equalsTo(rhs: Expr[O]): Expr[Boolean]                 = Equal(lhs, rhs)
