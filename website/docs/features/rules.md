@@ -50,10 +50,7 @@ Implicit conversion between `Expr[Boolean]` and `UnaryTest` is also defined.
 The easiest way to create expressions is by using Scala quoted code blocks.
 This allows to write regular Scala code that will be converted to `Expr` automatically.
 
-```scala
-import decisions4s.Expr.quoted
-
-val expr: Expr[Int] = quoted(1 + 1)
+```scala file=./main/scala/decisions4s/example/docs/ExpressionsExample.scala start=start_quoted end=end_quoted
 ```
 
 The code within `quoted` block is analyzed to extract its source code representation.
