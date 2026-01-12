@@ -18,10 +18,10 @@ class QuotedExpressionTest extends AnyFreeSpec {
       assert(e.evaluate == 20)
       assert(e.renderExpression == "x * 2")
     }
-    
-     "should capture function calls" in {
+
+    "should capture function calls" in {
       def f(i: Int) = i + 1
-      val e = quoted(f(10))
+      val e         = quoted(f(10))
       assert(e.evaluate == 11)
       assert(e.renderExpression == "f(10)")
     }

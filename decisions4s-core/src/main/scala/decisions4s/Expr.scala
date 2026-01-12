@@ -32,12 +32,12 @@ object Expr {
 
   private def quotedImpl[T: Type](expr: scala.quoted.Expr[T])(using Quotes): scala.quoted.Expr[Expr[T]] = {
     import quotes.reflect.*
-    val pos = expr.asTerm.pos
+    val pos  = expr.asTerm.pos
     val code = pos.sourceCode.getOrElse("???")
     '{
       new Expr[T] {
-        def evaluate: T = $expr
-        def renderExpression: String = ${scala.quoted.Expr(code)}
+        def evaluate: T              = $expr
+        def renderExpression: String = ${ scala.quoted.Expr(code) }
       }
     }
   }
