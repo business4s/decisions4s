@@ -33,7 +33,7 @@ object Expr {
   private def quotedImpl[T: Type](expr: scala.quoted.Expr[T])(using Quotes): scala.quoted.Expr[Expr[T]] = {
     import quotes.reflect.*
     val pos  = expr.asTerm.pos
-    val code = pos.sourceCode.getOrElse("???")
+    val code = pos.sourceCode.getOrElse(quotes.reflect.report.errorAndAbort("Cannot find source code for this expression. Please execute it within a file", pos))
     '{
       new Expr[T] {
         def evaluate: T              = $expr

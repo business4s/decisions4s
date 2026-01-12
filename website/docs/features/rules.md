@@ -45,6 +45,20 @@ trait Expr[+Out] {
 All the most common ways of building `UnaryTest`s are accessible through `it` object.
 Implicit conversion between `Expr[Boolean]` and `UnaryTest` is also defined.
 
+## Quoted Expressions
+
+The easiest way to create expressions is by using Scala quoted code blocks.
+This allows to write regular Scala code that will be converted to `Expr` automatically.
+
+```scala
+import decisions4s.Expr.quoted
+
+val expr: Expr[Int] = quoted(1 + 1)
+```
+
+The code within `quoted` block is analyzed to extract its source code representation.
+If the source code cannot be obtained (e.g. when dynamically generating code), a compile-time error will be reported.
+
 ## Built-in Expressions
 
 `Decisions4s` provides basic numeric and boolean expressions that can be used by invoking methods on
