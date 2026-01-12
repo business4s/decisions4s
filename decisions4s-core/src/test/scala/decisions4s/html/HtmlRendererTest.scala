@@ -26,7 +26,7 @@ class HtmlRendererTest extends AnyFreeSpec {
   "HtmlRenderer" - {
     "should render a basic table" in {
       val html = HtmlRenderer.render(testTable)
-      
+
       assert(html.contains("<!DOCTYPE html>"))
       assert(html.contains("test"))
       assert(html.contains("Inputs"))
@@ -38,27 +38,27 @@ class HtmlRendererTest extends AnyFreeSpec {
       assert(html.contains("&gt; 3"))
       assert(html.contains("some string"))
     }
-    
+
     "should handle annotations" in {
-         val tableWithAnnotation: DecisionTable[Input, Output, HitPolicy.Single] = DecisionTable(
-            rules = List(
-              Rule(
-                matching = Input(
-                  foo = it > 3,
-                  bar = it.equalsTo("some string"),
-                ),
-                output = Output(2),
-                annotation = Some("this is a test rule")
-              ),
-              Rule.default(Output(1)),
+      val tableWithAnnotation: DecisionTable[Input, Output, HitPolicy.Single] = DecisionTable(
+        rules = List(
+          Rule(
+            matching = Input(
+              foo = it > 3,
+              bar = it.equalsTo("some string"),
             ),
-            "test_with_anno",
-            HitPolicy.Single,
-          )
-          
-          val html = HtmlRenderer.render(tableWithAnnotation)
-          assert(html.contains("Annotations"))
-          assert(html.contains("this is a test rule"))
+            output = Output(2),
+            annotation = Some("this is a test rule"),
+          ),
+          Rule.default(Output(1)),
+        ),
+        "test_with_anno",
+        HitPolicy.Single,
+      )
+
+      val html = HtmlRenderer.render(tableWithAnnotation)
+      assert(html.contains("Annotations"))
+      assert(html.contains("this is a test rule"))
     }
   }
 }
