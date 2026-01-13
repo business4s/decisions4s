@@ -8,6 +8,7 @@ lazy val `decisions4s` = (project in file("."))
     `decisions4s-cats-effect`,
     `decisions4s-examples`,
     `decisions4s-dmn-to-image`,
+    `decisions4s-sql`,
   )
 
 lazy val `decisions4s-core` = (project in file("decisions4s-core"))
@@ -36,6 +37,15 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % "3.6.3",
+    ),
+  )
+
+lazy val `decisions4s-sql` = (project in file("decisions4s-sql"))
+  .settings(commonSettings)
+  .dependsOn(`decisions4s-core`)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.tpolecat" %% "doobie-core" % "1.0.0-RC6",
     ),
   )
 
@@ -87,7 +97,8 @@ lazy val commonSettings = Seq(
 )
 
 lazy val testDeps = List(
-  "org.scalatest" %% "scalatest-freespec" % "3.2.19" % Test,
+  "org.scalatest" %% "scalatest-freespec"       % "3.2.19" % Test,
+  "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.19" % Test,
 )
 
 lazy val stableVersion = taskKey[String]("stableVersion")

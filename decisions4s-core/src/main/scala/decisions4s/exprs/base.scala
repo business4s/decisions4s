@@ -33,12 +33,22 @@ case class VariableStub[T](name: String) extends Expr[T] {
   override def renderExpression: String = name
 }
 
-class Projection[O1, +O2](base: Expr[O1], get: O1 => Expr[O2], label: String) extends Expr[O2] {
+class Projection[O1, +O2](val base: Expr[O1], val get: O1 => Expr[O2], val label: String) extends Expr[O2] {
   override def evaluate: O2             = base.evaluate.pipe(get).evaluate
   override def renderExpression: String = s"${base.renderExpression}.$label"
 }
 
-class IsEmpty[T](base: Expr[Option[T]]) extends Expr[Boolean] {
+object Projection {
+  def apply[O1, O2](base: Expr[O1], get: O1 => Expr[O2], label: String): Projection[O1, O2] = new Projection(base, get, label)
+  def unapply[O1, O2](x: Projection[O1, O2]): Option[(Expr[O1], O1 => Expr[O2], String)] = Some((x.base, x.get, x.label))
+}
+
+class IsEmpty[T](val base: Expr[Option[T]]) extends Expr[Boolean] {
   override def evaluate: Boolean        = base.evaluate.isEmpty
   override def renderExpression: String = s"isEmpty(${base.renderExpression})"
+}
+
+object IsEmpty {
+  def apply[T](base: Expr[Option[T]]): IsEmpty[T] = new IsEmpty(base)
+  def unapply[T](x: IsEmpty[T]): Option[Expr[Option[T]]] = Some(x.base)
 }

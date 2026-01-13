@@ -24,21 +24,30 @@ object Function {
   }
 }
 
-trait Function1[A, Out](arg1: Expr[A], name: String) extends Expr[Out] {
+trait Function1[A, Out](arg1Param: Expr[A], nameParam: String) extends Expr[Out] {
+  val arg1 = arg1Param
+  val name = nameParam
   def evaluate(a: A): Out
 
   override def evaluate: Out            = evaluate(arg1.evaluate)
   override def renderExpression: String = s"${name}(${arg1.renderExpression})"
 }
 
-trait Function2[A, B, Out](arg1: Expr[A], arg2: Expr[B], name: String) extends Expr[Out] {
+trait Function2[A, B, Out](arg1Param: Expr[A], arg2Param: Expr[B], nameParam: String) extends Expr[Out] {
+  val arg1 = arg1Param
+  val arg2 = arg2Param
+  val name = nameParam
   def evaluate(a: A, b: B): Out
 
   override def evaluate: Out            = evaluate(arg1.evaluate, arg2.evaluate)
   override def renderExpression: String = s"${name}(${arg1.renderExpression}, ${arg2.renderExpression})"
 }
 
-trait Function3[A, B, C, Out](arg1: Expr[A], arg2: Expr[B], arg3: Expr[C], name: String) extends Expr[Out] {
+trait Function3[A, B, C, Out](arg1Param: Expr[A], arg2Param: Expr[B], arg3Param: Expr[C], nameParam: String) extends Expr[Out] {
+  val arg1 = arg1Param
+  val arg2 = arg2Param
+  val arg3 = arg3Param
+  val name = nameParam
   def evaluate(a: A, b: B, c: C): Out
 
   override def evaluate: Out            = evaluate(arg1.evaluate, arg2.evaluate, arg3.evaluate)

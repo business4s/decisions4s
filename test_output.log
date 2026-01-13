@@ -1,0 +1,54 @@
+[info] welcome to sbt 1.12.0 (Oracle Corporation Java 20.0.2)
+[info] loading settings for project decisions4s-build from plugins.sbt...
+[info] loading project definition from /Users/krrishbiswas/Desktop/GSoC/decisions4s/project
+[info] loading settings for project decisions4s from build.sbt...
+[info] set current project to decisions4s (in build file:/Users/krrishbiswas/Desktop/GSoC/decisions4s/)
+[info] set current project to decisions4s-sql (in build file:/Users/krrishbiswas/Desktop/GSoC/decisions4s/)
+[info] compiling 1 Scala source to /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/target/scala-3.7.3/test-classes ...
+[error] -- [E046] Cyclic Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:9:48 
+[error] 9 |class SqlEvaluatorTest extends AnyFreeSpec with Matchers {
+[error]   |                                                ^
+[error]   |                               Cyclic reference involving val <import>
+[error]   |
+[error]   |                                Run with -explain-cyclic for more details.
+[error]   |
+[error]   | longer explanation available when compiling with `-explain`
+[error] -- [E008] Not Found Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:4:21 
+[error] 4 |import org.scalatest.matchers.should.Matchers
+[error]   |       ^^^^^^^^^^^^^^^^^^^^^^
+[error]   |       value matchers is not a member of org.scalatest
+[error] -- [E008] Not Found Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:19:29 
+[error] 19 |       toSql(Literal(1)).str shouldBe "?"
+[error]    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[error]    |       value shouldBe is not a member of String
+[error] -- [E008] Not Found Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:20:33 
+[error] 20 |       toSql(Literal("foo")).str shouldBe "?"
+[error]    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[error]    |       value shouldBe is not a member of String
+[error] -- [E008] Not Found Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:25:23 
+[error] 25 |       toSql(expr).str shouldBe "(? + ?)"
+[error]    |       ^^^^^^^^^^^^^^^^^^^^^^^^
+[error]    |       value shouldBe is not a member of String
+[error] -- [E008] Not Found Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:30:23 
+[error] 30 |       toSql(expr).str shouldBe "x"
+[error]    |       ^^^^^^^^^^^^^^^^^^^^^^^^
+[error]    |       value shouldBe is not a member of String
+[error] -- [E008] Not Found Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:35:23 
+[error] 35 |       toSql(expr).str shouldBe "((x > ?) AND (y < ?))"
+[error]    |       ^^^^^^^^^^^^^^^^^^^^^^^^
+[error]    |       value shouldBe is not a member of String
+[error] -- [E008] Not Found Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:43:30 
+[error] 43 |       toSql(In(x, test)).str shouldBe "(x > ?)"
+[error]    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[error]    |       value shouldBe is not a member of String
+[error] -- [E008] Not Found Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:49:30 
+[error] 49 |       toSql(In(x, test)).str shouldBe "(x = ?)"
+[error]    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[error]    |       value shouldBe is not a member of String
+[error] -- [E008] Not Found Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/test/scala/decisions4s/sql/SqlEvaluatorTest.scala:57:20 
+[error] 57 |       toSql(f).str shouldBe "myFunc(x)"
+[error]    |       ^^^^^^^^^^^^^^^^^^^^^
+[error]    |       value shouldBe is not a member of String
+[error] 10 errors found
+[error] (Test / compileIncremental) Compilation failed
+[error] Total time: 3 s, completed Jan 13, 2026, 10:57:39 AM

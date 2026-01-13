@@ -1,0 +1,75 @@
+[info] welcome to sbt 1.12.0 (Oracle Corporation Java 20.0.2)
+[info] loading settings for project decisions4s-build from plugins.sbt...
+[info] loading project definition from /Users/krrishbiswas/Desktop/GSoC/decisions4s/project
+[info] loading settings for project decisions4s from build.sbt...
+[info] set current project to decisions4s (in build file:/Users/krrishbiswas/Desktop/GSoC/decisions4s/)
+[info] Executing in batch mode. For better performance use sbt's shell
+[success] Total time: 0 s, completed Jan 13, 2026, 10:56:30 AM
+[info] compiling 28 Scala sources to /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-core/target/scala-3.7.3/classes ...
+[info] compiling 2 Scala sources to /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-dmn-to-image/target/scala-3.7.3/classes ...
+[info] done compiling
+[info] done compiling
+[info] compiling 2 Scala sources to /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-dmn/target/scala-3.7.3/classes ...
+[info] compiling 2 Scala sources to /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-cats-effect/target/scala-3.7.3/classes ...
+[info] compiling 1 Scala source to /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/target/scala-3.7.3/classes ...
+[info] done compiling
+[info] done compiling
+[info] compiling 12 Scala sources to /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-examples/target/scala-3.7.3/classes ...
+[error] -- [E007] Type Mismatch Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/main/scala/decisions4s/sql/SqlEvaluator.scala:13:44 
+[error] 13 |        case s: String  => val str = s; fr"$str"
+[error]    |                                            ^^^
+[error]    |               Found:    (str : T$1 & String)
+[error]    |               Required: doobie.syntax.SqlInterpolator.SingleFragment[?]
+[error]    |
+[error]    |               where:    T$1 is a type in method toSql
+[error]    |
+[error]    | longer explanation available when compiling with `-explain`
+[error] -- [E007] Type Mismatch Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/main/scala/decisions4s/sql/SqlEvaluator.scala:14:47 
+[error] 14 |        case i: Int     => val intVal = i; fr"$intVal"
+[error]    |                                               ^^^^^^
+[error]    |               Found:    (intVal : T$1 & Int)
+[error]    |               Required: doobie.syntax.SqlInterpolator.SingleFragment[?]
+[error]    |
+[error]    |               where:    T$1 is a type in method toSql
+[error]    |
+[error]    | longer explanation available when compiling with `-explain`
+[error] -- [E007] Type Mismatch Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/main/scala/decisions4s/sql/SqlEvaluator.scala:15:48 
+[error] 15 |        case l: Long    => val longVal = l; fr"$longVal"
+[error]    |                                                ^^^^^^^
+[error]    |               Found:    (longVal : T$1 & Long)
+[error]    |               Required: doobie.syntax.SqlInterpolator.SingleFragment[?]
+[error]    |
+[error]    |               where:    T$1 is a type in method toSql
+[error]    |
+[error]    | longer explanation available when compiling with `-explain`
+[error] -- [E007] Type Mismatch Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/main/scala/decisions4s/sql/SqlEvaluator.scala:16:50 
+[error] 16 |        case d: Double  => val doubleVal = d; fr"$doubleVal"
+[error]    |                                                  ^^^^^^^^^
+[error]    |               Found:    (doubleVal : T$1 & Double)
+[error]    |               Required: doobie.syntax.SqlInterpolator.SingleFragment[?]
+[error]    |
+[error]    |               where:    T$1 is a type in method toSql
+[error]    |
+[error]    | longer explanation available when compiling with `-explain`
+[error] -- [E007] Type Mismatch Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/main/scala/decisions4s/sql/SqlEvaluator.scala:17:49 
+[error] 17 |        case f: Float   => val floatVal = f; fr"$floatVal"
+[error]    |                                                 ^^^^^^^^
+[error]    |               Found:    (floatVal : T$1 & Float)
+[error]    |               Required: doobie.syntax.SqlInterpolator.SingleFragment[?]
+[error]    |
+[error]    |               where:    T$1 is a type in method toSql
+[error]    |
+[error]    | longer explanation available when compiling with `-explain`
+[error] -- [E007] Type Mismatch Error: /Users/krrishbiswas/Desktop/GSoC/decisions4s/decisions4s-sql/src/main/scala/decisions4s/sql/SqlEvaluator.scala:18:48 
+[error] 18 |        case b: Boolean => val boolVal = b; fr"$boolVal"
+[error]    |                                                ^^^^^^^
+[error]    |               Found:    (boolVal : T$1 & Boolean)
+[error]    |               Required: doobie.syntax.SqlInterpolator.SingleFragment[?]
+[error]    |
+[error]    |               where:    T$1 is a type in method toSql
+[error]    |
+[error]    | longer explanation available when compiling with `-explain`
+[error] 6 errors found
+[info] done compiling
+[error] (decisions4s-sql / Compile / compileIncremental) Compilation failed
+[error] Total time: 7 s, completed Jan 13, 2026, 10:56:37 AM

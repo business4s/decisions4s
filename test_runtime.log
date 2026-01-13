@@ -1,0 +1,31 @@
+[info] welcome to sbt 1.12.0 (Oracle Corporation Java 20.0.2)
+[info] loading settings for project decisions4s-build from plugins.sbt...
+[info] loading project definition from /Users/krrishbiswas/Desktop/GSoC/decisions4s/project
+[info] loading settings for project decisions4s from build.sbt...
+[info] set current project to decisions4s (in build file:/Users/krrishbiswas/Desktop/GSoC/decisions4s/)
+[info] set current project to decisions4s-sql (in build file:/Users/krrishbiswas/Desktop/GSoC/decisions4s/)
+[info] SqlEvaluatorTest:
+[info] SqlEvaluator
+[info] - should compile literals *** FAILED ***
+[info]   "?[ ]" was not equal to "?[]" (SqlEvaluatorTest.scala:19)
+[info] - should compile arithmetic *** FAILED ***
+[info]   "(? [ + ? ) ]" was not equal to "(? [+ ?)]" (SqlEvaluatorTest.scala:25)
+[info] - should compile variables *** FAILED ***
+[info]   "x[ ]" was not equal to "x[]" (SqlEvaluatorTest.scala:30)
+[info] - should compile boolean logic *** FAILED ***
+[info]   "((x [ > ? )  AND (y  < ? ) ) ]" was not equal to "((x [> ?) AND (y < ?))]" (SqlEvaluatorTest.scala:35)
+[info] - should compile UnaryTest (Input Entry) *** FAILED ***
+[info]   "(x [ >  ? ) ]" was not equal to "(x [> ?)]" (SqlEvaluatorTest.scala:43)
+[info] - should compile UnaryTest EqualTo *** FAILED ***
+[info]   "(x [ = ? ) ]" was not equal to "(x [= ?)]" (SqlEvaluatorTest.scala:49)
+[info] - should compile Function1 *** FAILED ***
+[info]   "myFunc[ (x ) ]" was not equal to "myFunc[(x)]" (SqlEvaluatorTest.scala:57)
+[info] Run completed in 289 milliseconds.
+[info] Total number of tests run: 7
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 0, failed 7, canceled 0, ignored 0, pending 0
+[info] *** 7 TESTS FAILED ***
+[error] Failed tests:
+[error] 	decisions4s.sql.SqlEvaluatorTest
+[error] (Test / test) sbt.TestsFailedException: Tests unsuccessful
+[error] Total time: 1 s, completed Jan 13, 2026, 10:58:33 AM
