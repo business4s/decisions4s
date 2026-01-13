@@ -8,7 +8,7 @@ import doobie.implicits._
 object SqlEvaluator {
 
   def toSql(expr: Expr[?]): Fragment = expr match {
-    case Literal(v) => 
+    case Literal(v) =>
       v match {
         case s: String  => val str: String = s; fr0"$str"
         case i: Int     => val intVal: Int = i; fr0"$intVal"
@@ -38,14 +38,14 @@ object SqlEvaluator {
     case In(lhs, test) => compileUnaryTest(test, toSql(lhs))
 
     case Projection(base, _, label) => fr0"${toSql(base)}.${Fragment.const0(label)}"
-    
-    case IsEmpty(base) => fr0"${toSql(base)} IS NULL" 
+
+    case IsEmpty(base) => fr0"${toSql(base)} IS NULL"
 
     case f: Function1[_, _] =>
       fr0"${Fragment.const0(f.name)}(${toSql(f.arg1)})"
-    
+
     case f: Function2[_, _, _] =>
-       fr0"${Fragment.const0(f.name)}(${toSql(f.arg1)}, ${toSql(f.arg2)})"
+      fr0"${Fragment.const0(f.name)}(${toSql(f.arg1)}, ${toSql(f.arg2)})"
 
     case _ => throw new UnsupportedOperationException(s"Cannot compile expression to SQL: $expr")
   }
@@ -61,36 +61,36 @@ object SqlEvaluator {
       fr0"($input ${Fragment.const0(op)} ${toSql(rhs)})"
 
     case UnaryTest.EqualTo(expr) => fr0"($input = ${toSql(expr)})"
-    
+
     case UnaryTest.OneOf(expr) =>
-       expr match {
-         case Literal(iter: Iterable[_]) => 
-            if (iter.isEmpty) fr0"1=0" // false
-            else {
-               val list = iter.toList
-               list.headOption match {
-                   case Some(s: String) => 
-                      import cats.data.NonEmptyList
-                      Fragments.in(input, NonEmptyList.fromListUnsafe(list.asInstanceOf[List[String]]))
-                   case Some(i: Int) => 
-                      import cats.data.NonEmptyList
-                      Fragments.in(input, NonEmptyList.fromListUnsafe(list.asInstanceOf[List[Int]]))
-                   case _ =>  throw new IllegalArgumentException(s"Unsupported OneOf list type: $list")
-               }
+      expr match {
+        case Literal(iter: Iterable[_]) =>
+          if (iter.isEmpty) fr0"1=0" // false
+          else {
+            val list = iter.toList
+            list.headOption match {
+              case Some(s: String) =>
+                import cats.data.NonEmptyList
+                Fragments.in(input, NonEmptyList.fromListUnsafe(list.asInstanceOf[List[String]]))
+              case Some(i: Int)    =>
+                import cats.data.NonEmptyList
+                Fragments.in(input, NonEmptyList.fromListUnsafe(list.asInstanceOf[List[Int]]))
+              case _               => throw new IllegalArgumentException(s"Unsupported OneOf list type: $list")
             }
-         case _ => throw new UnsupportedOperationException("OneOf requires a Literal Iterable")
-       }
+          }
+        case _                          => throw new UnsupportedOperationException("OneOf requires a Literal Iterable")
+      }
 
     case UnaryTest.Not(inner) => fr0"NOT (${compileUnaryTest(inner, input)})"
-    
-    case UnaryTest.Or(parts) => 
-       if (parts.isEmpty) fr0"1=0"
-       else parts.map(compileUnaryTest(_, input)).reduceLeft { (a, b) => fr0"($a OR $b)" }
+
+    case UnaryTest.Or(parts) =>
+      if (parts.isEmpty) fr0"1=0"
+      else parts.map(compileUnaryTest(_, input)).reduceLeft { (a, b) => fr0"($a OR $b)" }
 
     case UnaryTest.CatchAll => fr0"1=1"
-    
+
     case UnaryTest.Bool(expr) => toSql(expr) // Ignore input for pure boolean test?
-    
+
     case _ => throw new UnsupportedOperationException(s"Cannot compile UnaryTest: $test")
   }
 }
