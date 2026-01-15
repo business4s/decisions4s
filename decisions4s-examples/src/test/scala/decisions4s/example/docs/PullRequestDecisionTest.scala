@@ -1,6 +1,7 @@
 package decisions4s.example.docs
 
 import decisions4s.{DiagnosticsData, Value}
+import decisions4s.dmn.DmnRenderer
 import decisions4s.html.HtmlRenderer
 import decisions4s.markdown.MarkdownRenderer
 import decisions4s.testing.SnapshotTest
@@ -21,6 +22,11 @@ class PullRequestDecisionTest extends AnyFreeSpec {
   "html" in {
     val liveString = HtmlRenderer.render(PullRequestDecision.decisionTable)
     SnapshotTest.testSnapshot(liveString, "docs/pull-request-html.html")
+  }
+
+  "dmn" in {
+    val liveString = DmnRenderer.render(PullRequestDecision.decisionTable).toXML
+    SnapshotTest.testSnapshot(liveString, "docs/pull-request-dmn.xml")
   }
 
   "generate custom diagnostics" in {

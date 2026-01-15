@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions id="definitions" name="definitions" namespace="http://camunda.org/schema/1.0/dmn" xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/">
+  <decision id="decision_1" name="PullRequestDecision">
+    <decisionTable hitPolicy="FIRST" id="table_1">
+      <input id="input_0" label="numOfApprovals">
+        <inputExpression id="input_0_expr_1"/>
+      </input>
+      <input id="input_1" label="isTargetBranchProtected">
+        <inputExpression id="input_1_expr_1"/>
+      </input>
+      <input id="input_2" label="authorIsAdmin">
+        <inputExpression id="input_2_expr_1"/>
+      </input>
+      <output id="output_0" label="allowMerging"/>
+      <output id="output_1" label="notifyUnusualAction"/>
+      <rule id="rule_0">
+        <inputEntry id="rule_0_input_0">
+          <text>&gt; 0</text>
+        </inputEntry>
+        <inputEntry id="rule_0_input_1">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="rule_0_input_2">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="rule_0_output_0">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="rule_0_output_1">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule_1">
+        <inputEntry id="rule_1_input_0">
+          <text>&gt; 1</text>
+        </inputEntry>
+        <inputEntry id="rule_1_input_1">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="rule_1_input_2">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="rule_1_output_0">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="rule_1_output_1">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule_2">
+        <inputEntry id="rule_2_input_0">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="rule_2_input_1">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="rule_2_input_2">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="rule_2_output_0">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="rule_2_output_1">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule_3">
+        <inputEntry id="rule_3_input_0">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="rule_3_input_1">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="rule_3_input_2">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="rule_3_output_0">
+          <text>false</text>
+        </outputEntry>
+        <outputEntry id="rule_3_output_1">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>

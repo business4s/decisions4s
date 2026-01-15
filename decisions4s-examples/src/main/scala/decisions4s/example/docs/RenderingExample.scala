@@ -18,6 +18,12 @@ object RenderingExample {
   val markdown: String                               = MarkdownRenderer.render(decisionTable)
   // end_markdown
 
+  // start_html
+  import decisions4s.html.HtmlRenderer
+
+  val html: String = HtmlRenderer.render(decisionTable)
+  // end_html
+
   // start_dmn_raw
   import decisions4s.dmn.*
 
