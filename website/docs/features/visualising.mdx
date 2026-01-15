@@ -14,16 +14,40 @@ Markdown representation is provided out-of-the box in the core module.
 ```scala file=./main/scala/decisions4s/example/docs/RenderingExample.scala start=start_markdown end=end_markdown
 ```
 
+<details>
+<summary>Example output</summary>
+
+import MDOutput from '../../../decisions4s-examples/src/test/resources/docs/pull-request-markdown.md'
+
+<MDOutput/>
+
+</details>
+
 ## HTML
 
 A standalone HTML representation is also provided in the core module, which can be useful for sharing the decisions easily with other people in a quick and easy way.
 For sharing decisions in a systemic way we recommend either a custom renderer or DMN rendering through `dmn-js`, both described below.
 
-```scala
-import decisions4s.html.HtmlRenderer
-
-val html = HtmlRenderer.render(decisionTable)
+```scala file=./main/scala/decisions4s/example/docs/RenderingExample.scala start=start_html end=end_html
 ```
+
+<details>
+<summary>Example output (raw)</summary>
+
+```html file=./test/resources/docs/pull-request-html.html
+```
+
+</details>
+
+<details>
+<summary>Example output (rendered)</summary>
+
+<iframe
+  src={require('!!file-loader!../../../decisions4s-examples/src/test/resources/docs/pull-request-html.html').default}
+  style={{width: '100%', height: '200px', border: '1px solid #ccc', borderRadius: '4px'}}
+/>
+
+</details>
 
 ## Decision Model and Notation (DMN)
 
@@ -35,6 +59,14 @@ import SbtDependency from '@site/src/components/SbtDependency';
 
 ```scala file=./main/scala/decisions4s/example/docs/RenderingExample.scala start=start_dmn_raw end=end_dmn_raw
 ```
+
+<details>
+<summary>Example output</summary>
+
+```xml file=./test/resources/docs/pull-request-dmn.xml
+```
+
+</details>
 
 ## DMN As Image
 
@@ -51,6 +83,13 @@ This process is rather slow and not recommended for live server-side usage.
 
 ```scala file=./main/scala/decisions4s/example/docs/RenderingExample.scala start=start_dmn_image end=end_dmn_image
 ```
+
+<details>
+<summary>Example output</summary>
+
+![PullRequestDecision.png](./../assets/PullRequestDecision.png)
+
+</details>
 
 ## Alternative Visualizations
 
