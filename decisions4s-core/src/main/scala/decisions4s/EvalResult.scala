@@ -14,7 +14,7 @@ import decisions4s.internal.{DiagnosticsDataBuilder, DiagnosticsPrinter}
   *   value produced by the table as a whole based on hit policy
   */
 case class EvalResult[In[_[_]], Out[_[_]], +Output](
-    table: DecisionTable[In, Out, ?],
+    table: DecisionTable[In, Out],
     input: In[Option],
     results: List[RuleResult[In, Out]],
     output: Output,
