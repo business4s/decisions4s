@@ -5,6 +5,8 @@ import shapeless3.deriving.K11.Id
 import shapeless3.deriving.{Const, K11, Labelling, ~>}
 
 import scala.annotation.nowarn
+import scala.compiletime.{erasedValue, summonInline}
+import scala.deriving.Mirror
 
 /** Specialised typeclass to expose operations on higher kinded data (case-classes where each field is wrapped in F[_])
   */
@@ -151,5 +153,22 @@ object HKD {
   def values[F[_[_]], A[_]](fa: F[A])(using hkd: HKD[F]): F[Const[Any]] = {
     fa.mapK[Const[Any]]([t] => (x: A[t]) => x: Any)
   }
+
+  /** Gathers implicit instances of a type class for all fields of an HKD type.
+    *
+    * For a case class like `case class Input[F[_]](a: F[Int], b: F[String])`, calling `HKD.gatherGivens[Input,
+    * ToCelType]` will produce `Input[ToCelType]` by summoning `ToCelType[Int]` and `ToCelType[String]` from implicit
+    * scope.
+    */
+  inline def gatherGivens[Data[_[_]], TC[_]](using m: Mirror.ProductOf[Data[TC]]): Data[TC] = {
+    val tuple = summonTuple[m.MirroredElemTypes]
+    m.fromProduct(tuple)
+  }
+
+  private inline def summonTuple[T <: Tuple]: Tuple =
+    inline erasedValue[T] match {
+      case _: EmptyTuple => EmptyTuple
+      case _: (h *: t)   => summonInline[h] *: summonTuple[t]
+    }
 
 }

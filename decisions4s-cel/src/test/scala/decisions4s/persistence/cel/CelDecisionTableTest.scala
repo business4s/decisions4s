@@ -2,7 +2,6 @@ package decisions4s.persistence.cel
 
 import decisions4s.persistence.DecisionTableDTO
 import decisions4s.{DecisionTable, HKD, HitPolicy}
-import dev.cel.common.types.{CelType, SimpleType}
 import org.scalatest.freespec.AnyFreeSpec
 
 class CelDecisionTableTest extends AnyFreeSpec {
@@ -23,12 +22,8 @@ class CelDecisionTableTest extends AnyFreeSpec {
       "table1",
     )
 
-    val inputTypes: Input[ToCelType]   = Input(new ToCelType[Int] {
-      override def tpe: CelType = SimpleType.INT
-    })
-    val outputReaders: Output[FromCel] = Output(new FromCel[Int] {
-      def read(tpe: CelType): Option[Any => Int] = Option.when(tpe == SimpleType.INT)(x => x.toString.toInt)
-    })
+    val inputTypes: Input[ToCelType]   = HKD.gatherGivens[Input, ToCelType]
+    val outputReaders: Output[FromCel] = HKD.gatherGivens[Output, FromCel]
 
     val table: DecisionTable[Input, Output, HitPolicy.First] = CelDecisionTable
       .load(dto, inputTypes, outputReaders, HitPolicy.First)
