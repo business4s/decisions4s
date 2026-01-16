@@ -1,7 +1,8 @@
-package decisions4s.jsonlogic
+package decisions4s.persistence
 
 import decisions4s.HitPolicy
-import decisions4s.jsonlogic.DecisionTableDTO.given
+import decisions4s.persistence.DecisionTableDTO.given
+
 import io.circe.Codec
 
 case class DecisionTableDTO(

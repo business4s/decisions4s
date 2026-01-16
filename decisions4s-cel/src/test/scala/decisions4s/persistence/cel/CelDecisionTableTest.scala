@@ -1,10 +1,11 @@
-package decisions4s.jsonlogic
+package decisions4s.persistence.cel
 
+import decisions4s.persistence.DecisionTableDTO
 import decisions4s.{DecisionTable, HKD, HitPolicy}
 import dev.cel.common.types.{CelType, SimpleType}
 import org.scalatest.freespec.AnyFreeSpec
 
-class PersistedDecisionTableTest extends AnyFreeSpec {
+class CelDecisionTableTest extends AnyFreeSpec {
 
   "test" in {
 
@@ -30,13 +31,16 @@ class PersistedDecisionTableTest extends AnyFreeSpec {
       def read(tpe: CelType): Option[Any => Int] = Option.when(tpe == SimpleType.INT)(x => x.toString.toInt)
     })
 
-    val table: DecisionTable[Input, Output, HitPolicy.First] = PersistedDecisionTable
+    val table: DecisionTable[Input, Output, HitPolicy.First] = CelDecisionTable
       .load(dto, inputTypes, outputReaders)
       .get
       .copy(hitPolicy = HitPolicy.First)
+
     val result1                                               = table.evaluateFirst(Input(1))
     println(result1.output)
     println(result1.makeDiagnosticsString)
+    println()
+
     val result2                                               = table.evaluateFirst(Input(3))
     println(result2.output)
     println(result2.makeDiagnosticsString)

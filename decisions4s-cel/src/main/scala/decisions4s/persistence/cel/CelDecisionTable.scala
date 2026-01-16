@@ -1,8 +1,9 @@
-package decisions4s.jsonlogic
+package decisions4s.persistence.cel
 
 import decisions4s.exprs.UnaryTest
 import decisions4s.internal.{Const, Extract, Functor, HKDUtils}
 import decisions4s.*
+import decisions4s.persistence.DecisionTableDTO
 import dev.cel.common.CelVarDecl
 import dev.cel.common.types.{CelKind, CelType}
 import dev.cel.compiler.{CelCompiler, CelCompilerFactory}
@@ -10,16 +11,9 @@ import dev.cel.runtime.{CelRuntime, CelRuntimeFactory}
 
 import scala.jdk.CollectionConverters.*
 import scala.util.Try
-import scala.util.chaining.scalaUtilChainingOps
 
-trait ToCelType[T] {
-  def tpe: CelType
-}
-trait FromCel[T]   {
-  def read(tpe: CelType): Option[Any => T]
-}
 
-object PersistedDecisionTable {
+object CelDecisionTable {
 
   def load[Input[_[_]]: HKD, Output[_[_]]: HKD](
       raw: DecisionTableDTO,
@@ -113,7 +107,4 @@ object PersistedDecisionTable {
   private val fromCelBool: FromCel[Boolean] = (tpe: CelType) => Option.when(tpe.kind() == CelKind.BOOL)(x => x.asInstanceOf[Boolean])
 }
 
-class CelExpression[T](source: String, compiled: CelRuntime.Program, reader: Any => T, input: Expr[Map[String, Any]]) extends Expr[T] {
-  def evaluate: T              = compiled.eval(input.evaluate.asJava).pipe(reader)
-  def renderExpression: String = source
-}
+
