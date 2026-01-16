@@ -21,7 +21,6 @@ class CelDecisionTableTest extends AnyFreeSpec {
         ),
       ),
       "table1",
-      HitPolicy.First,
     )
 
     val inputTypes: Input[ToCelType]   = Input(new ToCelType[Int] {
@@ -32,9 +31,8 @@ class CelDecisionTableTest extends AnyFreeSpec {
     })
 
     val table: DecisionTable[Input, Output, HitPolicy.First] = CelDecisionTable
-      .load(dto, inputTypes, outputReaders)
+      .load(dto, inputTypes, outputReaders, HitPolicy.First)
       .get
-      .copy(hitPolicy = HitPolicy.First)
 
     val result1                                               = table.evaluateFirst(Input(1))
     println(result1.output)

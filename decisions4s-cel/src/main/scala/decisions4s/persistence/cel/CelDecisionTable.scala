@@ -15,11 +15,12 @@ import scala.util.Try
 
 object CelDecisionTable {
 
-  def load[Input[_[_]]: HKD, Output[_[_]]: HKD](
+  def load[Input[_[_]]: HKD, Output[_[_]]: HKD, HP <: HitPolicy](
       raw: DecisionTableDTO,
       inputTypes: Input[ToCelType],
       outputReaders: Output[FromCel],
-  ): Try[DecisionTable[Input, Output, HitPolicy]] = Try {
+      hitPolicy: HP,
+  ): Try[DecisionTable[Input, Output, HP]] = Try {
     val celCompiler = CelCompilerFactory.standardCelCompilerBuilder
       .addVarDeclarations(constructVariables(inputTypes).asJava)
       .build
@@ -28,7 +29,7 @@ object CelDecisionTable {
     DecisionTable(
       raw.rules.map(rule => convertRule(rule, celRuntime, celCompiler, outputReaders).get),
       raw.name,
-      raw.hitPolicy,
+      hitPolicy,
     )
   }
 
