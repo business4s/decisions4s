@@ -1,0 +1,113 @@
+---
+sidebar_position: 7
+---
+
+# Persistence
+
+Decisions4s supports loading decision tables from external sources using expression languages. This allows storing decision logic in databases, configuration files, or receiving them from external services, while maintaining type safety at the Scala level.
+
+## Overview
+
+The persistence feature consists of:
+- **DecisionTableDTO**: A language-agnostic data transfer object for serializing/deserializing decision tables
+- **Expression language modules**: CEL and FEEL support for evaluating expressions at runtime
+
+## DecisionTableDTO
+
+The `DecisionTableDTO` is the serialization format for decision tables. It stores expressions as plain strings that are interpreted by the chosen expression language at load time.
+
+import SbtDependency from '@site/src/components/SbtDependency';
+
+<SbtDependency moduleName="decisions4s-persistence-core"/>
+
+```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_dto end=end_dto
+```
+
+## CEL (Common Expression Language)
+
+[CEL](https://cel.dev/) is a fast, safe expression language developed by Google. It's widely used in cloud-native systems (Kubernetes, Envoy, etc.).
+
+<SbtDependency moduleName="decisions4s-cel"/>
+
+```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_cel end=end_cel
+```
+
+### CEL Type Mapping
+
+| Scala Type | CEL Type |
+|------------|----------|
+| `Int` | INT (64-bit) |
+| `Long` | INT |
+| `Double` | DOUBLE |
+| `Float` | DOUBLE |
+| `String` | STRING |
+| `Boolean` | BOOL |
+
+### CEL Expression Syntax
+
+CEL uses full expressions for both input conditions and output values:
+- Input conditions: `price > 100`, `quantity >= 10`, `name.size() > 0`
+- Output values: `price * quantity * 0.9`, `"Hello, " + name`
+
+## FEEL (Friendly Enough Expression Language)
+
+[FEEL](https://docs.camunda.io/docs/components/modeler/feel/what-is-feel/) is the expression language defined by the DMN (Decision Model and Notation) standard. It's the native language for decision tables and is widely used in business process management.
+
+<SbtDependency moduleName="decisions4s-feel"/>
+
+```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_feel end=end_feel
+```
+
+### FEEL Type Mapping
+
+FEEL is dynamically typed at runtime. The `Input` type parameter must be explicitly specified since it cannot be inferred from the other arguments.
+
+| Scala Type | FEEL Type |
+|------------|-----------|
+| `Int` | number (BigDecimal) |
+| `Long` | number |
+| `Double` | number |
+| `Float` | number |
+| `String` | string |
+| `Boolean` | boolean |
+
+### FEEL Unary Test Syntax
+
+FEEL has a special syntax for input conditions called "unary tests":
+
+```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_feel_unary end=end_feel_unary
+```
+
+Examples:
+- `> 100` - greater than 100
+- `[1..10]` - between 1 and 10 (inclusive)
+- `(0..100]` - between 0 (exclusive) and 100 (inclusive)
+- `"active", "pending"` - matches "active" or "pending"
+- `not("inactive")` - does not equal "inactive"
+- `-` - matches any value (wildcard)
+
+## Choosing an Expression Language
+
+| Aspect | CEL | FEEL |
+|--------|-----|------|
+| **Best for** | Cloud-native, microservices | Business rules, DMN tooling |
+| **Syntax** | C-like, familiar to developers | DMN standard, business-friendly |
+| **Unary tests** | Full expressions required | Native support (`> 100`, `[1..10]`) |
+| **Typing** | Static (compile-time type checking) | Dynamic (runtime) |
+| **Numbers** | 64-bit integers, IEEE doubles | BigDecimal (arbitrary precision) |
+| **API** | Type inferred from `inputTypes` param | Explicit type parameters required |
+
+**Recommendation:**
+- Use **FEEL** if you're working with DMN tools (Camunda, Drools) or need business user readability
+- Use **CEL** if you're in a cloud-native environment or prefer static typing
+
+## Custom Expression Languages
+
+To add support for a new expression language, implement:
+
+1. **Type markers**: `ToYourLangType[T]` trait instances for supported Scala types
+2. **Result converters**: `FromYourLang[T]` trait instances to convert results back to Scala
+3. **Expression wrapper**: A class implementing `Expr[T]` that wraps evaluated expressions
+4. **Loader**: An object with a `load` method that converts `DecisionTableDTO` to `DecisionTable`
+
+See the CEL and FEEL implementations for reference patterns.
