@@ -106,4 +106,52 @@ object PersistenceExample {
   // - Negation: not("inactive", "blocked")
   // - Any: - (matches any value)
   // end_feel_unary
+
+  // start_jsonlogic
+  import decisions4s.persistence.jsonlogic.*
+
+  val jsonLogicDto = DecisionTableDTO(
+    Seq(
+      DecisionTableDTO.Rule(
+        // json-logic uses JSON objects for expressions
+        Map(
+          "price"    -> """{">":[{"var":"price"}, 100]}""",
+          "quantity" -> """{">=":[{"var":"quantity"}, 10]}""",
+        ),
+        Map("discount" -> "0.1"),
+        Some("Bulk discount"),
+      ),
+      DecisionTableDTO.Rule(
+        Map(
+          "price"    -> """{">":[{"var":"price"}, 0]}""",
+          "quantity" -> """{">":[{"var":"quantity"}, 0]}""",
+        ),
+        Map("discount" -> "0.0"),
+        Some("No discount"),
+      ),
+    ),
+    "pricing",
+  )
+
+  val jsonLogicTable = JsonLogicDecisionTable
+    .load[PricingInput, PricingOutput, HitPolicy.First](
+      jsonLogicDto,
+      HKD.gatherGivens[PricingOutput, FromJsonLogic],
+      HitPolicy.First,
+    )
+    .get
+
+  val jsonLogicResult = jsonLogicTable.evaluateFirst(PricingInput(150, 20))
+  // jsonLogicResult.output == Some(PricingOutput[Value](0.1))
+  // end_jsonlogic
+
+  // start_jsonlogic_syntax
+  // json-logic syntax examples:
+  // - Comparisons: {">":[{"var":"x"}, 100]}, {">=":[{"var":"x"}, 10]}
+  // - Boolean logic: {"and":[...]}, {"or":[...]}, {"!":[...]}
+  // - List membership: {"in":[{"var":"status"}, ["a", "b", "c"]]}
+  // - Arithmetic: {"+":[{"var":"a"}, {"var":"b"}]}, {"*":[...]}
+  // - String concat: {"cat":["Hello, ", {"var":"name"}]}
+  // - Truthiness: {"!!":[{"var":"value"}]} (non-empty string is true)
+  // end_jsonlogic_syntax
 }
