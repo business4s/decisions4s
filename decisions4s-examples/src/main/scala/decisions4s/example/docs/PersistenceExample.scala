@@ -56,8 +56,8 @@ object PersistenceExample {
   val celTable = CelDecisionTable
     .load(
       celDto,
-      HKD.gatherGivens[PricingInput, ToCelType],
-      HKD.gatherGivens[PricingOutput, FromCel],
+      HKD.gatherGivens[PricingInput, ToCelType], // required to declare input variables
+      HKD.gatherGivens[PricingOutput, FromCel], // required to extract output variables
       HitPolicy.First,
     )
     .get
@@ -89,7 +89,7 @@ object PersistenceExample {
   val feelTable = FeelDecisionTable
     .load[PricingInput, PricingOutput, HitPolicy.First](
       feelDto,
-      HKD.gatherGivens[PricingOutput, FromFeel],
+      HKD.gatherGivens[PricingOutput, FromFeel], // required to extract output variables
       HitPolicy.First,
     )
     .get
@@ -97,15 +97,6 @@ object PersistenceExample {
   val feelResult = feelTable.evaluateFirst(PricingInput(150, 20))
   // feelResult.output == Some(PricingOutput[Value](0.1))
   // end_feel
-
-  // start_feel_unary
-  // FEEL supports native unary test syntax:
-  // - Comparisons: > 100, >= 10, < 5, <= 0, = "active"
-  // - Ranges: [1..10], (0..100], [0..100)
-  // - Lists: "A", "B", "C" (matches if input is any of these)
-  // - Negation: not("inactive", "blocked")
-  // - Any: - (matches any value)
-  // end_feel_unary
 
   // start_jsonlogic
   import decisions4s.persistence.jsonlogic.*
@@ -136,7 +127,7 @@ object PersistenceExample {
   val jsonLogicTable = JsonLogicDecisionTable
     .load[PricingInput, PricingOutput, HitPolicy.First](
       jsonLogicDto,
-      HKD.gatherGivens[PricingOutput, FromJsonLogic],
+      HKD.gatherGivens[PricingOutput, FromJsonLogic], // required to extract output variables
       HitPolicy.First,
     )
     .get
@@ -144,14 +135,4 @@ object PersistenceExample {
   val jsonLogicResult = jsonLogicTable.evaluateFirst(PricingInput(150, 20))
   // jsonLogicResult.output == Some(PricingOutput[Value](0.1))
   // end_jsonlogic
-
-  // start_jsonlogic_syntax
-  // json-logic syntax examples:
-  // - Comparisons: {">":[{"var":"x"}, 100]}, {">=":[{"var":"x"}, 10]}
-  // - Boolean logic: {"and":[...]}, {"or":[...]}, {"!":[...]}
-  // - List membership: {"in":[{"var":"status"}, ["a", "b", "c"]]}
-  // - Arithmetic: {"+":[{"var":"a"}, {"var":"b"}]}, {"*":[...]}
-  // - String concat: {"cat":["Hello, ", {"var":"name"}]}
-  // - Truthiness: {"!!":[{"var":"value"}]} (non-empty string is true)
-  // end_jsonlogic_syntax
 }

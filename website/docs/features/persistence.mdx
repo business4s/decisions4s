@@ -32,23 +32,6 @@ import SbtDependency from '@site/src/components/SbtDependency';
 ```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_cel end=end_cel
 ```
 
-### CEL Type Mapping
-
-| Scala Type | CEL Type |
-|------------|----------|
-| `Int` | INT (64-bit) |
-| `Long` | INT |
-| `Double` | DOUBLE |
-| `Float` | DOUBLE |
-| `String` | STRING |
-| `Boolean` | BOOL |
-
-### CEL Expression Syntax
-
-CEL uses full expressions for both input conditions and output values:
-- Input conditions: `price > 100`, `quantity >= 10`, `name.size() > 0`
-- Output values: `price * quantity * 0.9`, `"Hello, " + name`
-
 ## FEEL (Friendly Enough Expression Language)
 
 [FEEL](https://docs.camunda.io/docs/components/modeler/feel/what-is-feel/) is the expression language defined by the DMN (Decision Model and Notation) standard. It's the native language for decision tables and is widely used in business process management.
@@ -57,34 +40,6 @@ CEL uses full expressions for both input conditions and output values:
 
 ```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_feel end=end_feel
 ```
-
-### FEEL Type Mapping
-
-FEEL is dynamically typed at runtime. The `Input` type parameter must be explicitly specified since it cannot be inferred from the other arguments.
-
-| Scala Type | FEEL Type |
-|------------|-----------|
-| `Int` | number (BigDecimal) |
-| `Long` | number |
-| `Double` | number |
-| `Float` | number |
-| `String` | string |
-| `Boolean` | boolean |
-
-### FEEL Unary Test Syntax
-
-FEEL has a special syntax for input conditions called "unary tests":
-
-```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_feel_unary end=end_feel_unary
-```
-
-Examples:
-- `> 100` - greater than 100
-- `[1..10]` - between 1 and 10 (inclusive)
-- `(0..100]` - between 0 (exclusive) and 100 (inclusive)
-- `"active", "pending"` - matches "active" or "pending"
-- `not("inactive")` - does not equal "inactive"
-- `-` - matches any value (wildcard)
 
 ## json-logic
 
@@ -95,57 +50,12 @@ Examples:
 ```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_jsonlogic end=end_jsonlogic
 ```
 
-### json-logic Type Mapping
-
-json-logic is dynamically typed. Numbers are handled as doubles internally.
-
-| Scala Type | json-logic Type |
-|------------|-----------------|
-| `Int` | number (double) |
-| `Long` | number |
-| `Double` | number |
-| `Float` | number |
-| `String` | string |
-| `Boolean` | boolean |
-
-### json-logic Expression Syntax
-
-json-logic uses JSON objects where the key is the operator and the value is the arguments:
-
-```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_jsonlogic_syntax end=end_jsonlogic_syntax
-```
-
-Examples:
-- `{">":[{"var":"price"}, 100]}` - price greater than 100
-- `{">=":[{"var":"quantity"}, 10]}` - quantity at least 10
-- `{"and":[...]}` - logical AND of conditions
-- `{"in":[{"var":"status"}, ["active", "pending"]]}` - status in list
-- `{"*":[{"var":"a"}, {"var":"b"}]}` - multiplication
-- `{"cat":["Hello, ", {"var":"name"}]}` - string concatenation
-
 ## Choosing an Expression Language
 
 | Aspect | CEL | FEEL | json-logic |
 |--------|-----|------|------------|
 | **Best for** | Cloud-native, microservices | Business rules, DMN tooling | Frontend/backend sharing |
-| **Syntax** | C-like, familiar to developers | DMN standard, business-friendly | JSON objects |
+| **Syntax** | C-like, familiar to developers | DMN standard, business-friendly | JSON objects, fully structured |
 | **Unary tests** | Full expressions required | Native support (`> 100`, `[1..10]`) | Full expressions required |
 | **Typing** | Static (compile-time type checking) | Dynamic (runtime) | Dynamic (runtime) |
-| **Numbers** | 64-bit integers, IEEE doubles | BigDecimal (arbitrary precision) | IEEE doubles |
-| **API** | Type inferred from `inputTypes` param | Explicit type parameters required | Explicit type parameters required |
 
-**Recommendation:**
-- Use **FEEL** if you're working with DMN tools (Camunda, Drools) or need business user readability
-- Use **CEL** if you're in a cloud-native environment or prefer static typing
-- Use **json-logic** if you need to share rules between JavaScript frontend and Scala backend, or want pure JSON storage
-
-## Custom Expression Languages
-
-To add support for a new expression language, implement:
-
-1. **Type markers**: `ToYourLangType[T]` trait instances for supported Scala types
-2. **Result converters**: `FromYourLang[T]` trait instances to convert results back to Scala
-3. **Expression wrapper**: A class implementing `Expr[T]` that wraps evaluated expressions
-4. **Loader**: An object with a `load` method that converts `DecisionTableDTO` to `DecisionTable`
-
-See the CEL and FEEL implementations for reference patterns.
