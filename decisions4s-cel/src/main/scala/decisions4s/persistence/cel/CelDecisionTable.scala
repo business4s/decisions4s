@@ -12,7 +12,6 @@ import dev.cel.runtime.{CelRuntime, CelRuntimeFactory}
 import scala.jdk.CollectionConverters.*
 import scala.util.Try
 
-
 object CelDecisionTable {
 
   def load[Input[_[_]]: HKD, Output[_[_]]: HKD, HP <: HitPolicy](
@@ -96,7 +95,7 @@ object CelDecisionTable {
 
   private def convertInput[Input[_[_]]: {HKD as iHKD}](using ec: EvaluationContext[Input]): InputVars = {
     val wholeInput: Input[Expr] = ec.wholeInput
-    lazy val transformed             = HKDUtils.collectFields(wholeInput.mapK[Const[Any]]([t] => expr => expr.evaluate))
+    lazy val transformed        = HKDUtils.collectFields(wholeInput.mapK[Const[Any]]([t] => expr => expr.evaluate))
     new Expr[Map[String, Any]] {
       def evaluate: Map[String, Any] = iHKD.fieldNames.zip(transformed).toMap
       def renderExpression: String   = "you should never see this"
@@ -107,5 +106,3 @@ object CelDecisionTable {
 
   private val fromCelBool: FromCel[Boolean] = (tpe: CelType) => Option.when(tpe.kind() == CelKind.BOOL)(x => x.asInstanceOf[Boolean])
 }
-
-

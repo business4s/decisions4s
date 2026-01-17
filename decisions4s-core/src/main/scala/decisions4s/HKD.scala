@@ -156,9 +156,8 @@ object HKD {
 
   /** Gathers implicit instances of a type class for all fields of an HKD type.
     *
-    * For a case class like `case class Input[F[_]](a: F[Int], b: F[String])`, calling `HKD.gatherGivens[Input,
-    * ToCelType]` will produce `Input[ToCelType]` by summoning `ToCelType[Int]` and `ToCelType[String]` from implicit
-    * scope.
+    * For a case class like `case class Input[F[_]](a: F[Int], b: F[String])`, calling `HKD.gatherGivens[Input, ToCelType]` will produce
+    * `Input[ToCelType]` by summoning `ToCelType[Int]` and `ToCelType[String]` from implicit scope.
     */
   inline def gatherGivens[Data[_[_]], TC[_]](using m: Mirror.ProductOf[Data[TC]]): Data[TC] = {
     val tuple = summonTuple[m.MirroredElemTypes]

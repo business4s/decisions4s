@@ -13,14 +13,16 @@ class JsonLogicDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](total: F[Int]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map(
-            "price"    -> """{">":[{"var":"price"}, 0]}""",
-            "quantity" -> """{">":[{"var":"quantity"}, 0]}""",
+        Seq(
+          DecisionTableDTO.Rule(
+            Map(
+              "price"    -> """{">":[{"var":"price"}, 0]}""",
+              "quantity" -> """{">":[{"var":"quantity"}, 0]}""",
+            ),
+            Map("total"  -> """{"*":[{"var":"price"}, {"var":"quantity"}]}"""),
+            None,
           ),
-          Map("total" -> """{"*":[{"var":"price"}, {"var":"quantity"}]}"""),
-          None,
-        )),
+        ),
         "test",
       )
 
@@ -37,16 +39,18 @@ class JsonLogicDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](eligible: F[Boolean]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map(
-            // json-logic uses truthiness - non-empty string is truthy
-            "name"   -> """{"!!":[{"var":"name"}]}""",
-            "age"    -> """{">=":[{"var":"age"}, 18]}""",
-            "active" -> """{"==":[{"var":"active"}, true]}""",
+        Seq(
+          DecisionTableDTO.Rule(
+            Map(
+              // json-logic uses truthiness - non-empty string is truthy
+              "name"       -> """{"!!":[{"var":"name"}]}""",
+              "age"        -> """{">=":[{"var":"age"}, 18]}""",
+              "active"     -> """{"==":[{"var":"active"}, true]}""",
+            ),
+            Map("eligible" -> "true"),
+            None,
           ),
-          Map("eligible" -> "true"),
-          None,
-        )),
+        ),
         "test",
       )
 
@@ -64,14 +68,16 @@ class JsonLogicDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](result: F[Double]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map(
-            "base"       -> """{">":[{"var":"base"}, 0]}""",
-            "multiplier" -> """{">":[{"var":"multiplier"}, 0]}""",
+        Seq(
+          DecisionTableDTO.Rule(
+            Map(
+              "base"       -> """{">":[{"var":"base"}, 0]}""",
+              "multiplier" -> """{">":[{"var":"multiplier"}, 0]}""",
+            ),
+            Map("result"   -> """{"*":[{"var":"base"}, {"var":"multiplier"}]}"""),
+            None,
           ),
-          Map("result" -> """{"*":[{"var":"base"}, {"var":"multiplier"}]}"""),
-          None,
-        )),
+        ),
         "test",
       )
 
@@ -88,18 +94,20 @@ class JsonLogicDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](sum: F[Int], diff: F[Int], product: F[Int]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map(
-            "a" -> """{">":[{"var":"a"}, 0]}""",
-            "b" -> """{">":[{"var":"b"}, 0]}""",
+        Seq(
+          DecisionTableDTO.Rule(
+            Map(
+              "a"       -> """{">":[{"var":"a"}, 0]}""",
+              "b"       -> """{">":[{"var":"b"}, 0]}""",
+            ),
+            Map(
+              "sum"     -> """{"+":[{"var":"a"}, {"var":"b"}]}""",
+              "diff"    -> """{"-":[{"var":"a"}, {"var":"b"}]}""",
+              "product" -> """{"*":[{"var":"a"}, {"var":"b"}]}""",
+            ),
+            None,
           ),
-          Map(
-            "sum"     -> """{"+":[{"var":"a"}, {"var":"b"}]}""",
-            "diff"    -> """{"-":[{"var":"a"}, {"var":"b"}]}""",
-            "product" -> """{"*":[{"var":"a"}, {"var":"b"}]}""",
-          ),
-          None,
-        )),
+        ),
         "test",
       )
 
@@ -116,11 +124,13 @@ class JsonLogicDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](doubled: F[Int]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("x" -> """{">":[{"var":"x"}, 0]}"""),
-          Map("doubled" -> """{"*":[{"var":"x"}, 2]}"""),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("x"       -> """{">":[{"var":"x"}, 0]}"""),
+            Map("doubled" -> """{"*":[{"var":"x"}, 2]}"""),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -137,15 +147,17 @@ class JsonLogicDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](greeting: F[String]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map(
-            // json-logic uses truthiness - non-empty string is truthy
-            "prefix" -> """{"!!":[{"var":"prefix"}]}""",
-            "name"   -> """{"!!":[{"var":"name"}]}""",
+        Seq(
+          DecisionTableDTO.Rule(
+            Map(
+              // json-logic uses truthiness - non-empty string is truthy
+              "prefix"     -> """{"!!":[{"var":"prefix"}]}""",
+              "name"       -> """{"!!":[{"var":"name"}]}""",
+            ),
+            Map("greeting" -> """{"cat":[{"var":"prefix"}, {"var":"name"}]}"""),
+            None,
           ),
-          Map("greeting" -> """{"cat":[{"var":"prefix"}, {"var":"name"}]}"""),
-          None,
-        )),
+        ),
         "test",
       )
 
@@ -227,12 +239,12 @@ class JsonLogicDecisionTableTest extends AnyFreeSpec {
       val dto = DecisionTableDTO(
         Seq(
           DecisionTableDTO.Rule(
-            Map("status" -> """{"in":[{"var":"status"}, ["active", "pending"]]}"""),
+            Map("status"  -> """{"in":[{"var":"status"}, ["active", "pending"]]}"""),
             Map("allowed" -> "true"),
             None,
           ),
           DecisionTableDTO.Rule(
-            Map("status" -> """{"in":[{"var":"status"}, ["inactive", "blocked"]]}"""),
+            Map("status"  -> """{"in":[{"var":"status"}, ["inactive", "blocked"]]}"""),
             Map("allowed" -> "false"),
             None,
           ),

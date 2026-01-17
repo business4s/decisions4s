@@ -20,6 +20,3 @@ class JsonLogicExpression[T](
 
   def renderExpression: String = source
 }
-
-case class JsonLogicEvaluationException(expression: String, message: String)
-    extends RuntimeException(s"json-logic evaluation failed for '$expression': $message")

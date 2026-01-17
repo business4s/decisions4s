@@ -40,12 +40,12 @@ object PersistenceExample {
   val celDto = DecisionTableDTO(
     Seq(
       DecisionTableDTO.Rule(
-        Map("price" -> "price > 100", "quantity" -> "quantity >= 10"),
+        Map("price"    -> "price > 100", "quantity" -> "quantity >= 10"),
         Map("discount" -> "0.1"),
         Some("Bulk discount"),
       ),
       DecisionTableDTO.Rule(
-        Map("price" -> "true", "quantity" -> "true"),
+        Map("price"    -> "true", "quantity" -> "true"),
         Map("discount" -> "0.0"),
         Some("No discount"),
       ),
@@ -73,12 +73,12 @@ object PersistenceExample {
     Seq(
       DecisionTableDTO.Rule(
         // FEEL unary tests - input value referenced via ?
-        Map("price" -> "> 100", "quantity" -> ">= 10"),
+        Map("price"    -> "> 100", "quantity" -> ">= 10"),
         Map("discount" -> "0.1"),
         Some("Bulk discount"),
       ),
       DecisionTableDTO.Rule(
-        Map("price" -> "> 0", "quantity" -> "> 0"),
+        Map("price"    -> "> 0", "quantity" -> "> 0"),
         Map("discount" -> "0.0"),
         Some("No discount"),
       ),
@@ -115,16 +115,16 @@ object PersistenceExample {
       DecisionTableDTO.Rule(
         // json-logic uses JSON objects for expressions
         Map(
-          "price"    -> """{">":[{"var":"price"}, 100]}""",
-          "quantity" -> """{">=":[{"var":"quantity"}, 10]}""",
+          "price"      -> """{">":[{"var":"price"}, 100]}""",
+          "quantity"   -> """{">=":[{"var":"quantity"}, 10]}""",
         ),
         Map("discount" -> "0.1"),
         Some("Bulk discount"),
       ),
       DecisionTableDTO.Rule(
         Map(
-          "price"    -> """{">":[{"var":"price"}, 0]}""",
-          "quantity" -> """{">":[{"var":"quantity"}, 0]}""",
+          "price"      -> """{">":[{"var":"price"}, 0]}""",
+          "quantity"   -> """{">":[{"var":"quantity"}, 0]}""",
         ),
         Map("discount" -> "0.0"),
         Some("No discount"),

@@ -68,8 +68,8 @@ object FeelDecisionTable {
   }
 
   private def convertInput[Input[_[_]]: {HKD as iHKD}](using ec: EvaluationContext[Input]): Expr[Map[String, Any]] = {
-    val wholeInput: Input[Expr]  = ec.wholeInput
-    lazy val transformed         = HKDUtils.collectFields(wholeInput.mapK[Const[Any]]([t] => expr => expr.evaluate))
+    val wholeInput: Input[Expr] = ec.wholeInput
+    lazy val transformed        = HKDUtils.collectFields(wholeInput.mapK[Const[Any]]([t] => expr => expr.evaluate))
     new Expr[Map[String, Any]] {
       def evaluate: Map[String, Any] = iHKD.fieldNames.zip(transformed).toMap
       def renderExpression: String   = "input context"

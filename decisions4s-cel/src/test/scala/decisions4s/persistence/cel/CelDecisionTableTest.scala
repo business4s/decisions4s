@@ -14,11 +14,13 @@ class CelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](total: F[Int]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("price" -> "true", "quantity" -> "true"),
-          Map("total" -> "price * quantity"), // uses both field names as variables
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("price" -> "true", "quantity" -> "true"),
+            Map("total" -> "price * quantity"), // uses both field names as variables
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -35,11 +37,13 @@ class CelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](eligible: F[Boolean]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("name" -> "size(name) > 0", "age" -> "age >= 18", "active" -> "active"),
-          Map("eligible" -> "true"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("name"     -> "size(name) > 0", "age" -> "age >= 18", "active" -> "active"),
+            Map("eligible" -> "true"),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -58,11 +62,13 @@ class CelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](result: F[Double]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("base" -> "true", "multiplier" -> "true"),
-          Map("result" -> "double(base) * multiplier"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("base"   -> "true", "multiplier" -> "true"),
+            Map("result" -> "double(base) * multiplier"),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -79,11 +85,13 @@ class CelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](sum: F[Int], diff: F[Int], product: F[Int]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("a" -> "true", "b" -> "true"),
-          Map("sum" -> "a + b", "diff" -> "a - b", "product" -> "a * b"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("a"   -> "true", "b"     -> "true"),
+            Map("sum" -> "a + b", "diff" -> "a - b", "product" -> "a * b"),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -101,11 +109,13 @@ class CelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](doubled: F[Int]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("x" -> "x > 0"),
-          Map("doubled" -> "x * 2"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("x"       -> "x > 0"),
+            Map("doubled" -> "x * 2"),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -122,11 +132,13 @@ class CelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](greeting: F[String]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("prefix" -> "true", "name" -> "size(name) > 0"),
-          Map("greeting" -> "prefix + name"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("prefix"   -> "true", "name" -> "size(name) > 0"),
+            Map("greeting" -> "prefix + name"),
+            None,
+          ),
+        ),
         "test",
       )
 

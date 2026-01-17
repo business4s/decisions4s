@@ -13,11 +13,13 @@ class FeelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](total: F[Int]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("price" -> "> 0", "quantity" -> "> 0"),
-          Map("total" -> "price * quantity"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("price" -> "> 0", "quantity" -> "> 0"),
+            Map("total" -> "price * quantity"),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -34,12 +36,14 @@ class FeelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](eligible: F[Boolean]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          // FEEL unary tests: ? references the input value
-          Map("name" -> "string length(?) > 0", "age" -> ">= 18", "active" -> "true"),
-          Map("eligible" -> "true"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            // FEEL unary tests: ? references the input value
+            Map("name"     -> "string length(?) > 0", "age" -> ">= 18", "active" -> "true"),
+            Map("eligible" -> "true"),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -58,11 +62,13 @@ class FeelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](result: F[Double]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("base" -> "> 0", "multiplier" -> "> 0"),
-          Map("result" -> "base * multiplier"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("base"   -> "> 0", "multiplier" -> "> 0"),
+            Map("result" -> "base * multiplier"),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -79,11 +85,13 @@ class FeelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](sum: F[Int], diff: F[Int], product: F[Int]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("a" -> "> 0", "b" -> "> 0"),
-          Map("sum" -> "a + b", "diff" -> "a - b", "product" -> "a * b"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("a"   -> "> 0", "b"      -> "> 0"),
+            Map("sum" -> "a + b", "diff" -> "a - b", "product" -> "a * b"),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -100,11 +108,13 @@ class FeelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](doubled: F[Int]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          Map("x" -> "> 0"),
-          Map("doubled" -> "x * 2"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            Map("x"       -> "> 0"),
+            Map("doubled" -> "x * 2"),
+            None,
+          ),
+        ),
         "test",
       )
 
@@ -121,12 +131,14 @@ class FeelDecisionTableTest extends AnyFreeSpec {
       case class Output[F[_]](greeting: F[String]) derives HKD
 
       val dto = DecisionTableDTO(
-        Seq(DecisionTableDTO.Rule(
-          // FEEL unary tests: ? references the input value
-          Map("prefix" -> "string length(?) > 0", "name" -> "string length(?) > 0"),
-          Map("greeting" -> "prefix + name"),
-          None,
-        )),
+        Seq(
+          DecisionTableDTO.Rule(
+            // FEEL unary tests: ? references the input value
+            Map("prefix"   -> "string length(?) > 0", "name" -> "string length(?) > 0"),
+            Map("greeting" -> "prefix + name"),
+            None,
+          ),
+        ),
         "test",
       )
 

@@ -2,8 +2,8 @@ package decisions4s.persistence.feel
 
 /** Converts FEEL evaluation results to Scala types.
   *
-  * FEEL uses BigDecimal for all numbers, which is different from CEL. This trait handles the conversion from FEEL's
-  * internal representation to the expected Scala types.
+  * FEEL uses BigDecimal for all numbers, which is different from CEL. This trait handles the conversion from FEEL's internal representation to the
+  * expected Scala types.
   */
 trait FromFeel[T] {
   def read: Any => T
