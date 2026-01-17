@@ -57,7 +57,7 @@ object PersistenceExample {
     .load(
       celDto,
       HKD.gatherGivens[PricingInput, ToCelType], // required to declare input variables
-      HKD.gatherGivens[PricingOutput, FromCel], // required to extract output variables
+      HKD.gatherGivens[PricingOutput, FromCel],  // required to extract output variables
       HitPolicy.First,
     )
     .get

@@ -6,7 +6,7 @@ import decisions4s.*
 import decisions4s.persistence.DecisionTableDTO
 import dev.cel.common.CelVarDecl
 import dev.cel.common.types.{CelKind, CelType}
-import dev.cel.compiler.{CelCompiler, CelCompilerFactory}
+import dev.cel.compiler.{CelCompiler, CelCompilerBuilder, CelCompilerFactory}
 import dev.cel.runtime.{CelRuntime, CelRuntimeFactory}
 
 import scala.jdk.CollectionConverters.*
@@ -14,19 +14,23 @@ import scala.util.Try
 
 object CelDecisionTable {
 
+  def defaultCompilerBuilder: CelCompilerBuilder = CelCompilerFactory.standardCelCompilerBuilder
+  val defaultRuntime: CelRuntime                 = CelRuntimeFactory.standardCelRuntimeBuilder.build
+
   def load[Input[_[_]]: HKD, Output[_[_]]: HKD, HP <: HitPolicy](
       raw: DecisionTableDTO,
       inputTypes: Input[ToCelType],
       outputReaders: Output[FromCel],
       hitPolicy: HP,
+      compilerBuilder: CelCompilerBuilder = defaultCompilerBuilder,
+      runtime: CelRuntime = defaultRuntime,
   ): Try[DecisionTable[Input, Output, HP]] = Try {
-    val celCompiler = CelCompilerFactory.standardCelCompilerBuilder
+    val celCompiler = compilerBuilder
       .addVarDeclarations(constructVariables(inputTypes).asJava)
       .build
-    val celRuntime  = CelRuntimeFactory.standardCelRuntimeBuilder.build
 
     DecisionTable(
-      raw.rules.map(rule => convertRule(rule, celRuntime, celCompiler, outputReaders).get),
+      raw.rules.map(rule => convertRule(rule, runtime, celCompiler, outputReaders).get),
       raw.name,
       hitPolicy,
     )
@@ -48,7 +52,6 @@ object CelDecisionTable {
         },
       )
     }
-    // TODO passing input
     given Extract[FromCel] with {
       extension [T](ft: FromCel[T]) {
         def extract: T = ???

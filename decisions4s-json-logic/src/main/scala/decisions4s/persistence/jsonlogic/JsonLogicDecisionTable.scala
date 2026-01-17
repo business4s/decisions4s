@@ -10,7 +10,7 @@ import scala.util.Try
 
 object JsonLogicDecisionTable {
 
-  val defaultEngine: JsonLogic = new JsonLogic()
+  lazy val defaultEngine: JsonLogic = new JsonLogic()
 
   def load[Input[_[_]]: HKD, Output[_[_]]: HKD, HP <: HitPolicy](
       raw: DecisionTableDTO,

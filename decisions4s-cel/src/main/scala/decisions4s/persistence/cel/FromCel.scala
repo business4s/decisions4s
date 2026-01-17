@@ -11,7 +11,7 @@ object FromCel {
   given FromCel[Int] with {
     // CEL INT is 64-bit, returned as Long
     def read(tpe: CelType): Option[Any => Int] =
-      Option.when(tpe == SimpleType.INT)(x => x.asInstanceOf[Long].toInt)
+      Option.when(tpe == SimpleType.INT)(x => Math.toIntExact(x.asInstanceOf[Long]))
   }
 
   given FromCel[Long] with {

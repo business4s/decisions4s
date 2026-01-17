@@ -11,7 +11,7 @@ import scala.util.Try
 
 object FeelDecisionTable {
 
-  val defaultEngine: FeelEngineApi = new FeelEngineApi(new FeelEngine())
+  lazy val defaultEngine: FeelEngineApi = new FeelEngineApi(new FeelEngine())
 
   def load[Input[_[_]]: HKD, Output[_[_]]: HKD, HP <: HitPolicy](
       raw: DecisionTableDTO,
