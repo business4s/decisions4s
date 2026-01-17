@@ -1,0 +1,65 @@
+---
+sidebar_position: 7
+---
+
+# Persistence
+
+Decisions4s supports loading decision tables from external sources using expression languages. This allows storing decision logic in databases, configuration files, or receiving them from external services, while maintaining type safety at the Scala level.
+
+:::warning Experimental
+This set of features is experimental. The API or behavior may change in future versions. We welcome all feedback - please open an issue on [GitHub](https://github.com/business4s/decisions4s/issues) if you encounter any problems or have suggestions.
+:::
+
+## Overview
+
+The persistence feature consists of:
+- **DecisionTableDTO**: A language-agnostic data transfer object for serializing/deserializing decision tables
+- **Expression language modules**: CEL, FEEL, and json-logic support for evaluating expressions at runtime
+
+## DecisionTableDTO
+
+The `DecisionTableDTO` is the serialization format for decision tables. It stores expressions as plain strings that are interpreted by the chosen expression language at load time.
+
+import SbtDependency from '@site/src/components/SbtDependency';
+
+<SbtDependency moduleName="decisions4s-persistence-core"/>
+
+```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_dto end=end_dto
+```
+
+## CEL (Common Expression Language)
+
+[CEL](https://cel.dev/) is a fast, safe expression language developed by Google. It's widely used in cloud-native systems (Kubernetes, Envoy, etc.).
+
+<SbtDependency moduleName="decisions4s-cel"/>
+
+```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_cel end=end_cel
+```
+
+## FEEL (Friendly Enough Expression Language)
+
+[FEEL](https://docs.camunda.io/docs/components/modeler/feel/what-is-feel/) is the expression language defined by the DMN (Decision Model and Notation) standard. It's the native language for decision tables and is widely used in business process management.
+
+<SbtDependency moduleName="decisions4s-feel"/>
+
+```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_feel end=end_feel
+```
+
+## json-logic
+
+[json-logic](https://jsonlogic.com/) is a JSON-based rule format that enables sharing logic between frontend and backend code. Rules are expressed as JSON objects, making them easy to store in databases and transmit over APIs.
+
+<SbtDependency moduleName="decisions4s-json-logic"/>
+
+```scala file=./main/scala/decisions4s/example/docs/PersistenceExample.scala start=start_jsonlogic end=end_jsonlogic
+```
+
+## Choosing an Expression Language
+
+| Aspect | CEL | FEEL | json-logic |
+|--------|-----|------|------------|
+| **Best for** | Cloud-native, microservices | Business rules, DMN tooling | Frontend/backend sharing |
+| **Syntax** | C-like, familiar to developers | DMN standard, business-friendly | JSON objects, fully structured |
+| **Unary tests** | Full expressions required | Native support (`> 100`, `[1..10]`) | Full expressions required |
+| **Typing** | Static (compile-time type checking) | Dynamic (runtime) | Dynamic (runtime) |
+

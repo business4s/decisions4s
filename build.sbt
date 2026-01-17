@@ -8,6 +8,10 @@ lazy val `decisions4s` = (project in file("."))
     `decisions4s-cats-effect`,
     `decisions4s-examples`,
     `decisions4s-dmn-to-image`,
+    `decisions4s-persistence-core`,
+    `decisions4s-cel`,
+    `decisions4s-feel`,
+    `decisions4s-json-logic`,
   )
 
 lazy val `decisions4s-core` = (project in file("decisions4s-core"))
@@ -51,12 +55,49 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
     ),
   )
 
+lazy val `decisions4s-persistence-core` = (project in file("decisions4s-persistence-core"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "io.circe" %% "circe-core"   % "0.14.14",
+      "io.circe" %% "circe-parser" % "0.14.14",
+    ),
+  )
+  .dependsOn(`decisions4s-core`)
+
+lazy val `decisions4s-cel` = (project in file("decisions4s-cel"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "dev.cel" % "cel" % "0.10.1",
+    ),
+  )
+  .dependsOn(`decisions4s-core`, `decisions4s-persistence-core`)
+
+lazy val `decisions4s-feel` = (project in file("decisions4s-feel"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      ("org.camunda.feel" % "feel-engine" % "1.19.3").exclude("com.lihaoyi", "sourcecode_2.13"),
+    ),
+  )
+  .dependsOn(`decisions4s-core`, `decisions4s-persistence-core`)
+
+lazy val `decisions4s-json-logic` = (project in file("decisions4s-json-logic"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "io.github.jamsesso" % "json-logic-java" % "1.0.7",
+    ),
+  )
+  .dependsOn(`decisions4s-core`, `decisions4s-persistence-core`)
+
 lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(commonSettings)
   .settings(
     publish / skip := true,
   )
-  .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`, `decisions4s-dmn-to-image`)
+  .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`, `decisions4s-dmn-to-image`, `decisions4s-cel`, `decisions4s-feel`, `decisions4s-json-logic`)
 
 lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-scala2"))
   .settings(
