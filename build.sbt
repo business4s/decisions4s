@@ -69,7 +69,7 @@ lazy val `decisions4s-cel` = (project in file("decisions4s-cel"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "dev.cel" % "cel" % "0.10.1",
+      "dev.cel" % "cel" % "0.11.1",
     ),
   )
   .dependsOn(`decisions4s-core`, `decisions4s-persistence-core`)
