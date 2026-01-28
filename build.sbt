@@ -60,7 +60,7 @@ lazy val `decisions4s-persistence-core` = (project in file("decisions4s-persiste
   .settings(
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core"   % "0.14.15",
-      "io.circe" %% "circe-parser" % "0.14.14",
+      "io.circe" %% "circe-parser" % "0.14.15",
     ),
   )
   .dependsOn(`decisions4s-core`)
