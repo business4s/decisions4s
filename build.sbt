@@ -21,7 +21,7 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
       "org.typelevel"    %% "shapeless3-deriving" % "3.5.0",
       "com.lihaoyi"      %% "sourcecode"          % "0.4.4",
       ("org.camunda.feel" % "feel-engine"         % "1.20.0" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
-      "ch.qos.logback"    % "logback-classic"     % "1.5.25" % Test,
+      "ch.qos.logback"    % "logback-classic"     % "1.5.26" % Test,
     ),
   )
 
@@ -51,7 +51,7 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
       "io.github.bonigarcia"    % "webdrivermanager" % "6.3.3",
     ),
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.5.25" % Test,
+      "ch.qos.logback" % "logback-classic" % "1.5.26" % Test,
     ),
   )
 
@@ -97,7 +97,15 @@ lazy val `decisions4s-examples` = (project in file("decisions4s-examples"))
   .settings(
     publish / skip := true,
   )
-  .dependsOn(`decisions4s-core`, `decisions4s-dmn`, `decisions4s-cats-effect`, `decisions4s-dmn-to-image`, `decisions4s-cel`, `decisions4s-feel`, `decisions4s-json-logic`)
+  .dependsOn(
+    `decisions4s-core`,
+    `decisions4s-dmn`,
+    `decisions4s-cats-effect`,
+    `decisions4s-dmn-to-image`,
+    `decisions4s-cel`,
+    `decisions4s-feel`,
+    `decisions4s-json-logic`,
+  )
 
 lazy val `decisions4s-examples-scala2` = (project in file("decisions4s-examples-scala2"))
   .settings(
