@@ -87,7 +87,7 @@ lazy val `decisions4s-json-logic` = (project in file("decisions4s-json-logic"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.github.jamsesso" % "json-logic-java" % "1.0.7",
+      "io.github.jamsesso" % "json-logic-java" % "1.0.9",
     ),
   )
   .dependsOn(`decisions4s-core`, `decisions4s-persistence-core`)
