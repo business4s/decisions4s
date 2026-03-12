@@ -78,7 +78,7 @@ lazy val `decisions4s-feel` = (project in file("decisions4s-feel"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      ("org.camunda.feel" % "feel-engine" % "1.19.3").exclude("com.lihaoyi", "sourcecode_2.13"),
+      ("org.camunda.feel" % "feel-engine" % "1.19.5").exclude("com.lihaoyi", "sourcecode_2.13"),
     ),
   )
   .dependsOn(`decisions4s-core`, `decisions4s-persistence-core`)
