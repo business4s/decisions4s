@@ -20,8 +20,8 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
     libraryDependencies ++= Seq(
       "org.typelevel"    %% "shapeless3-deriving" % "3.5.0",
       "com.lihaoyi"      %% "sourcecode"          % "0.4.4",
-      ("org.camunda.feel" % "feel-engine"         % "1.20.0" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
-      "ch.qos.logback"    % "logback-classic"     % "1.5.26" % Test,
+      ("org.camunda.feel" % "feel-engine"         % "1.20.2" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
+      "ch.qos.logback"    % "logback-classic"     % "1.5.32" % Test,
     ),
   )
 
@@ -39,7 +39,7 @@ lazy val `decisions4s-cats-effect` = (project in file("decisions4s-cats-effect")
   .dependsOn(`decisions4s-core`)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % "3.6.3",
+      "org.typelevel" %% "cats-effect" % "3.7.0",
     ),
   )
 
@@ -47,11 +47,11 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.seleniumhq.selenium" % "selenium-java"    % "4.40.0",
+      "org.seleniumhq.selenium" % "selenium-java"    % "4.41.0",
       "io.github.bonigarcia"    % "webdrivermanager" % "6.3.3",
     ),
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.5.26" % Test,
+      "ch.qos.logback" % "logback-classic" % "1.5.32" % Test,
     ),
   )
 
@@ -69,7 +69,7 @@ lazy val `decisions4s-cel` = (project in file("decisions4s-cel"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "dev.cel" % "cel" % "0.11.1",
+      "dev.cel" % "cel" % "0.12.0",
     ),
   )
   .dependsOn(`decisions4s-core`, `decisions4s-persistence-core`)
@@ -78,7 +78,7 @@ lazy val `decisions4s-feel` = (project in file("decisions4s-feel"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      ("org.camunda.feel" % "feel-engine" % "1.19.3").exclude("com.lihaoyi", "sourcecode_2.13"),
+      ("org.camunda.feel" % "feel-engine" % "1.19.5").exclude("com.lihaoyi", "sourcecode_2.13"),
     ),
   )
   .dependsOn(`decisions4s-core`, `decisions4s-persistence-core`)
@@ -87,7 +87,7 @@ lazy val `decisions4s-json-logic` = (project in file("decisions4s-json-logic"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.github.jamsesso" % "json-logic-java" % "1.0.9",
+      "io.github.jamsesso" % "json-logic-java" % "1.1.0",
     ),
   )
   .dependsOn(`decisions4s-core`, `decisions4s-persistence-core`)
