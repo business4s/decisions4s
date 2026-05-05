@@ -6,6 +6,37 @@ sidebar_position: 6.1
 
 Providing a visual representation of decision logic is a core concern of Decisions4s.
 Below we present the available ways of generating such representation.
+The recommended starting point is the [Shareable URL](#shareable-url) — it requires no hosting and renders directly in a browser.
+
+import SbtDependency from '@site/src/components/SbtDependency';
+import shareUrl from '!!raw-loader!../../../decisions4s-examples/src/test/resources/docs/pull-request-share-url.txt';
+
+## Shareable URL
+
+A `DMNModel` can produce a self-contained URL pointing at a hosted dmn-js viewer.
+The DMN XML is deflate-compressed and base64url-encoded into the URL fragment, so no server stores the content — anyone with the link sees the same diagram.
+The default viewer is hosted alongside this documentation at [`/dmn-viewer/`](pathname:///dmn-viewer/);
+pass a different base URL to `shareUrl(...)` to point at a self-hosted instance.
+
+<SbtDependency moduleName="decisions4s-dmn"/>
+
+```scala file=./main/scala/decisions4s/example/docs/RenderingExample.scala start=start_dmn_share end=end_dmn_share
+```
+
+<details>
+<summary>Example output</summary>
+
+<a href={shareUrl} target="_blank" rel="noopener" style={{wordBreak: 'break-all'}}>
+  <code>{shareUrl}</code>
+</a>
+
+</details>
+
+:::warning
+URL length is bounded by what your channel of choice (chat client, email, browser address bar) accepts.
+Decision tables with dozens of rules or long expressions may exceed practical limits;
+fall back to hosting the diagram and linking to it in those cases.
+:::
 
 ## Markdown
 
@@ -52,8 +83,6 @@ For sharing decisions in a systemic way we recommend either a custom renderer or
 ## Decision Model and Notation (DMN)
 
 [DMN](https://en.wikipedia.org/wiki/Decision_Model_and_Notation) model can be generated using the following dependency:
-
-import SbtDependency from '@site/src/components/SbtDependency';
 
 <SbtDependency moduleName="decisions4s-dmn"/>
 

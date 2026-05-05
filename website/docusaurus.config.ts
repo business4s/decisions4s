@@ -64,6 +64,11 @@ const config: Config = {
                     label: 'Docs',
                 },
                 {
+                    to: '/dmn-viewer/',
+                    label: 'DMN Viewer',
+                    position: 'left',
+                },
+                {
                     href: 'https://medium.com/business4s-blog',
                     label: 'Blog',
                     position: 'right',

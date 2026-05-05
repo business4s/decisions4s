@@ -37,4 +37,8 @@ object RenderingExample {
   converter.convertDiagram(dmnXml)
   // end_dmn_image
 
+  // start_dmn_share
+  val shareUrl: String = DmnRenderer.render(decisionTable).shareUrl()
+  // end_dmn_share
+
 }

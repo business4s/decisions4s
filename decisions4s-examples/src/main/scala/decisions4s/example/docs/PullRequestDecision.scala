@@ -87,7 +87,12 @@ object PullRequestDecision {
     import decisions4s.dmn.DmnRenderer
     val dmnXML: String = DmnRenderer.render(decisionTable).toXML
     // end_dmn
-    dmnXML.toString
+    val _ = dmnXML
+
+    // start_dmn_share
+    val shareUrl: String = DmnRenderer.render(decisionTable).shareUrl()
+    // end_dmn_share
+    val _ = shareUrl
     ()
 
   }

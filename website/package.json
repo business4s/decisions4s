@@ -19,6 +19,8 @@
     "@docusaurus/preset-classic": "^3.7.0",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
+    "dmn-js": "^17.8.0",
+    "pako": "^2.1.0",
     "prism-react-renderer": "^2.3.0",
     "raw-loader": "^4.0.2",
     "react": "^18.0.0",
@@ -28,6 +30,7 @@
     "@docusaurus/module-type-aliases": "^3.7.0",
     "@docusaurus/tsconfig": "^3.7.0",
     "@docusaurus/types": "^3.7.0",
+    "@types/pako": "^2.0.4",
     "remark-code-snippets": "^1.1.0",
     "typescript": "~5.2.2"
   },

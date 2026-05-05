@@ -29,6 +29,11 @@ class PullRequestDecisionTest extends AnyFreeSpec {
     SnapshotTest.testSnapshot(liveString, "docs/pull-request-dmn.xml")
   }
 
+  "share url" in {
+    val liveString = DmnRenderer.render(PullRequestDecision.decisionTable).shareUrl()
+    SnapshotTest.testSnapshot(liveString, "docs/pull-request-share-url.txt")
+  }
+
   "generate custom diagnostics" in {
     val decisionTable = PullRequestDecision.decisionTable
     val input         = PullRequestDecision.Input[Value](1, false, false)

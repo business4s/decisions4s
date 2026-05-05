@@ -1,0 +1,66 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+}
+
+.toolbar {
+    padding: 8px;
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.fileLabel {
+    margin: 0;
+    cursor: pointer;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.hint {
+    color: var(--ifm-color-emphasis-700);
+    font-size: 13px;
+}
+
+.loadingFallback {
+    padding: 16px;
+}
+
+.scroller {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 16px;
+}
+
+.canvas :global(.tjs-container) {
+    margin-left: auto;
+    margin-right: auto;
+    width: max-content;
+    max-width: 100%;
+}
+
+/* dmn-js sets `white-space: pre-wrap` on cells with high specificity, which forces
+   columns to wrap text instead of growing — override so column widths follow content. */
+.canvas :global(.dmn-decision-table-container td),
+.canvas :global(.dmn-decision-table-container th) {
+    white-space: pre !important;
+}
+
+.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    color: var(--ifm-color-emphasis-700);
+}
+
+.placeholderError {
+    color: crimson;
+}
