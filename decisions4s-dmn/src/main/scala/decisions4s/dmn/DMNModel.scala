@@ -23,10 +23,13 @@ object DMNModel {
   val HashPrefix       = "#dmn="
 
   private def deflate(input: Array[Byte]): Array[Byte] = {
-    val out = new ByteArrayOutputStream()
-    val dos = new DeflaterOutputStream(out, new Deflater(Deflater.BEST_COMPRESSION))
-    try dos.write(input)
-    finally dos.close()
+    val out      = new ByteArrayOutputStream()
+    val deflater = new Deflater(Deflater.BEST_COMPRESSION)
+    try {
+      val dos = new DeflaterOutputStream(out, deflater)
+      try dos.write(input)
+      finally dos.close()
+    } finally deflater.end()
     out.toByteArray
   }
 }

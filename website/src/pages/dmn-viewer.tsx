@@ -16,12 +16,16 @@ const HASH_PREFIX = '#dmn=';
 
 function decodeHash(hash: string): Uint8Array | null {
     if (!hash.startsWith(HASH_PREFIX)) return null;
-    const b64 = hash.slice(HASH_PREFIX.length).replace(/-/g, '+').replace(/_/g, '/');
-    const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
-    const binary = atob(padded);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return bytes;
+    try {
+        const b64 = hash.slice(HASH_PREFIX.length).replace(/-/g, '+').replace(/_/g, '/');
+        const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
+        const binary = atob(padded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        return bytes;
+    } catch {
+        return null;
+    }
 }
 
 function encodeXml(xml: string, pako: typeof import('pako')): string {
@@ -104,9 +108,13 @@ function Viewer(): JSX.Element {
     }, [onFile]);
 
     const onCopy = useCallback(async () => {
-        await navigator.clipboard.writeText(window.location.href);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+        } catch (e) {
+            console.error('Failed to copy share link:', e);
+        }
     }, []);
 
     return (
