@@ -100,8 +100,7 @@ class DecisionTableTest extends AnyFreeSpec {
 
     // A user-supplied Equiv comparing raw bits flags +0.0 vs -0.0 as not-distinct.
     locally {
-      given Equiv[FloatOutput[Value]] = (a, b) =>
-        java.lang.Double.doubleToRawLongBits(a.value) == java.lang.Double.doubleToRawLongBits(b.value)
+      given Equiv[FloatOutput[Value]] = (a, b) => java.lang.Double.doubleToRawLongBits(a.value) == java.lang.Double.doubleToRawLongBits(b.value)
       val result                      = table.evaluateDistinct(FloatInput(1))
       assert(result.output == Left("not-distinct"))
     }

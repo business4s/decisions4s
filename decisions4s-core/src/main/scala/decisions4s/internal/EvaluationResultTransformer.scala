@@ -20,8 +20,8 @@ class EvaluationResultTransformer[Input[_[_]], Output[_[_]]](
     }
   }
 
-  /** Returns result if there is a unique result produced by all satisfied rules. Equality is governed by the supplied [[Equiv]] instance,
-    * making the comparison rule explicit at the call site (e.g. to opt into bit-exact Double comparison via `doubleToRawLongBits`).
+  /** Returns result if there is a unique result produced by all satisfied rules. Equality is governed by the supplied [[Equiv]] instance, making the
+    * comparison rule explicit at the call site (e.g. to opt into bit-exact Double comparison via `doubleToRawLongBits`).
     */
   def distinct()(using eq: Equiv[Output[Value]]): EvalResult.Distinct[Input, Output] = {
     val raw              = rawResults.map(_.apply()).toList
