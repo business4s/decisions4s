@@ -48,6 +48,8 @@ class DecisionTableTest extends AnyFreeSpec {
 
   val anyTestTable: DecisionTable[Input, Output, HitPolicy.Distinct] = uniqueTestTable.copy(hitPolicy = HitPolicy.Distinct)
 
+  given Equiv[Output[Value]] = Equiv.universal
+
   "distinct - single matching rule" in {
     val result = anyTestTable.evaluateDistinct(Input(2))
     assert(result.output == Right(Some(Output[Value](1))))
@@ -73,6 +75,36 @@ class DecisionTableTest extends AnyFreeSpec {
     val result = anyTestTable.evaluateDistinct(input)
     assert(result.output == Left("not-distinct"))
     assert(result.results == rawResults(true, true, true))
+  }
+
+  "distinct - equality is customizable via Equiv (e.g. bit-exact Double)" in {
+    case class FloatInput[F[_]](trigger: F[Int]) derives HKD
+    case class FloatOutput[F[_]](value: F[Double]) derives HKD
+
+    val table: DecisionTable[FloatInput, FloatOutput, HitPolicy.Distinct] = DecisionTable(
+      rules = List(
+        Rule(matching = FloatInput(it > 0), output = FloatOutput(+0.0)),
+        Rule(matching = FloatInput(it > 0), output = FloatOutput(-0.0)),
+      ),
+      "float-distinct",
+      HitPolicy.Distinct,
+    )
+
+    // Universal Equiv uses ==; case-class equality on a Double field uses primitive ==,
+    // which treats +0.0 and -0.0 as the same value.
+    locally {
+      given Equiv[FloatOutput[Value]] = Equiv.universal
+      val result                      = table.evaluateDistinct(FloatInput(1))
+      assert(result.output == Right(Some(FloatOutput[Value](+0.0))))
+    }
+
+    // A user-supplied Equiv comparing raw bits flags +0.0 vs -0.0 as not-distinct.
+    locally {
+      given Equiv[FloatOutput[Value]] = (a, b) =>
+        java.lang.Double.doubleToRawLongBits(a.value) == java.lang.Double.doubleToRawLongBits(b.value)
+      val result                      = table.evaluateDistinct(FloatInput(1))
+      assert(result.output == Left("not-distinct"))
+    }
   }
 
   val firstTestTable: DecisionTable[Input, Output, HitPolicy.First] = uniqueTestTable.copy(hitPolicy = HitPolicy.First)

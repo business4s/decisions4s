@@ -19,10 +19,13 @@ object HitPoliciesExample {
   single.evaluateSingle(in)
   // end_single
 
-  // start_distinct
-  val distinct: DecisionTable[In, Out, HitPolicy.Distinct] = DecisionTable(rules, name, HitPolicy.Distinct)
-  distinct.evaluateDistinct(in)
-  // end_distinct
+  {
+    // start_distinct
+    val distinct: DecisionTable[In, Out, HitPolicy.Distinct] = DecisionTable(rules, name, HitPolicy.Distinct)
+    given Equiv[Out[Value]]                                  = Equiv.universal
+    distinct.evaluateDistinct(in)
+    // end_distinct
+  }
 
   // start_first
   val first: DecisionTable[In, Out, HitPolicy.First] = DecisionTable(rules, name, HitPolicy.First)

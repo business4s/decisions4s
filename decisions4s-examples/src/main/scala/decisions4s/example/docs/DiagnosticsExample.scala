@@ -15,6 +15,7 @@ object DiagnosticsExample {
 
   val decisionTable: DecisionTable[Input, Output, HitPolicy.Distinct] = ???
   val input: Input[Value]                                             = ???
+  given Equiv[Output[Value]]                                          = Equiv.universal
 
   decisionTable.evaluateDistinct(input).makeDiagnosticsString
   // end_diagnose

@@ -27,7 +27,7 @@ object DecisionTable {
       transformer(dt, in).single()
   }
   extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.Distinct]) {
-    def evaluateDistinct(in: Input[Value]): EvalResult.Distinct[Input, Output] =
+    def evaluateDistinct(in: Input[Value])(using Equiv[Output[Value]]): EvalResult.Distinct[Input, Output] =
       transformer(dt, in).distinct()
   }
   extension [Input[_[_]], Output[_[_]]](dt: DecisionTable[Input, Output, HitPolicy.First]) {
