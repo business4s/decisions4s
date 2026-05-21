@@ -18,7 +18,7 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel"    %% "shapeless3-deriving" % "3.5.0",
+      "org.typelevel"    %% "shapeless3-deriving" % "3.6.0",
       "com.lihaoyi"      %% "sourcecode"          % "0.4.4",
       ("org.camunda.feel" % "feel-engine"         % "1.21.0" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
       "ch.qos.logback"    % "logback-classic"     % "1.5.32" % Test,
