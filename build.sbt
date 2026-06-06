@@ -21,7 +21,7 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
       "org.typelevel"    %% "shapeless3-deriving" % "3.6.0",
       "com.lihaoyi"      %% "sourcecode"          % "0.4.4",
       ("org.camunda.feel" % "feel-engine"         % "1.21.0" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
-      "ch.qos.logback"    % "logback-classic"     % "1.5.33" % Test,
+      "ch.qos.logback"    % "logback-classic"     % "1.5.34" % Test,
     ),
   )
 
@@ -51,7 +51,7 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
       "io.github.bonigarcia"    % "webdrivermanager" % "6.3.4",
     ),
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.5.33" % Test,
+      "ch.qos.logback" % "logback-classic" % "1.5.34" % Test,
     ),
   )
 
