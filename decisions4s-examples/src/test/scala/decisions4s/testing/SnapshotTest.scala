@@ -7,11 +7,12 @@ import java.nio.file.{Files, Paths}
 object SnapshotTest {
 
   private val testResourcesPath = Paths
-    .get(getClass.getResource("/").toURI) // decisions4s-examples/target/scala-3.4.2/test-classes
-    .getParent                            // decisions4s-examples/target/scala-3.4.2
-    .getParent                            // decisions4s-examples/target
-    .getParent                            // decisions4s-examples
-    .resolve("src/test/resources")
+    .get(sourcecode.File()) // decisions4s-examples/src/test/scala/decisions4s/testing/SnapshotTest.scala
+    .getParent              // decisions4s-examples/src/test/scala/decisions4s/testing
+    .getParent              // decisions4s-examples/src/test/scala/decisions4s
+    .getParent              // decisions4s-examples/src/test/scala
+    .getParent              // decisions4s-examples/src/test
+    .resolve("resources")
 
   def testSnapshot(content: String, path: String) = {
     val filePath    = testResourcesPath.resolve(path)
