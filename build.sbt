@@ -48,7 +48,7 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
   .settings(
     libraryDependencies ++= Seq(
       "org.seleniumhq.selenium" % "selenium-java"    % "4.49.0",
-      "io.github.bonigarcia"    % "webdrivermanager" % "6.3.4",
+      "io.github.bonigarcia"    % "webdrivermanager" % "6.4.0",
     ),
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % "1.6.4" % Test,
