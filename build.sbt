@@ -21,7 +21,7 @@ lazy val `decisions4s-core` = (project in file("decisions4s-core"))
       "org.typelevel"    %% "shapeless3-deriving" % "3.6.0",
       "com.lihaoyi"      %% "sourcecode"          % "0.4.4",
       ("org.camunda.feel" % "feel-engine"         % "1.22.1" % Test).exclude("com.lihaoyi", "sourcecode_2.13"),
-      "ch.qos.logback"    % "logback-classic"     % "1.6.4"  % Test,
+      "ch.qos.logback"    % "logback-classic"     % "1.6.5"  % Test,
     ),
   )
 
@@ -51,7 +51,7 @@ lazy val `decisions4s-dmn-to-image` = (project in file("decisions4s-dmn-to-image
       "io.github.bonigarcia"    % "webdrivermanager" % "6.4.0",
     ),
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.6.4" % Test,
+      "ch.qos.logback" % "logback-classic" % "1.6.5" % Test,
     ),
   )
 
@@ -59,8 +59,8 @@ lazy val `decisions4s-persistence-core` = (project in file("decisions4s-persiste
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.circe" %% "circe-core"   % "0.14.16",
-      "io.circe" %% "circe-parser" % "0.14.16",
+      "io.circe" %% "circe-core"   % "0.14.17",
+      "io.circe" %% "circe-parser" % "0.14.17",
     ),
   )
   .dependsOn(`decisions4s-core`)
